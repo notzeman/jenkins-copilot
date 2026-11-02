@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+        disableConcurrentBuilds()
+    }
+    environment {
+        IMAGE = 'ghcr.io/example/crm'
+        TAG = "${env.BUILD_NUMBER}-${env.GIT_COMMIT?.take(7) ?: 'local'}"
+    }
+    stages {
+        stage('Checkout') {
+            steps { checkout scm }
+        }
+        stage('Install') {
+            steps {
+                sh 'python -m pip install --upgrade pip && pip install -r requirements.txt'
+            }
+        }
+        stage('Django Checks') {
+            steps {
+                sh 'python manage.py check'
+                sh 'python manage.py makemigrations --check --dry-run'
+            }
+        }
+        stage('Tests') {
+            steps {
+                sh 'pytest -q'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                sh 'docker build --pull --cache-from "$IMAGE:latest" -t "$IMAGE:$TAG" .'
+            }
+        }
+        stage('Publish') {
+            when { branch 'main' }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'ghcr-credentials', usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_TOKEN')]) {
+                    sh '''
+                        echo "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
+                        docker push "$IMAGE:$TAG"
+                    '''
+                }
+            }
+        }
+        stage('Deploy') {
+            when { branch 'main' }
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'deploy-ssh', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+                    sh '''
+                        ssh -i "$SSH_KEY" -o StrictHostKeyChecking=accept-new "$SSH_USER@DEPLOY_HOST" \
+                          "cd /srv/crm && IMAGE='$IMAGE:$TAG' docker compose up -d"
+                    '''
+                }
+            }
+        }
+    }
+    post {
+        always { cleanWs() }
+        failure { echo 'Inspect the failed stage and the exact commit SHA.' }
+    }
+}

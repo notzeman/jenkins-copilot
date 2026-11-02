@@ -1,0 +1,31 @@
+import hljs from 'highlight.js/lib/core';
+import bash from 'highlight.js/lib/languages/bash';
+import dockerfile from 'highlight.js/lib/languages/dockerfile';
+import groovy from 'highlight.js/lib/languages/groovy';
+import ini from 'highlight.js/lib/languages/ini';
+import javascript from 'highlight.js/lib/languages/javascript';
+import json from 'highlight.js/lib/languages/json';
+import python from 'highlight.js/lib/languages/python';
+import typescript from 'highlight.js/lib/languages/typescript';
+import yaml from 'highlight.js/lib/languages/yaml';
+
+hljs.registerLanguage('bash', bash);
+hljs.registerLanguage('sh', bash);
+hljs.registerLanguage('shell', bash);
+hljs.registerLanguage('dockerfile', dockerfile);
+hljs.registerLanguage('docker', dockerfile);
+hljs.registerLanguage('groovy', groovy);
+hljs.registerLanguage('jenkinsfile', groovy);
+hljs.registerLanguage('ini', ini);
+hljs.registerLanguage('properties', ini);
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('js', javascript);
+hljs.registerLanguage('json', json);
+hljs.registerLanguage('python', python);
+hljs.registerLanguage('py', python);
+hljs.registerLanguage('typescript', typescript);
+hljs.registerLanguage('ts', typescript);
+hljs.registerLanguage('yaml', yaml);
+hljs.registerLanguage('yml', yaml);
+
+export { hljs };

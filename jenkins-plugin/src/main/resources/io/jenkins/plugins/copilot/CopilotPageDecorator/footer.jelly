@@ -1,0 +1,12 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core">
+  <j:if test="${it.visible}">
+    <div id="jenkins-ai-copilot-root"
+         data-context="${it.contextJson}"
+         data-base-url="${it.apiUrl}"
+         data-ui-url="${it.uiUrl}"
+         data-max-steps="${it.maxSteps}"
+         data-plugin-version="${it.pluginVersion}"></div>
+    <script type="module" src="${it.uiUrl}"/>
+  </j:if>
+</j:jelly>

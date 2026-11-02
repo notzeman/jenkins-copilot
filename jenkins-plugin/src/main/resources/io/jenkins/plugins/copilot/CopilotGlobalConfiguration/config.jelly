@@ -1,0 +1,70 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+  <f:section title="Jenkins AI Copilot">
+    <f:description>
+      The assistant is configured from the drawer after installation: click the floating button, choose a
+      provider, paste an API key, load models, and save. This page is the fallback/advanced configuration.
+      Keys are stored as Jenkins Secrets and never returned to the browser.
+    </f:description>
+    <f:entry title="Enable assistant" field="enabled">
+      <f:checkbox/>
+    </f:entry>
+    <f:entry title="Show sidebar" field="sidebarEnabled">
+      <f:checkbox/>
+    </f:entry>
+    <f:entry title="Default provider" field="defaultProvider"
+             description="openai, anthropic, or opencode-go">
+      <f:textbox/>
+    </f:entry>
+    <f:entry title="Default model" field="defaultModel"
+             description="For example gpt-5.1, claude-sonnet-4-5, or an opencode go model id">
+      <f:textbox/>
+    </f:entry>
+  </f:section>
+
+  <f:section title="AI providers">
+    <f:entry title="OpenAI API key" field="openaiApiKey">
+      <f:password/>
+    </f:entry>
+    <f:entry title="Claude API key" field="anthropicApiKey">
+      <f:password/>
+    </f:entry>
+    <f:entry title="opencode go base URL" field="opencodeGoBaseUrl"
+             description="OpenAI-compatible base URL, for example https://your-gateway/v1">
+      <f:textbox/>
+    </f:entry>
+    <f:entry title="opencode go API key" field="opencodeGoApiKey">
+      <f:password/>
+    </f:entry>
+  </f:section>
+
+  <f:section title="Repositories">
+    <f:entry title="GitHub token" field="githubToken"
+             description="Optional. Used for repository inspection, recovery branches, and pull requests.">
+      <f:password/>
+    </f:entry>
+    <f:entry title="GitHub API URL" field="githubApiUrl"
+             description="Change only for GitHub Enterprise or a mirror">
+      <f:textbox/>
+    </f:entry>
+  </f:section>
+
+  <f:advanced>
+    <f:entry title="Maximum tool steps" field="maxSteps">
+      <f:number/>
+    </f:entry>
+    <f:entry title="Provider timeout (seconds)" field="requestTimeoutSeconds">
+      <f:number/>
+    </f:entry>
+    <f:entry title="Auto-approve level 2 operations" field="autoApproveLevel2"
+             description="Never applies to production targets or privileged operations">
+      <f:checkbox/>
+    </f:entry>
+    <f:entry title="Maximum attachment size (MB)" field="maxAttachmentMb">
+      <f:number/>
+    </f:entry>
+    <f:entry title="Conversations retained per user" field="retentionPerUser">
+      <f:number/>
+    </f:entry>
+  </f:advanced>
+</j:jelly>

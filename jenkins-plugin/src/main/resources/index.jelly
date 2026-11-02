@@ -1,0 +1,6 @@
+<?jelly escape-by-default='true'?>
+<div>
+  Jenkins AI Copilot adds an agentic CI/CD assistant to Jenkins. It inspects jobs, builds, agents, pipelines,
+  and connected repositories; diagnoses failures; proposes and applies approved pipeline changes; and prepares
+  recovery actions. The language model runs in an external Node service, never inside the Jenkins JVM.
+</div>
