@@ -35,11 +35,17 @@ public final class Operations {
     private static Map<String, Operation> build() {
         Map<String, Operation> ops = new LinkedHashMap<>();
         add(ops, new JobOperations());
+        add(ops, new ViewOperations());
+        add(ops, new FolderOperations());
+        add(ops, new QueueOperations());
         add(ops, new BuildOperations());
         add(ops, new NodeOperations());
         add(ops, new PipelineOperations());
         add(ops, new CredentialOperations());
         add(ops, new ScmOperations());
+        add(ops, new UserOperations());
+        add(ops, new PermissionOperations());
+        add(ops, new SystemOperations());
         return Map.copyOf(ops);
     }
 

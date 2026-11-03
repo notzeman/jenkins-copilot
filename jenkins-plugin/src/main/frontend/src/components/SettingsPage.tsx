@@ -14,8 +14,9 @@ import { CheckIcon, GitHubIcon, PencilIcon, ProviderIcon, TrashIcon } from './ic
 
 const ABOUT = [
   'Jenkins AI Copilot is an agentic CI/CD assistant built into Jenkins. It diagnoses failing builds, ' +
-    'reviews Jenkinsfiles, and prepares fixes from pipeline-grouped sessions — with privileged actions ' +
-    'gated behind explicit approval and provider keys kept encrypted on the controller.',
+    'reviews Jenkinsfiles, prepares fixes, and manages views, folders, jobs, queue items, agents, ' +
+    'credentials, permissions, plugins, and controller settings — with privileged actions gated behind explicit approval ' +
+    'and provider keys kept encrypted on the controller.',
   'Works with OpenAI, Claude, opencode go, or any OpenAI-compatible endpoint.',
 ];
 

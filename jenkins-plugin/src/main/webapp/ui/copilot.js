@@ -15238,7 +15238,7 @@ function Qi({ value: e, options: t, placeholder: n, onSelect: r, icon: i, title:
 	})] });
 }
 // src/components/SettingsPage.tsx
-var K = ["Jenkins AI Copilot is an agentic CI/CD assistant built into Jenkins. It diagnoses failing builds, reviews Jenkinsfiles, and prepares fixes from pipeline-grouped sessions — with privileged actions gated behind explicit approval and provider keys kept encrypted on the controller.", "Works with OpenAI, Claude, opencode go, or any OpenAI-compatible endpoint."], $i = [
+var K = ["Jenkins AI Copilot is an agentic CI/CD assistant built into Jenkins. It diagnoses failing builds, reviews Jenkinsfiles, prepares fixes, and manages views, folders, jobs, queue items, agents, credentials, permissions, plugins, and controller settings — with privileged actions gated behind explicit approval and provider keys kept encrypted on the controller.", "Works with OpenAI, Claude, opencode go, or any OpenAI-compatible endpoint."], $i = [
 	{
 		id: "openai",
 		label: "OpenAI"

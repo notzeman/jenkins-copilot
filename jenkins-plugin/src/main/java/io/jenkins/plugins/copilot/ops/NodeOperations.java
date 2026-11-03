@@ -2,11 +2,17 @@ package io.jenkins.plugins.copilot.ops;
 
 import hudson.PluginWrapper;
 import hudson.model.Computer;
+import hudson.model.Failure;
 import hudson.model.Executor;
 import hudson.model.Node;
 import hudson.model.Queue;
 import hudson.model.User;
 import hudson.security.Permission;
+import hudson.slaves.DumbSlave;
+import hudson.slaves.JNLPLauncher;
+import hudson.slaves.OfflineCause;
+import hudson.slaves.RetentionStrategy;
+import hudson.model.Slave;
 import io.jenkins.plugins.copilot.util.Json;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -30,6 +36,12 @@ public final class NodeOperations implements OperationGroup {
         h.put("get_jenkins_version", this::getJenkinsVersion);
         h.put("get_controller_info", this::getControllerInfo);
         h.put("get_plugin_information", this::getPluginInformation);
+        h.put("create_node", this::createNode);
+        h.put("update_node", this::updateNode);
+        h.put("delete_node", this::deleteNode);
+        h.put("set_node_offline", this::setNodeOffline);
+        h.put("disconnect_node", this::disconnectNode);
+        h.put("reconnect_node", this::reconnectNode);
         return h;
     }
 
@@ -161,6 +173,133 @@ public final class NodeOperations implements OperationGroup {
                 "labels", jenkins.getAssignedLabels().stream().map(Object::toString).toList(),
                 "nodes", jenkins.getNodes().size(),
                 "queueItems", jenkins.getQueue().getItems().length);
+    }
+
+    private JSONObject createNode(JSONObject args, User user) throws Exception {
+        Jenkins.get().checkPermission(Computer.CREATE);
+        String name = Json.requireString(args, "name").trim();
+        try {
+            Jenkins.checkGoodName(name);
+        } catch (Failure e) {
+            throw OperationException.invalid("Invalid agent name: " + e.getMessage());
+        }
+        if (Jenkins.get().getNode(name) != null) {
+            throw OperationException.conflict("An agent named '" + name + "' already exists");
+        }
+        String remoteFs = Json.string(args, "remoteFS", "/home/jenkins").trim();
+        if (remoteFs.isBlank()) {
+            throw OperationException.invalid("remoteFS must not be blank");
+        }
+        DumbSlave slave = new DumbSlave(name, remoteFs, new JNLPLauncher(true));
+        slave.setNumExecutors(executorsArg(args));
+        slave.setLabelString(Json.string(args, "labels", ""));
+        slave.setMode(modeArg(args));
+        String description = Json.string(args, "description", null);
+        if (description != null) {
+            slave.setNodeDescription(description);
+        }
+        slave.setRetentionStrategy(RetentionStrategy.INSTANCE);
+        Jenkins.get().addNode(slave);
+        return Json.obj(
+                "created", true,
+                "node", slave.getNodeName(),
+                "remoteFS", slave.getRemoteFS(),
+                "labels", slave.getLabelString(),
+                "executors", slave.getNumExecutors(),
+                "mode", slave.getMode().name(),
+                "launcher", "jnlp");
+    }
+
+    private JSONObject updateNode(JSONObject args, User user) throws Exception {
+        Jenkins.get().checkPermission(Computer.CONFIGURE);
+        Slave node = agent(Json.requireString(args, "node"));
+        if (args.has("labels")) {
+            node.setLabelString(Json.string(args, "labels", ""));
+        }
+        if (args.has("executors")) {
+            node.setNumExecutors(executorsArg(args));
+        }
+        if (args.has("mode")) {
+            node.setMode(modeArg(args));
+        }
+        if (args.has("description")) {
+            node.setNodeDescription(Json.string(args, "description", ""));
+        }
+        node.save();
+        return Json.obj(
+                "updated", true,
+                "node", node.getNodeName(),
+                "labels", node.getLabelString(),
+                "executors", node.getNumExecutors(),
+                "mode", node.getMode().name(),
+                "description", node.getNodeDescription());
+    }
+
+    private JSONObject deleteNode(JSONObject args, User user) throws Exception {
+        Jenkins.get().checkPermission(Computer.DELETE);
+        Node node = agent(Json.requireString(args, "node"));
+        if (!Json.bool(args, "confirm", false)) {
+            throw OperationException.invalid("confirm=true is required to delete an agent");
+        }
+        String name = node.getNodeName();
+        Jenkins.get().removeNode(node);
+        return Json.obj("deleted", true, "node", name);
+    }
+
+    private JSONObject setNodeOffline(JSONObject args, User user) throws Exception {
+        Computer computer = computer(Json.requireString(args, "node"));
+        Jenkins.get().checkPermission(Computer.CONFIGURE);
+        boolean offline = Json.bool(args, "offline", true);
+        String message = Json.string(args, "message", "Set by Jenkins AI Copilot");
+        if (offline) {
+            computer.setTemporarilyOffline(true, new OfflineCause.UserCause(user, message));
+        } else {
+            computer.setTemporarilyOffline(false, null);
+        }
+        return Json.obj("node", computer.getName(), "temporarilyOffline", computer.isTemporarilyOffline());
+    }
+
+    private JSONObject disconnectNode(JSONObject args, User user) throws Exception {
+        Computer computer = computer(Json.requireString(args, "node"));
+        Jenkins.get().checkPermission(Computer.DISCONNECT);
+        computer.disconnect(new OfflineCause.UserCause(
+                user, Json.string(args, "message", "Disconnected by Jenkins AI Copilot")));
+        return Json.obj("node", computer.getName(), "disconnectRequested", true);
+    }
+
+    private JSONObject reconnectNode(JSONObject args, User user) throws Exception {
+        Computer computer = computer(Json.requireString(args, "node"));
+        Jenkins.get().checkPermission(Computer.CONNECT);
+        computer.connect(true);
+        return Json.obj("node", computer.getName(), "connectRequested", true);
+    }
+
+    private static Slave agent(String name) throws OperationException {
+        if (name == null || name.isBlank() || "master".equals(name) || "built-in".equals(name)) {
+            throw OperationException.invalid("The built-in controller is not an agent");
+        }
+        Node node = Jenkins.get().getNode(name);
+        if (!(node instanceof Slave slave)) {
+            throw OperationException.notFound("No permanent agent named '" + name + "'");
+        }
+        return slave;
+    }
+
+    private static int executorsArg(JSONObject args) throws OperationException {
+        int executors = Json.integer(args, "executors", 1);
+        if (executors < 0 || executors > 100) {
+            throw OperationException.invalid("executors must be between 0 and 100");
+        }
+        return executors;
+    }
+
+    private static Node.Mode modeArg(JSONObject args) throws OperationException {
+        String mode = Json.string(args, "mode", "NORMAL");
+        try {
+            return Node.Mode.valueOf(mode.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw OperationException.invalid("mode must be NORMAL or EXCLUSIVE");
+        }
     }
 
     private JSONObject getPluginInformation(JSONObject args, User user) {

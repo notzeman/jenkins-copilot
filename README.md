@@ -24,6 +24,8 @@ Jenkins (one HPI)
 - Create, copy, update, enable, disable, and delete jobs; trigger, abort, and retry builds.
 - Inspect GitHub repositories, files, commits, and comparisons; prepare recovery branches and pull requests.
 - Track known-good builds and deployment records; propose digest-pinned rollbacks.
+- Manage views and dashboards: create List/All views, add/remove jobs, set regex filters, rename, delete, and set the primary view.
+- Manage folders, permanent agents, queue items, system-scope and folder-scope credentials, users in the private realm, the Global Matrix permission matrix, plugins, and controller settings.
 - Stream tool activity, approvals, diffs, and results in a persistent right-hand sidebar.
 
 ## Requirements

@@ -66,7 +66,10 @@ public final class ToolContext {
         if (args == null) {
             return null;
         }
-        for (String key : new String[] {"job", "environment", "name", "source", "repoUrl", "planId"}) {
+        for (String key : new String[] {
+                    "job", "view", "node", "plugin", "folder", "id", "sid",
+                    "environment", "name", "source", "repoUrl", "planId"
+                }) {
             JsonNode value = args.get(key);
             if (value != null && !value.isNull()) {
                 return value.asText();

@@ -6,6 +6,9 @@
 jenkins-plugin:
   CopilotUnitTest       6 tests   log analysis, redaction, Jenkinsfile validation, tool catalog,
                                   JSON-schema validation, unified diff
+  ManagementOperationsTest 15 tests  view/folder lifecycle, regex views, folder-scoped views,
+                                  credential write-only lifecycle, agent lifecycle, controller
+                                  settings, private-realm users, permission grant/revoke, permission denial, tool registration
   CopilotPluginTest    10 tests   sidebar mount, session/setup state, secret non-leakage, admin-only setup,
                                   chat setup guard, conversation ownership, approval pause/rejection,
                                   read-only tool execution, masked provider/GitHub accounts, pipeline
@@ -27,7 +30,7 @@ cd ../../../e2e
 npm ci && npx playwright test
 ```
 
-Result: **25 plugin tests pass**, frontend typecheck passes, **2 Playwright tests pass** (the Playwright suite
+Result: **40 plugin tests pass**, frontend typecheck passes, **2 Playwright tests pass** (the Playwright suite
 predates the single-HPI rewrite and is not part of the Jenkins build).
 
 ## Live verification performed
@@ -64,6 +67,8 @@ The plugin was installed into a real Jenkins 2.580.2 container and exercised in 
 - A failing/unstable latest build animates the FAB and drawer icon and offers **Quickly analyse**, which starts
   a pipeline session and sends an investigation prompt.
 - The drawer uses a bot icon; the header exposes sessions, settings, theme, expand, new session, and close.
+- The management tool catalog now covers views, folders, queue cancellation, permanent JNLP agents,
+  credentials, private-realm users, plugins, and controller settings in addition to jobs and builds.
 - Each assistant message has a **Copy** button that copies the raw Markdown response and shows a temporary
   **Copied** confirmation.
 - Provider reasoning is captured into a separate collapsible **Analysis** panel. Assistant text that precedes

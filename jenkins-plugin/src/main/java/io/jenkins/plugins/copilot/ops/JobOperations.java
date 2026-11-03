@@ -43,6 +43,8 @@ public final class JobOperations implements OperationGroup {
         h.put("get_job_config", this::getJobConfig);
         h.put("create_job", this::createJob);
         h.put("copy_job", this::copyJob);
+        h.put("rename_job", this::renameJob);
+        h.put("move_job", this::moveJob);
         h.put("delete_job", this::deleteJob);
         h.put("enable_job", (a, u) -> setDisabled(a, u, false));
         h.put("disable_job", (a, u) -> setDisabled(a, u, true));
@@ -203,6 +205,41 @@ public final class JobOperations implements OperationGroup {
                         "Triggers were removed; re-enable them deliberately.",
                         "Credential references were copied by ID only; no secret values were read.",
                         "Review environment-specific URLs, hostnames, and deployment targets.")));
+    }
+
+    private JSONObject renameJob(JSONObject args, User user) throws Exception {
+        Job<?, ?> job = Items.job(Json.requireString(args, "job"));
+        Items.check(job, Item.CONFIGURE, job.getFullName());
+        if (job.getParent() instanceof AccessControlled parent) {
+            Items.check(parent, Item.CREATE, job.getParent().getFullName());
+        }
+        String newName = Json.requireString(args, "newName").trim();
+        if (job.getParent() != null && job.getParent().getItem(newName) != null) {
+            throw OperationException.conflict("An item named '" + newName + "' already exists in the parent folder");
+        }
+        String oldName = job.getFullName();
+        job.renameTo(newName);
+        job.save();
+        return Json.obj("renamed", true, "oldName", oldName, "newName", job.getFullName());
+    }
+
+    private JSONObject moveJob(JSONObject args, User user) throws Exception {
+        Job<?, ?> job = Items.job(Json.requireString(args, "job"));
+        Items.check(job, Item.CONFIGURE, job.getFullName());
+        String targetName = Json.requireString(args, "folder");
+        ItemGroup<?> target = Items.group(targetName);
+        if (!(target instanceof jenkins.model.DirectlyModifiableTopLevelItemGroup destination)) {
+            throw OperationException.unsupported("Jobs can only be moved to Jenkins or a folder");
+        }
+        if (target instanceof AccessControlled controlled) {
+            Items.check(controlled, Item.CREATE, targetName);
+        }
+        if (!(job instanceof hudson.model.TopLevelItem)) {
+            throw OperationException.unsupported("Only top-level jobs can be moved");
+        }
+        hudson.model.Items.move(
+                (hudson.model.AbstractItem & hudson.model.TopLevelItem) job, destination);
+        return Json.obj("moved", true, "job", job.getFullName(), "folder", targetName);
     }
 
     private JSONObject deleteJob(JSONObject args, User user) throws Exception {
