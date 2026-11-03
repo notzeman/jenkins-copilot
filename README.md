@@ -29,23 +29,21 @@ Jenkins (one HPI)
 ## Requirements
 
 - Jenkins **2.580.2 or newer** (Java 21).
-- Node.js 22+ **only to build the frontend**; not required at runtime.
 - Maven 3.9+ (the repository includes `mvnw`).
+- Node.js is not required on the build machine: Maven downloads Node 24 and builds the React UI during
+  `package`. Node is only needed for the Playwright tests.
 
 ## Build the HPI
 
 ```bash
-cd jenkins-plugin/src/main/frontend
-npm ci
-npm run build
-
-cd ../../..
+cd jenkins-plugin
 JAVA_HOME=/path/to/jdk21 ./mvnw -B -ntp package
 ```
 
+The first build downloads Node 24 and the frontend dependencies, builds the React UI, then packages the HPI.
 The artifact is `jenkins-plugin/target/jenkins-ai-copilot.hpi`.
 
-`./scripts/build.sh` does both steps.
+`./scripts/build.sh` does the same.
 
 ## Install
 

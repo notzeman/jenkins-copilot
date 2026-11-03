@@ -1,11 +1,10 @@
 // Jenkins CI for the plugin.
 //
-// Required Jenkins tool installations (Manage Jenkins -> Tools):
-//   - jdk21    : JDK 21
-//   - nodejs24 : Node.js 24
+// Requires JDK 21 on the build agent. Maven downloads Node.js and builds the React UI
+// during the Plugin stage, so no Node tool installation is required in Jenkins.
 //
-// The pipeline builds the React UI, runs the plugin tests, packages the HPI,
-// and archives it as a build artifact. It does not deploy anything.
+// The pipeline runs the plugin tests, packages the HPI, and archives it as a build artifact.
+// It does not deploy anything.
 
 pipeline {
     agent any
@@ -29,19 +28,11 @@ pipeline {
             }
         }
 
-        stage('Frontend') {
-            steps {
-                dir('jenkins-plugin/src/main/frontend') {
-                    sh 'npm ci'
-                    sh 'npm run build'
-                }
-            }
-        }
-
         stage('Plugin') {
             steps {
                 dir('jenkins-plugin') {
-                    sh './mvnw -B -ntp -Dspotbugs.skip=true test package'
+                    sh 'java -version'
+                    sh './mvnw -B -ntp -Dspotbugs.skip=true package'
                 }
             }
         }
@@ -61,7 +52,7 @@ pipeline {
             echo 'HPI built: jenkins-plugin/target/jenkins-ai-copilot.hpi'
         }
         failure {
-            echo 'Build failed. Inspect the Frontend or Plugin stage output.'
+            echo 'Build failed. Inspect the Plugin stage output.'
         }
     }
 }
