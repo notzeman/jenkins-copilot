@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 interface MenuProps {
   open: boolean;
@@ -44,20 +44,48 @@ export function Menu({
     width,
   });
 
-  useLayoutEffect(() => {
-    if (!open || !anchor) {
+  const place = useCallback(() => {
+    const menu = ref.current;
+    if (!anchor || !menu) {
       return;
     }
     const rect = anchor.getBoundingClientRect();
     const actualWidth = Math.min(Math.max(width, 220), window.innerWidth - 16);
     let left = align === 'end' ? rect.right - actualWidth : rect.left;
     left = Math.min(Math.max(left, 8), window.innerWidth - actualWidth - 8);
+
+    // Measure the rendered menu so short menus sit next to the trigger instead of
+    // reserving the full max height.
+    const menuHeight = Math.min(menu.offsetHeight, maxHeight);
     let top = rect.bottom + 6;
-    if (top + maxHeight > window.innerHeight - 8) {
-      top = Math.max(8, rect.top - maxHeight - 6);
+    if (top + menuHeight > window.innerHeight - 8) {
+      top = Math.max(8, rect.top - menuHeight - 6);
     }
-    setPosition({ left, top, width: actualWidth });
-  }, [open, anchor, width, maxHeight, align]);
+    setPosition((current) =>
+      current.left === left && current.top === top && current.width === actualWidth
+        ? current
+        : { left, top, width: actualWidth },
+    );
+  }, [align, anchor, maxHeight, width]);
+
+  useLayoutEffect(() => {
+    if (open) {
+      place();
+    }
+  }, [open, place]);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const menu = ref.current;
+    if (!menu || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+    const observer = new ResizeObserver(() => place());
+    observer.observe(menu);
+    return () => observer.disconnect();
+  }, [open, place]);
 
   useEffect(() => {
     if (!open) {

@@ -12,6 +12,13 @@ import type { AccountsResponse, GitHubAccount, ModelInfo, ProviderAccount } from
 import { SimpleSelect } from './Pickers';
 import { CheckIcon, GitHubIcon, PencilIcon, ProviderIcon, TrashIcon } from './icons';
 
+const ABOUT = [
+  'Jenkins AI Copilot is an agentic CI/CD assistant built into Jenkins. It diagnoses failing builds, ' +
+    'reviews Jenkinsfiles, and prepares fixes from pipeline-grouped sessions — with privileged actions ' +
+    'gated behind explicit approval and provider keys kept encrypted on the controller.',
+  'Works with OpenAI, Claude, opencode go, or any OpenAI-compatible endpoint.',
+];
+
 const PROVIDER_TYPES = [
   { id: 'openai', label: 'OpenAI' },
   { id: 'anthropic', label: 'Claude' },
@@ -581,12 +588,17 @@ export function SettingsPage({
 
         {tab === 'about' && (
           <section className="cp-settings-section">
-            <h3>Jenkins AI Copilot</h3>
-            <p>Version {version}</p>
-            <p>
-              Sessions are stored under <code>$JENKINS_HOME/jenkins-ai-copilot</code>. Keys never leave the
-              Jenkins controller except to the configured provider.
-            </p>
+            <div className="cp-about-head">
+              <h3>Jenkins AI Copilot</h3>
+              <span className="cp-settings-version">v{version}</span>
+            </div>
+            {ABOUT.map((line) => (
+              <p className="cp-about-lede" key={line}>{line}</p>
+            ))}
+            <div className="cp-settings-note">
+              Sessions live under <code>$JENKINS_HOME/jenkins-ai-copilot</code> and stay scoped to their owner.
+              Provider keys are Jenkins Secrets and only leave the controller for the configured provider.
+            </div>
             <p>
               <a href="/manage/configure" target="_blank" rel="noreferrer">Advanced configuration</a>
             </p>

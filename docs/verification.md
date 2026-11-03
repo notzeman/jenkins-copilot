@@ -63,7 +63,12 @@ The plugin was installed into a real Jenkins 2.580.2 container and exercised in 
   masked account list but cannot write.
 - A failing/unstable latest build animates the FAB and drawer icon and offers **Quickly analyse**, which starts
   a pipeline session and sends an investigation prompt.
-- The draw uses a bot icon; the header exposes sessions, settings, theme, expand, new session, and close.
+- The drawer uses a bot icon; the header exposes sessions, settings, theme, expand, new session, and close.
+- Each assistant message has a **Copy** button that copies the raw Markdown response and shows a temporary
+  **Copied** confirmation.
+- Provider reasoning is captured into a separate collapsible **Analysis** panel. Assistant text that precedes
+  tool calls is rendered as plain narration, and streaming text stays plain until complete, so partial
+  Markdown tables/code fences no longer render as broken blocks.
 
 The rebuilt drawer has not yet been re-run in a browser against a live Jenkins controller in this revision;
 typecheck, bundle build, and the 25 Java tests pass.

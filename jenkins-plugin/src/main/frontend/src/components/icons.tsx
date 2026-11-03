@@ -200,6 +200,15 @@ export function FlagIcon({ className }: IconProps): React.ReactElement {
   );
 }
 
+export function CopyIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg {...base} className={className}>
+      <rect x="8.5" y="8.5" width="11" height="11" rx="2" />
+      <path d="M15.5 5.5v-1a2 2 0 0 0-2-2h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h1" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function CheckIcon({ className }: IconProps): React.ReactElement {
   return (
     <svg {...base} strokeWidth={2.2} className={className}>

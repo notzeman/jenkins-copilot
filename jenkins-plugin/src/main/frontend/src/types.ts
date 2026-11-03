@@ -157,11 +157,19 @@ export interface StoredConversation {
 
 export type Item =
   | {
+      kind: 'reasoning';
+      id: string;
+      text: string;
+      done: boolean;
+    }
+  | {
       kind: 'message';
       id: string;
       role: 'user' | 'assistant';
       text: string;
       streaming?: boolean;
+      /** Text that introduced tool calls; rendered as plain analysis, not Markdown. */
+      narration?: boolean;
       images?: Array<{ id?: string; url: string; fileName?: string }>;
     }
   | {

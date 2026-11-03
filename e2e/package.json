@@ -1,7 +1,7 @@
 {
   "name": "jenkins-ai-copilot-e2e",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.2",
   "type": "module",
   "scripts": {
     "test": "playwright test"

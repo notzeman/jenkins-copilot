@@ -16,6 +16,6 @@ public final class UserAgent {
         } catch (Throwable ignored) {
             // Unit tests and early startup have no Jenkins context.
         }
-        return "jenkins-ai-copilot/0.1.0";
+        return "jenkins-ai-copilot/development";
     }
 }

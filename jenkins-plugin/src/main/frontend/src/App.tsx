@@ -26,6 +26,8 @@ import type {
 import { Markdown } from './components/Markdown';
 import { ToolCard } from './components/ToolCard';
 import { ApprovalCard } from './components/ApprovalCard';
+import { ReasoningPanel } from './components/ReasoningPanel';
+import { CopyButton } from './components/CopyButton';
 import { SettingsPage } from './components/SettingsPage';
 import { SessionList } from './components/SessionList';
 import {
@@ -291,6 +293,14 @@ export function App(): React.ReactElement {
     [],
   );
 
+  const finishReasoning = useCallback(() => {
+    setItems((current) =>
+      current.map((item) =>
+        item.kind === 'reasoning' && !item.done ? { ...item, done: true } : item,
+      ),
+    );
+  }, []);
+
   const handleEvent = useCallback(
     (event: ServerEvent) => {
       switch (event.event) {
@@ -299,9 +309,28 @@ export function App(): React.ReactElement {
           break;
         case 'message.reasoning':
           setPhase('thinking');
+          setItems((current) => {
+            const last = current[current.length - 1];
+            if (last && last.kind === 'reasoning' && !last.done) {
+              return [
+                ...current.slice(0, -1),
+                { ...last, text: last.text + event.data.text },
+              ];
+            }
+            return [
+              ...current,
+              {
+                kind: 'reasoning',
+                id: `reasoning-${Date.now()}`,
+                text: event.data.text,
+                done: false,
+              },
+            ];
+          });
           break;
         case 'message.delta': {
           setPhase('streaming');
+          finishReasoning();
           const existing = streamingId.current;
           if (existing) {
             setItems((current) =>
@@ -322,6 +351,7 @@ export function App(): React.ReactElement {
           break;
         }
         case 'message.completed': {
+          finishReasoning();
           const existing = streamingId.current;
           streamingId.current = null;
           setPhase(null);
@@ -329,7 +359,7 @@ export function App(): React.ReactElement {
             setItems((current) =>
               current.map((item) =>
                 item.kind === 'message' && item.id === existing
-                  ? { ...item, text: event.data.text || item.text, streaming: false }
+                  ? { ...item, text: item.text || event.data.text, streaming: false }
                   : item,
               ),
             );
@@ -347,8 +377,20 @@ export function App(): React.ReactElement {
           }
           break;
         }
-        case 'tool.start':
+        case 'tool.start': {
           setPhase('tools');
+          finishReasoning();
+          const streamingMessage = streamingId.current;
+          streamingId.current = null;
+          if (streamingMessage) {
+            setItems((current) =>
+              current.map((item) =>
+                item.kind === 'message' && item.id === streamingMessage
+                  ? { ...item, streaming: false, narration: true }
+                  : item,
+              ),
+            );
+          }
           addItem({
             kind: 'tool',
             id: `tool-${event.data.toolCallId}`,
@@ -360,6 +402,7 @@ export function App(): React.ReactElement {
             reason: event.data.reason,
           });
           break;
+        }
         case 'tool.result':
           updateTool(event.data.toolCallId, {
             status: 'succeeded',
@@ -398,6 +441,7 @@ export function App(): React.ReactElement {
           addItem({ kind: 'error', id: `error-${Date.now()}`, text: event.data.message });
           break;
         case 'done':
+          finishReasoning();
           setBusy(false);
           setPhase(null);
           void refreshSessions();
@@ -406,7 +450,7 @@ export function App(): React.ReactElement {
           break;
       }
     },
-    [addItem, refreshSessions, updateTool],
+    [addItem, finishReasoning, refreshSessions, updateTool],
   );
 
   const addFiles = useCallback(
@@ -624,6 +668,7 @@ export function App(): React.ReactElement {
 
   const stop = useCallback(() => {
     abortRef.current?.abort();
+    finishReasoning();
     setBusy(false);
     setPhase(null);
     setItems((current) =>
@@ -631,7 +676,7 @@ export function App(): React.ReactElement {
         item.kind === 'message' && item.streaming ? { ...item, streaming: false } : item,
       ),
     );
-  }, []);
+  }, [finishReasoning]);
 
   const reset = useCallback(() => {
     abortRef.current?.abort();
@@ -1010,12 +1055,33 @@ export function App(): React.ReactElement {
               )}
 
               {items.map((item) => {
+                if (item.kind === 'reasoning') {
+                  return <ReasoningPanel item={item} key={item.id} />;
+                }
                 if (item.kind === 'message') {
                   return (
-                    <div className={`cp-msg ${item.role === 'user' ? 'cp-user' : ''}`} key={item.id}>
+                    <div
+                      className={`cp-msg ${item.role === 'user' ? 'cp-user' : ''} ${
+                        item.role === 'assistant' && item.narration ? 'cp-narration-msg' : ''
+                      }`}
+                      key={item.id}
+                    >
                       <div className="cp-msg-head">
                         <span className="cp-dot" />
-                        {item.role === 'user' ? 'You' : 'Copilot'}
+                        {item.role === 'user'
+                          ? 'You'
+                          : item.narration
+                            ? 'Copilot · analysis'
+                            : 'Copilot'}
+                        {item.role === 'assistant' && (
+                          <>
+                            <span className="cp-grow" />
+                            <CopyButton
+                              text={item.text}
+                              label={item.narration ? 'Copy analysis' : 'Copy response'}
+                            />
+                          </>
+                        )}
                       </div>
                       {item.role === 'user' ? (
                         <>
@@ -1032,11 +1098,18 @@ export function App(): React.ReactElement {
                             </div>
                           )}
                         </>
-                      ) : (
+                      ) : item.streaming || item.narration ? (
                         <>
-                          <Markdown text={item.text} />
+                          <div
+                            className={`cp-msg-body ${item.narration ? 'cp-narration' : ''}`}
+                            style={{ whiteSpace: 'pre-wrap' }}
+                          >
+                            {item.text}
+                          </div>
                           {item.streaming && <span className="cp-cursor" aria-label="Streaming" />}
                         </>
+                      ) : (
+                        <Markdown text={item.text} />
                       )}
                     </div>
                   );

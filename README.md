@@ -98,12 +98,16 @@ OpenAI-compatible gateway.
   - Claude: `thinking` with a token budget.
 - **Images**: file picker, drag/drop, or paste. PNG, JPEG, WebP; up to 4 per message; downscaled client-side
   and validated server-side.
+- **Copy response** on every assistant message, including a copied confirmation.
 - **Tool cards** with arguments and results.
 - **Approval cards** for privileged operations, with risk, diff, validation, comment, approve, and reject.
 - **Session manager** grouped by pipeline, with rename, delete, search, and new-session actions. Multibranch
   branch jobs are grouped under the parent multibranch project.
 - **Broken-build CTA**: a failing or unstable latest build pulses the floating icon and offers
   **Quickly analyse**, which starts an investigation session with the console log and recent changes.
+- **Thinking panel**: provider reasoning is shown separately in a muted, collapsible analysis block. Tool
+  narration is rendered as plain text so partially streamed Markdown tables or code fences never appear as
+  broken blocks.
 - **Current job/build context** read from the Jenkins page, not from the browser.
 
 ## Operation levels
