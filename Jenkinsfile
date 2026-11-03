@@ -1,7 +1,8 @@
 // Jenkins CI for the plugin.
 //
-// Requires JDK 21 on the build agent. Maven downloads Node.js and builds the React UI
-// during the Plugin stage, so no Node tool installation is required in Jenkins.
+// Requires JDK 21 on the build agent.
+// The built React UI (src/main/webapp/ui/copilot.js) is committed, so the Jenkins build
+// does not need Node.js. Run scripts/build.sh locally after changing the UI.
 //
 // The pipeline runs the plugin tests, packages the HPI, and archives it as a build artifact.
 // It does not deploy anything.

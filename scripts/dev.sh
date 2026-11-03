@@ -9,9 +9,11 @@ if [[ ! -x "$JAVA_HOME/bin/java" ]]; then
   exit 1
 fi
 
+cd "$ROOT/jenkins-plugin/src/main/frontend"
+npm ci
+npm run build
+
 cd "$ROOT/jenkins-plugin"
-echo "Building the UI through Maven..."
-env JAVA_HOME="$JAVA_HOME" ./mvnw -B -ntp -DskipTests -Dspotbugs.skip=true generate-resources
 echo "Starting Jenkins with the plugin on http://localhost:8080/jenkins"
 echo "Stop with Ctrl+C."
-exec env JAVA_HOME="$JAVA_HOME" ./mvnw -B -ntp -DskipTests -Dskip.frontend=true -Dspotbugs.skip=true hpi:run
+exec env JAVA_HOME="$JAVA_HOME" ./mvnw -B -ntp -DskipTests -Dspotbugs.skip=true hpi:run

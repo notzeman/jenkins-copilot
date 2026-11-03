@@ -30,20 +30,26 @@ Jenkins (one HPI)
 
 - Jenkins **2.580.2 or newer** (Java 21).
 - Maven 3.9+ (the repository includes `mvnw`).
-- Node.js is not required on the build machine: Maven downloads Node 24 and builds the React UI during
-  `package`. Node is only needed for the Playwright tests.
+- Node.js 22+ only when changing the React UI. The built UI bundle is committed, so the Jenkins build does
+  not need Node.
 
 ## Build the HPI
 
 ```bash
-cd jenkins-plugin
-JAVA_HOME=/path/to/jdk21 ./mvnw -B -ntp package
+./scripts/build.sh
 ```
 
-The first build downloads Node 24 and the frontend dependencies, builds the React UI, then packages the HPI.
+The script rebuilds the React UI (`npm ci`, `npm run build`) and then packages the HPI:
+
+```bash
+cd jenkins-plugin
+JAVA_HOME=/path/to/jdk21 ./mvnw -B -ntp -DskipTests -Dspotbugs.skip=true package
+```
+
 The artifact is `jenkins-plugin/target/jenkins-ai-copilot.hpi`.
 
-`./scripts/build.sh` does the same.
+If you do not change the UI, Jenkins can build the committed bundle directly with `./mvnw package`; it does
+not need Node.
 
 ## Install
 

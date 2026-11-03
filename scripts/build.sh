@@ -9,7 +9,12 @@ if [[ ! -x "$JAVA_HOME/bin/java" ]]; then
   exit 1
 fi
 
-echo "==> plugin (Maven downloads Node and builds the UI)"
+echo "==> frontend"
+cd "$ROOT/jenkins-plugin/src/main/frontend"
+npm ci
+npm run build
+
+echo "==> plugin"
 cd "$ROOT/jenkins-plugin"
 JAVA_HOME="$JAVA_HOME" ./mvnw -B -ntp -DskipTests -Dspotbugs.skip=true package
 
