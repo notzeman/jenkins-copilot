@@ -20,9 +20,12 @@ import io.jenkins.plugins.copilot.providers.ProviderConfig;
 import io.jenkins.plugins.copilot.providers.ProviderFactory;
 import io.jenkins.plugins.copilot.providers.ThinkingLevel;
 import io.jenkins.plugins.copilot.providers.ToolCall;
+import io.jenkins.plugins.copilot.storage.AccountsStore;
 import io.jenkins.plugins.copilot.storage.ApprovalRecord;
 import io.jenkins.plugins.copilot.storage.ChangePlanStore;
 import io.jenkins.plugins.copilot.storage.Conversation;
+import io.jenkins.plugins.copilot.storage.GitHubAccount;
+import io.jenkins.plugins.copilot.storage.ProviderAccount;
 import io.jenkins.plugins.copilot.storage.ConversationStore;
 import io.jenkins.plugins.copilot.storage.CopilotStorage;
 import io.jenkins.plugins.copilot.storage.RunState;
@@ -96,7 +99,14 @@ public class CopilotRootAction implements UnprotectedRootAction {
         out.put("user", user == null ? null : user.getId());
         out.put("isAdmin", config.hasPermissionToConfigure());
         out.set("context", JsonBridge.toJackson(Contexts.current()));
-        out.set("config", JsonBridge.toJackson(config.publicConfig()));
+        AccountsStore accounts = new AccountsStore();
+        accounts.ensureMigrated(config);
+        ObjectNode publicConfig = (ObjectNode) JsonBridge.toJackson(config.publicConfig());
+        publicConfig.put("setupRequired", accounts.providers().isEmpty());
+        publicConfig.put("accountsConfigured", !accounts.providers().isEmpty());
+        publicConfig.put("githubConfigured", accounts.defaultGithub() != null || config.githubConfigured());
+        publicConfig.put("defaultProviderId", accounts.defaultProviderId());
+        out.set("config", publicConfig);
         writeJson(rsp, 200, out);
     }
 
@@ -235,9 +245,11 @@ public class CopilotRootAction implements UnprotectedRootAction {
         }
         String pageContext = pageContext(body);
         ConversationStore store = new ConversationStore();
+        AccountsStore accounts = new AccountsStore();
+        accounts.ensureMigrated(config);
         Conversation conversation;
         try {
-            conversation = resolveConversation(user, store, body, config);
+            conversation = resolveConversation(user, store, body, config, accounts);
         } catch (IllegalArgumentException e) {
             writeError(rsp, 400, "invalid_request", e.getMessage());
             return;
@@ -252,23 +264,20 @@ public class CopilotRootAction implements UnprotectedRootAction {
             return;
         }
 
-        String providerId = body.path("provider").asText(conversation.getProvider());
-        String model = body.path("model").asText(conversation.getModel());
-        ThinkingLevel thinking = ThinkingLevel.parse(body.path("thinking").asText(conversation.getThinking()));
-        ProviderConfig providerConfig = config.providerConfig(providerId);
-        if (providerConfig == null) {
+        ResolvedProvider resolved = resolveProvider(accounts, config, body, conversation);
+        if (resolved == null) {
             writeError(rsp, 400, "provider_not_configured", "The selected provider is not configured");
             return;
         }
-        if (model == null || model.isBlank()) {
-            model = config.getDefaultModel();
-        }
-        if (model == null || model.isBlank()) {
+        if (resolved.model == null || resolved.model.isBlank()) {
             writeError(rsp, 400, "model_required", "Select a model in the composer");
             return;
         }
-        conversation.setProvider(providerId);
-        conversation.setModel(model);
+        ThinkingLevel thinking = ThinkingLevel.parse(body.path("thinking").asText(conversation.getThinking()));
+        conversation.setProvider(resolved.providerId);
+        conversation.setProviderAccountId(resolved.account == null ? "" : resolved.account.getId());
+        conversation.setPipeline(pipelineFor(body, conversation));
+        conversation.setModel(resolved.model);
         conversation.setThinking(thinking.name());
         store.save(conversation);
 
@@ -306,7 +315,7 @@ public class CopilotRootAction implements UnprotectedRootAction {
                     approved ? "allowed" : "denied",
                     Jackson.write(Jackson.obj().put("approvalId", approval.getApprovalId())));
             synchronized (store.runLock(conversation.getId())) {
-                streamResume(user, rsp, conversation, state, store, config, providerConfig, pageContext);
+                streamResume(user, rsp, conversation, state, store, config, resolved.config, pageContext);
             }
             return;
         }
@@ -335,8 +344,8 @@ public class CopilotRootAction implements UnprotectedRootAction {
         AgentRequest request = new AgentRequest(
                 user,
                 conversation.getId(),
-                providerConfig,
-                model,
+                resolved.config,
+                resolved.model,
                 thinking,
                 history,
                 toolContext(user, conversation, config),
@@ -410,7 +419,9 @@ public class CopilotRootAction implements UnprotectedRootAction {
                 Jackson.write(Jackson.obj().put("approvalId", approval.getApprovalId())));
 
         CopilotGlobalConfiguration config = CopilotGlobalConfiguration.get();
-        ProviderConfig providerConfig = config.providerConfig(conversation.getProvider());
+        AccountsStore accounts = new AccountsStore();
+        accounts.ensureMigrated(config);
+        ProviderConfig providerConfig = providerConfigFor(accounts, config, conversation);
         if (providerConfig == null) {
             writeError(rsp, 400, "provider_not_configured", "The selected provider is not configured");
             return;
@@ -474,6 +485,311 @@ public class CopilotRootAction implements UnprotectedRootAction {
         store.delete(user.getId(), id);
         store.audit(user.getId(), "conversation.delete", id, "succeeded", "{}");
         writeJson(rsp, 200, Jackson.obj().put("deleted", true));
+    }
+
+    @POST
+    public void doCreateConversation(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        JsonNode body;
+        try {
+            body = readJson(req);
+        } catch (Exception e) {
+            writeError(rsp, 400, "invalid_request", e.getMessage());
+            return;
+        }
+        CopilotGlobalConfiguration config = CopilotGlobalConfiguration.get();
+        AccountsStore accounts = new AccountsStore();
+        accounts.ensureMigrated(config);
+        if (accounts.providers().isEmpty() && config.setupRequired()) {
+            writeError(rsp, 409, "setup_required", "An administrator must configure a provider first");
+            return;
+        }
+        String requestedAccountId = body.path("providerAccountId").asText("");
+        ProviderAccount account = requestedAccountId.isBlank()
+                ? accounts.defaultProvider()
+                : accounts.provider(requestedAccountId);
+        if (account == null) {
+            account = accounts.defaultProvider();
+        }
+        String provider = account != null ? account.getProvider() : config.getDefaultProvider();
+        String model = firstNonBlank(
+                body.path("model").asText(""),
+                account == null ? "" : account.getDefaultModel(),
+                config.getDefaultModel());
+        String pipeline = body.path("pipeline").asText("General");
+        Conversation conversation = new ConversationStore().create(
+                user.getId(),
+                provider,
+                model,
+                body.path("thinking").asText("AUTO"),
+                pipeline,
+                account == null ? "" : account.getId());
+        writeJson(rsp, 200, Jackson.MAPPER.valueToTree(conversation));
+    }
+
+    @POST
+    public void doRenameConversation(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        JsonNode body;
+        try {
+            body = readJson(req);
+        } catch (Exception e) {
+            writeError(rsp, 400, "invalid_request", e.getMessage());
+            return;
+        }
+        String id = body.path("id").asText("");
+        String title = body.path("title").asText("").trim();
+        if (title.isBlank() || title.length() > 120) {
+            writeError(rsp, 400, "invalid_title", "Title must be between 1 and 120 characters");
+            return;
+        }
+        ConversationStore store = new ConversationStore();
+        try {
+            store.rename(user.getId(), id, title);
+            store.audit(user.getId(), "conversation.rename", id, "succeeded", "{}");
+            writeJson(rsp, 200, Jackson.obj().put("renamed", true).put("id", id).put("title", title));
+        } catch (IllegalArgumentException e) {
+            writeError(rsp, 404, "conversation_not_found", "Conversation not found");
+        }
+    }
+
+    public void doSettingsAccounts(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        CopilotGlobalConfiguration config = CopilotGlobalConfiguration.get();
+        AccountsStore accounts = new AccountsStore();
+        accounts.ensureMigrated(config);
+        writeJson(rsp, 200, accounts.masked());
+    }
+
+    @POST
+    public void doSaveProvider(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        JsonNode body;
+        try {
+            body = readJson(req);
+        } catch (Exception e) {
+            writeError(rsp, 400, "invalid_request", e.getMessage());
+            return;
+        }
+        AccountsStore accounts = new AccountsStore();
+        accounts.ensureMigrated(CopilotGlobalConfiguration.get());
+        try {
+            ProviderAccount account = accounts.saveProvider(
+                    body.path("id").asText(""),
+                    body.path("provider").asText(""),
+                    body.path("label").asText(""),
+                    body.path("apiKey").asText(""),
+                    body.path("baseUrl").asText(""),
+                    body.path("defaultModel").asText(""));
+            accounts.audit(user.getId(), "settings.provider.save", account.getId(), "succeeded", "{}");
+            writeJson(rsp, 200, Jackson.obj()
+                    .put("saved", true)
+                    .put("id", account.getId())
+                    .set("accounts", accounts.masked()));
+        } catch (IllegalArgumentException e) {
+            writeError(rsp, 400, "invalid_provider", e.getMessage());
+        }
+    }
+
+    @POST
+    public void doDeleteProvider(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        JsonNode body = readJson(req);
+        String id = body.path("id").asText("");
+        AccountsStore accounts = new AccountsStore();
+        accounts.deleteProvider(id);
+        accounts.audit(user.getId(), "settings.provider.delete", id, "succeeded", "{}");
+        writeJson(rsp, 200, Jackson.obj().put("deleted", true).set("accounts", accounts.masked()));
+    }
+
+    @POST
+    public void doDefaultProvider(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        JsonNode body = readJson(req);
+        String id = body.path("id").asText("");
+        AccountsStore accounts = new AccountsStore();
+        try {
+            accounts.setDefaultProvider(id);
+            accounts.audit(user.getId(), "settings.provider.default", id, "succeeded", "{}");
+            writeJson(rsp, 200, Jackson.obj().put("saved", true).set("accounts", accounts.masked()));
+        } catch (IllegalArgumentException e) {
+            writeError(rsp, 404, "provider_not_found", e.getMessage());
+        }
+    }
+
+    @POST
+    public void doProviderModels(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        JsonNode body;
+        try {
+            body = readJson(req);
+        } catch (Exception e) {
+            writeError(rsp, 400, "invalid_request", e.getMessage());
+            return;
+        }
+        CopilotGlobalConfiguration config = CopilotGlobalConfiguration.get();
+        AccountsStore accounts = new AccountsStore();
+        accounts.ensureMigrated(config);
+        String accountId = body.path("id").asText("");
+        String providerId = body.path("provider").asText("");
+        String apiKey = body.path("apiKey").asText("");
+        String baseUrl = body.path("baseUrl").asText("");
+
+        ProviderConfig providerConfig;
+        if (!accountId.isBlank()) {
+            ProviderAccount account = accounts.provider(accountId);
+            if (account == null) {
+                writeError(rsp, 404, "provider_not_found", "Provider account not found");
+                return;
+            }
+            providerId = account.getProvider();
+            providerConfig = accounts.providerConfig(account);
+        } else if (!apiKey.isBlank()) {
+            if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+                writeError(rsp, 403, "forbidden", "Administrator permission is required to validate a key");
+                return;
+            }
+            if (!ProviderFactory.SUPPORTED.contains(providerId)) {
+                writeError(rsp, 400, "invalid_provider", "Unsupported provider");
+                return;
+            }
+            providerConfig = new ProviderConfig(providerId, apiKey, baseUrl);
+        } else {
+            providerConfig = config.providerConfig(providerId);
+        }
+        if (providerConfig == null) {
+            writeError(rsp, 400, "provider_not_configured", "Configure this provider first");
+            return;
+        }
+        if ((ProviderFactory.OPENCODE_GO.equals(providerId)
+                        || ProviderFactory.OPENAI_COMPATIBLE.equals(providerId))
+                && (providerConfig.baseUrl() == null || providerConfig.baseUrl().isBlank())) {
+            writeError(rsp, 400, "missing_base_url", "A base URL is required for " + providerId);
+            return;
+        }
+        try {
+            List<ModelInfo> models = ProviderFactory
+                    .create(providerId, providerConfig.baseUrl())
+                    .listModels(providerConfig);
+            writeJson(rsp, 200, Jackson.obj()
+                    .put("provider", providerId)
+                    .put("accountId", accountId)
+                    .set("models", Jackson.MAPPER.valueToTree(models)));
+        } catch (Exception e) {
+            writeError(rsp, 400, "model_list_failed", e.getMessage());
+        }
+    }
+
+    @POST
+    public void doSaveGithub(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        JsonNode body = readJson(req);
+        AccountsStore accounts = new AccountsStore();
+        accounts.ensureMigrated(CopilotGlobalConfiguration.get());
+        try {
+            GitHubAccount account = accounts.saveGithub(
+                    body.path("id").asText(""),
+                    body.path("label").asText(""),
+                    body.path("token").asText(""),
+                    body.path("apiUrl").asText(""));
+            accounts.audit(user.getId(), "settings.github.save", account.getId(), "succeeded", "{}");
+            writeJson(rsp, 200, Jackson.obj()
+                    .put("saved", true)
+                    .put("id", account.getId())
+                    .set("accounts", accounts.masked()));
+        } catch (IllegalArgumentException e) {
+            writeError(rsp, 400, "invalid_token", e.getMessage());
+        }
+    }
+
+    @POST
+    public void doDeleteGithub(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        JsonNode body = readJson(req);
+        String id = body.path("id").asText("");
+        AccountsStore accounts = new AccountsStore();
+        accounts.deleteGithub(id);
+        accounts.audit(user.getId(), "settings.github.delete", id, "succeeded", "{}");
+        writeJson(rsp, 200, Jackson.obj().put("deleted", true).set("accounts", accounts.masked()));
+    }
+
+    @POST
+    public void doDefaultGithub(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        JsonNode body = readJson(req);
+        String id = body.path("id").asText("");
+        AccountsStore accounts = new AccountsStore();
+        try {
+            accounts.setDefaultGithub(id);
+            accounts.audit(user.getId(), "settings.github.default", id, "succeeded", "{}");
+            writeJson(rsp, 200, Jackson.obj().put("saved", true).set("accounts", accounts.masked()));
+        } catch (IllegalArgumentException e) {
+            writeError(rsp, 404, "github_not_found", e.getMessage());
+        }
     }
 
     public void doAttachment(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
@@ -579,6 +895,9 @@ public class CopilotRootAction implements UnprotectedRootAction {
             }
         }
         conversation.setMessages(messages);
+        conversation.setStatus(AgentOutcome.AWAITING_APPROVAL.equals(outcome.getStatus())
+                ? "awaiting_approval"
+                : outcome.getError() != null ? "error" : "idle");
         store.save(conversation);
 
         if (AgentOutcome.AWAITING_APPROVAL.equals(outcome.getStatus())) {
@@ -612,40 +931,150 @@ public class CopilotRootAction implements UnprotectedRootAction {
     }
 
     private Conversation resolveConversation(
-            User user, ConversationStore store, JsonNode body, CopilotGlobalConfiguration config) {
+            User user,
+            ConversationStore store,
+            JsonNode body,
+            CopilotGlobalConfiguration config,
+            AccountsStore accounts) {
         String id = body.path("conversationId").asText("");
         if (!id.isBlank()) {
             Conversation conversation = store.get(user.getId(), id);
-            String provider = body.path("provider").asText(conversation.getProvider());
-            String model = body.path("model").asText(conversation.getModel());
-            if (config.providerConfig(provider) == null && !config.setupRequired()) {
-                provider = config.getDefaultProvider();
-                if (config.getDefaultModel() != null && !config.getDefaultModel().isBlank()) {
-                    model = config.getDefaultModel();
+            String explicitPipeline = body.path("pipeline").asText("");
+            if (!explicitPipeline.isBlank()) {
+                conversation.setPipeline(explicitPipeline);
+            } else if ("General".equals(conversation.getPipeline()) && conversation.getMessages().isEmpty()) {
+                String pipeline = pipelineFromContext(body);
+                if (!pipeline.isBlank()) {
+                    conversation.setPipeline(pipeline);
                 }
             }
-            conversation.setProvider(provider);
-            conversation.setModel(model);
+            if (body.hasNonNull("providerAccountId")) {
+                conversation.setProviderAccountId(body.get("providerAccountId").asText(""));
+            }
             return conversation;
         }
-        if (config.setupRequired()) {
+        if (accounts.providers().isEmpty() && config.setupRequired()) {
             return null;
         }
-        String provider = body.path("provider").asText(config.getDefaultProvider());
-        if (config.providerConfig(provider) == null) {
-            provider = config.configuredProviders().get(0);
+        ProviderAccount account = accounts.defaultProvider();
+        String provider = account != null ? account.getProvider() : config.getDefaultProvider();
+        String model = firstNonBlank(
+                body.path("model").asText(""),
+                account == null ? "" : account.getDefaultModel(),
+                config.getDefaultModel());
+        String pipeline = firstNonBlank(body.path("pipeline").asText(""), pipelineFromContext(body), "General");
+        return store.create(
+                user.getId(),
+                provider,
+                model,
+                body.path("thinking").asText("AUTO"),
+                pipeline,
+                account == null ? "" : account.getId());
+    }
+
+    private ResolvedProvider resolveProvider(
+            AccountsStore accounts,
+            CopilotGlobalConfiguration config,
+            JsonNode body,
+            Conversation conversation) {
+        String accountId = firstNonBlank(
+                body.path("providerAccountId").asText(""), conversation.getProviderAccountId());
+        ProviderAccount account = accountId.isBlank() ? null : accounts.provider(accountId);
+        if (account == null) {
+            account = accounts.defaultProvider();
         }
-        String model = body.path("model").asText(config.getDefaultModel());
-        String thinking = body.path("thinking").asText("AUTO");
-        return store.create(user.getId(), provider, model, thinking);
+        if (account != null) {
+            ProviderConfig providerConfig = accounts.providerConfig(account);
+            if (providerConfig == null) {
+                return null;
+            }
+            String model = firstNonBlank(
+                    body.path("model").asText(""),
+                    conversation.getModel(),
+                    account.getDefaultModel(),
+                    config.getDefaultModel());
+            return new ResolvedProvider(account, providerConfig, account.getProvider(), model);
+        }
+        String providerId = firstNonBlank(
+                body.path("provider").asText(""), conversation.getProvider(), config.getDefaultProvider());
+        ProviderConfig providerConfig = config.providerConfig(providerId);
+        if (providerConfig == null) {
+            return null;
+        }
+        String model = firstNonBlank(
+                body.path("model").asText(""), conversation.getModel(), config.getDefaultModel());
+        return new ResolvedProvider(null, providerConfig, providerId, model);
+    }
+
+    private ProviderConfig providerConfigFor(
+            AccountsStore accounts, CopilotGlobalConfiguration config, Conversation conversation) {
+        String accountId = conversation.getProviderAccountId();
+        ProviderAccount account = accountId == null || accountId.isBlank() ? null : accounts.provider(accountId);
+        if (account != null) {
+            return accounts.providerConfig(account);
+        }
+        return config.providerConfig(conversation.getProvider());
+    }
+
+    private String pipelineFor(JsonNode body, Conversation conversation) {
+        String explicit = body.path("pipeline").asText("");
+        if (!explicit.isBlank()) {
+            return explicit;
+        }
+        if ("General".equals(conversation.getPipeline())) {
+            String fromContext = pipelineFromContext(body);
+            if (!fromContext.isBlank()) {
+                return fromContext;
+            }
+        }
+        return conversation.getPipeline();
+    }
+
+    private static String pipelineFromContext(JsonNode body) {
+        JsonNode context = body.path("context");
+        return firstNonBlank(
+                context.path("pipeline").asText(""),
+                context.path("jobFullName").asText(""),
+                "");
+    }
+
+    private static String firstNonBlank(String... values) {
+        for (String value : values) {
+            if (value != null && !value.isBlank()) {
+                return value;
+            }
+        }
+        return "";
+    }
+
+    private static final class ResolvedProvider {
+        private final ProviderAccount account;
+        private final ProviderConfig config;
+        private final String providerId;
+        private final String model;
+
+        private ResolvedProvider(ProviderAccount account, ProviderConfig config, String providerId, String model) {
+            this.account = account;
+            this.config = config;
+            this.providerId = providerId;
+            this.model = model;
+        }
     }
 
     private ToolContext toolContext(User user, Conversation conversation, CopilotGlobalConfiguration config) {
+        AccountsStore accounts = new AccountsStore();
+        accounts.ensureMigrated(config);
+        GitHubAccount github = accounts.defaultGithub();
+        String token = accounts.githubToken(github);
+        String apiUrl = github == null ? config.getGithubApiUrl() : github.getApiUrl();
+        if (token == null || token.isBlank()) {
+            token = config.githubTokenPlain();
+        }
         return new ToolContext(
                 user,
                 conversation.getId(),
                 config,
-                new GitHubService(config.githubTokenPlain(), config.getGithubApiUrl()),
+                new GitHubService(token, apiUrl),
                 new ChangePlanStore(),
                 new RecoveryService(),
                 new ConversationStore());

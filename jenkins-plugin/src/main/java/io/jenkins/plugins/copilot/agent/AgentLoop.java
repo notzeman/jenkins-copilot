@@ -99,6 +99,7 @@ public class AgentLoop {
             }
             ProviderResult response = provider.stream(
                     request.provider(),
+                    request.conversationId(),
                     request.model(),
                     messages,
                     ToolCatalog.specs(),

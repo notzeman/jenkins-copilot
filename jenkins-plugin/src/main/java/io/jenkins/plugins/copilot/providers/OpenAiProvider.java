@@ -44,11 +44,13 @@ public class OpenAiProvider implements Provider {
 
     @Override
     public List<ModelInfo> listModels(ProviderConfig config) throws Exception {
-        String base = normalizeBase(config.baseUrl() == null ? defaultBaseUrl : config.baseUrl());
+        String base = normalizeBase(
+                config.baseUrl() == null ? defaultBaseUrl : config.baseUrl(), id);
         HttpRequest request = HttpRequest.newBuilder(URI.create(base + "/models"))
                 .timeout(Duration.ofSeconds(30))
                 .header("authorization", "Bearer " + config.apiKey())
                 .header("accept", "application/json")
+                .header("user-agent", UserAgent.value())
                 .GET()
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -62,7 +64,7 @@ public class OpenAiProvider implements Provider {
             if (modelId.isBlank() || isNonChatModel(modelId)) {
                 continue;
             }
-            models.add(new ModelInfo(modelId, modelId));
+            models.add(new ModelInfo(modelId, item.path("name").asText(modelId)));
         }
         models.sort(Comparator.comparing(ModelInfo::id));
         return models.size() > 300 ? models.subList(0, 300) : models;
@@ -71,6 +73,7 @@ public class OpenAiProvider implements Provider {
     @Override
     public ProviderResult stream(
             ProviderConfig config,
+            String sessionId,
             String model,
             List<ChatMessage> messages,
             List<ToolSpec> tools,
@@ -80,7 +83,8 @@ public class OpenAiProvider implements Provider {
             ProviderStreamSink sink,
             AbortSignal abort)
             throws Exception {
-        String base = normalizeBase(config.baseUrl() == null ? defaultBaseUrl : config.baseUrl());
+        String base = normalizeBase(
+                config.baseUrl() == null ? defaultBaseUrl : config.baseUrl(), id);
         ObjectNode body = Jackson.obj();
         body.put("model", stripProvider(model));
         body.set("messages", toMessages(messages, attachments));
@@ -102,11 +106,16 @@ public class OpenAiProvider implements Provider {
             body.put("reasoning_effort", thinking.name().toLowerCase());
         }
 
-        HttpRequest request = HttpRequest.newBuilder(URI.create(base + "/chat/completions"))
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(base + "/chat/completions"))
                 .timeout(clampTimeout(timeout))
                 .header("authorization", "Bearer " + config.apiKey())
                 .header("content-type", "application/json")
                 .header("accept", "text/event-stream")
+                .header("user-agent", UserAgent.value());
+        if ("opencode-go".equals(id) && sessionId != null && !sessionId.isBlank()) {
+            requestBuilder.header("x-opencode-session", sessionId);
+        }
+        HttpRequest request = requestBuilder
                 .POST(HttpRequest.BodyPublishers.ofString(Jackson.write(body), StandardCharsets.UTF_8))
                 .build();
         HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
@@ -305,13 +314,16 @@ public class OpenAiProvider implements Provider {
         return Duration.ofSeconds(Math.max(30, Math.min(seconds, 900)));
     }
 
-    static String normalizeBase(String value) {
+    static String normalizeBase(String value, String providerId) {
         String base = (value == null ? "" : value.trim()).replaceAll("/+$", "");
         if (base.endsWith("/chat/completions")) {
             base = base.substring(0, base.length() - "/chat/completions".length());
         }
         if (base.isBlank()) {
             base = "https://api.openai.com/v1";
+        }
+        if ("opencode-go".equals(providerId) && base.contains("/inference/go/openai")) {
+            base = base.replace("/inference/go/openai", "/inference/go");
         }
         if (!base.endsWith("/v1")) {
             base += "/v1";
@@ -358,9 +370,15 @@ public class OpenAiProvider implements Provider {
     private static String errorMessage(String body) {
         try {
             JsonNode node = Jackson.parse(body);
-            String message = node.path("error").path("message").asText(null);
+            JsonNode error = node.path("error");
+            String message = error.path("message").asText(null);
             if (message != null) {
-                return message;
+                String type = error.path("type").asText(null);
+                return type == null || type.isBlank() ? message : type + ": " + message;
+            }
+            String topMessage = node.path("message").asText(null);
+            if (topMessage != null) {
+                return topMessage;
             }
         } catch (RuntimeException ignored) {
             // fall through

@@ -39,7 +39,7 @@ crumb, which the sidebar reads from the page's `<head data-crumb-header data-cru
 {
   "provider": "opencode-go",
   "apiKey": "...",
-  "baseUrl": "https://your-gateway/v1",
+  "baseUrl": "https://opencode.ai/inference/go",
   "model": "your-model"
 }
 ```

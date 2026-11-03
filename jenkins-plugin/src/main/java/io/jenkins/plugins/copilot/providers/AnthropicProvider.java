@@ -46,6 +46,7 @@ public class AnthropicProvider implements Provider {
                 .header("x-api-key", config.apiKey())
                 .header("anthropic-version", API_VERSION)
                 .header("accept", "application/json")
+                .header("user-agent", UserAgent.value())
                 .GET()
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -67,6 +68,7 @@ public class AnthropicProvider implements Provider {
     @Override
     public ProviderResult stream(
             ProviderConfig config,
+            String sessionId,
             String model,
             List<ChatMessage> messages,
             List<ToolSpec> tools,
@@ -110,12 +112,17 @@ public class AnthropicProvider implements Provider {
             body.set("thinking", Jackson.obj().put("type", "enabled").put("budget_tokens", budget));
         }
 
-        HttpRequest request = HttpRequest.newBuilder(URI.create(base + "/v1/messages"))
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(base + "/v1/messages"))
                 .timeout(clampTimeout(timeout))
                 .header("x-api-key", config.apiKey())
                 .header("anthropic-version", API_VERSION)
                 .header("content-type", "application/json")
                 .header("accept", "text/event-stream")
+                .header("user-agent", UserAgent.value());
+        if (base.contains("opencode.ai") && sessionId != null && !sessionId.isBlank()) {
+            requestBuilder.header("x-opencode-session", sessionId);
+        }
+        HttpRequest request = requestBuilder
                 .POST(HttpRequest.BodyPublishers.ofString(Jackson.write(body), StandardCharsets.UTF_8))
                 .build();
         HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
@@ -333,9 +340,15 @@ public class AnthropicProvider implements Provider {
     private static String errorMessage(String body) {
         try {
             JsonNode node = Jackson.parse(body);
-            String message = node.path("error").path("message").asText(null);
+            JsonNode error = node.path("error");
+            String message = error.path("message").asText(null);
             if (message != null) {
-                return message;
+                String type = error.path("type").asText(null);
+                return type == null || type.isBlank() ? message : type + ": " + message;
+            }
+            String topMessage = node.path("message").asText(null);
+            if (topMessage != null) {
+                return topMessage;
             }
         } catch (RuntimeException ignored) {
             // fall through

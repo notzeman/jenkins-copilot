@@ -1,77 +1,61 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   attachmentUrl,
+  createConversation,
   deleteConversation,
+  fetchProviderModels,
+  getAccounts,
   listConversations,
-  listModels,
   loadConversation,
   loadSession,
+  renameConversation,
   runtime,
   streamChat,
   streamDecision,
 } from './api';
 import { prepareAttachment, type LocalAttachment } from './attachments';
-import type { Item, ModelInfo, ServerEvent, SessionResponse, StoredConversation } from './types';
+import type {
+  AccountsResponse,
+  Item,
+  ModelInfo,
+  ServerEvent,
+  SessionResponse,
+  SessionSummary,
+  StoredConversation,
+} from './types';
 import { Markdown } from './components/Markdown';
 import { ToolCard } from './components/ToolCard';
 import { ApprovalCard } from './components/ApprovalCard';
-import { SetupCard } from './components/SetupCard';
+import { SettingsPage } from './components/SettingsPage';
+import { SessionList } from './components/SessionList';
 import {
-  ChevronIcon,
+  ModelPicker,
+  ProviderPicker,
+  ThinkingPicker,
+  type ModelsState,
+} from './components/Pickers';
+import {
+  AlertIcon,
+  BotIcon,
+  ExpandIcon,
+  GearIcon,
+  ListIcon,
   MoonIcon,
-  ModelIcon,
   PaperclipIcon,
-  ProviderIcon,
-  RefreshIcon,
+  PlusIcon,
+  SendIcon,
   ShieldIcon,
   StopIcon,
   SunIcon,
-  ThinkingIcon,
-  TrashIcon,
   XIcon,
 } from './components/icons';
 
 type ApprovalItem = Extract<Item, { kind: 'approval' }>;
+type View = 'chat' | 'sessions' | 'settings';
 
-const ChatIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-    <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H9l-4 3.5V5.5Z" />
-    <path d="M8 8.5h8M8 11.5h5" strokeLinecap="round" />
-  </svg>
-);
-
-const CloseIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <path d="m6 6 12 12M18 6 6 18" strokeLinecap="round" />
-  </svg>
-);
-
-const PlusIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <path d="M12 5v14M5 12h14" strokeLinecap="round" />
-  </svg>
-);
-
-const GearIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
-    <circle cx="12" cy="12" r="3" />
-    <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.14.36.36.7.6 1 .3.3.7.4 1.1.4H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51.6Z" />
-  </svg>
-);
-
-const ExpandIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-    <path d="M4 9V4h5M20 15v5h-5M15 4h5v5M9 20H4v-5" strokeLinecap="round" />
-  </svg>
-);
-
-const SendIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <path d="M4 12 20 4l-5 16-4-6-7-2Z" strokeLinejoin="round" />
-  </svg>
-);
-
-
+function storedModelsError(error: unknown): { error: string } {
+  return { error: error instanceof Error ? error.message : 'Could not load models' };
+}
 
 export function App(): React.ReactElement {
   const [session, setSession] = useState<SessionResponse | null>(null);
@@ -81,20 +65,21 @@ export function App(): React.ReactElement {
     return Number.isFinite(saved) && saved >= 360 && saved <= 760 ? saved : 440;
   });
   const [expanded, setExpanded] = useState(false);
+  const [view, setView] = useState<View>('chat');
   const [items, setItems] = useState<Item[]>([]);
   const [conversationId, setConversationId] = useState<string | undefined>();
-  const [conversations, setConversations] = useState<
-    Array<{ id: string; title: string; status: string; updatedAt: number; provider: string; model: string }>
-  >([]);
+  const [sessions, setSessions] = useState<SessionSummary[]>([]);
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [accounts, setAccounts] = useState<AccountsResponse | null>(null);
+  const [providerAccountId, setProviderAccountId] = useState(
+    () => localStorage.getItem('cp.account') ?? '',
+  );
+  const [model, setModel] = useState(() => localStorage.getItem('cp.model') ?? '');
+  const [modelsState, setModelsState] = useState<ModelsState>({});
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [phase, setPhase] = useState<'thinking' | 'tools' | 'streaming' | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [setupMode, setSetupMode] = useState(false);
-  const [provider, setProvider] = useState('openai');
-  const [model, setModel] = useState('');
-  const [models, setModels] = useState<ModelInfo[]>([]);
-  const [modelsLoading, setModelsLoading] = useState(false);
   const [thinking, setThinking] = useState(() => localStorage.getItem('cp.thinking') ?? 'AUTO');
   const [attachments, setAttachments] = useState<LocalAttachment[]>([]);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -110,25 +95,47 @@ export function App(): React.ReactElement {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const streamingId = useRef<string | null>(null);
-  const modelRef = useRef(model);
-  modelRef.current = model;
+  const modelsRef = useRef<ModelsState>({});
+  const loadingModels = useRef<Set<string>>(new Set());
+  const openedSettings = useRef(false);
+  modelsRef.current = modelsState;
 
-  const refreshModels = useCallback(async (providerId: string, keepModel = true) => {
-    setModelsLoading(true);
+  const refreshSessions = useCallback(async () => {
     try {
-      const list = await listModels({ provider: providerId });
-      setModels(list);
-      setModel((current) => {
-        if (keepModel && current) {
-          return current;
-        }
-        return list[0]?.id ?? current;
-      });
+      setSessions(await listConversations());
+    } catch {
+      // Conversation history is non-critical; keep the current list.
+    }
+  }, []);
+
+  const loadModels = useCallback(async (accountId: string, force = false) => {
+    if (!accountId || loadingModels.current.has(accountId)) {
+      return;
+    }
+    const current = modelsRef.current[accountId];
+    if (!force && Array.isArray(current)) {
+      return;
+    }
+    loadingModels.current.add(accountId);
+    setModelsState((value) => ({ ...value, [accountId]: 'loading' }));
+    try {
+      const result = await fetchProviderModels({ id: accountId });
+      setModelsState((value) => ({ ...value, [accountId]: result.models }));
     } catch (loadError) {
-      setModels([]);
-      setError(loadError instanceof Error ? loadError.message : 'Could not load models');
+      setModelsState((value) => ({ ...value, [accountId]: storedModelsError(loadError) }));
     } finally {
-      setModelsLoading(false);
+      loadingModels.current.delete(accountId);
+    }
+  }, []);
+
+  const reloadAccounts = useCallback(async () => {
+    try {
+      const next = await getAccounts();
+      setAccounts(next);
+      const loaded = await loadSession();
+      setSession(loaded);
+    } catch (reloadError) {
+      setError(reloadError instanceof Error ? reloadError.message : 'Could not reload settings');
     }
   }, []);
 
@@ -137,23 +144,70 @@ export function App(): React.ReactElement {
       try {
         const loaded = await loadSession();
         setSession(loaded);
-        const configured = loaded.config.providers.filter((item) => item.configured);
-        const preferred =
-          configured.find((item) => item.id === loaded.config.defaultProvider)?.id ??
-          configured[0]?.id ??
-          loaded.config.defaultProvider;
-        setProvider(preferred);
-        setModel(loaded.config.defaultModel ?? '');
-        setSetupMode(loaded.config.setupRequired && loaded.isAdmin);
-        if (loaded.authenticated && !loaded.config.setupRequired) {
-          setConversations(await listConversations());
-          void refreshModels(preferred, Boolean(loaded.config.defaultModel));
+        if (!loaded.authenticated) {
+          return;
         }
+        try {
+          const accountResult = await getAccounts();
+          setAccounts(accountResult);
+          const preferred =
+            accountResult.providers.find((item) => item.id === accountResult.defaultProviderId) ??
+            accountResult.providers[0];
+          if (preferred) {
+            setProviderAccountId((current) => current || preferred.id);
+            setModel((current) => current || preferred.defaultModel || '');
+          }
+        } catch {
+          // Older controllers or restricted users may not expose the account store yet.
+        }
+        await refreshSessions();
       } catch (loadError) {
         setError(loadError instanceof Error ? loadError.message : 'Could not load the assistant');
       }
     })();
-  }, [refreshModels]);
+  }, [refreshSessions]);
+
+  useEffect(() => {
+    if (!accounts || accounts.providers.length === 0) {
+      return;
+    }
+    setProviderAccountId((current) => {
+      if (current && accounts.providers.some((item) => item.id === current)) {
+        return current;
+      }
+      const preferred =
+        accounts.providers.find((item) => item.id === accounts.defaultProviderId) ??
+        accounts.providers[0];
+      return preferred.id;
+    });
+  }, [accounts]);
+
+  useEffect(() => {
+    if (!providerAccountId) {
+      return;
+    }
+    const account = accounts?.providers.find((item) => item.id === providerAccountId);
+    setModel((current) => current || account?.defaultModel || '');
+    void loadModels(providerAccountId);
+  }, [accounts, loadModels, providerAccountId]);
+
+  useEffect(() => {
+    if (!providerAccountId || model) {
+      return;
+    }
+    const list = modelsState[providerAccountId];
+    if (Array.isArray(list) && list[0]) {
+      setModel(list[0].id);
+    }
+  }, [model, modelsState, providerAccountId]);
+
+  useEffect(() => {
+    localStorage.setItem('cp.account', providerAccountId);
+  }, [providerAccountId]);
+
+  useEffect(() => {
+    localStorage.setItem('cp.model', model);
+  }, [model]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent): void => {
@@ -162,6 +216,10 @@ export function App(): React.ReactElement {
         setOpen((value) => !value);
       }
       if (event.key === 'Escape' && open) {
+        const shadow = document.getElementById('jenkins-ai-copilot-root')?.shadowRoot;
+        if (shadow?.querySelector('.cp-menu')) {
+          return;
+        }
         setOpen(false);
       }
     };
@@ -173,7 +231,7 @@ export function App(): React.ReactElement {
     if (open) {
       window.setTimeout(() => textareaRef.current?.focus(), 60);
     }
-  }, [open]);
+  }, [open, view]);
 
   useEffect(() => {
     const thread = threadRef.current;
@@ -186,14 +244,37 @@ export function App(): React.ReactElement {
     }
   }, [items, busy]);
 
-  const context = {
-    ...(runtime.context as Record<string, unknown>),
-    ...((session?.context ?? {}) as Record<string, unknown>),
-  };
+  const context = useMemo<Record<string, unknown>>(
+    () => ({
+      ...(runtime.context as Record<string, unknown>),
+      ...((session?.context ?? {}) as Record<string, unknown>),
+    }),
+    [session],
+  );
+
   const jobName = typeof context.jobFullName === 'string' ? context.jobFullName : undefined;
   const buildNumber = typeof context.buildNumber === 'number' ? context.buildNumber : undefined;
+  const pipelineKey =
+    typeof context.pipeline === 'string' && context.pipeline
+      ? context.pipeline
+      : jobName ?? 'General';
   const buildResult = typeof context.buildResult === 'string' ? context.buildResult : null;
-  const configuredProviders = session?.config.providers.filter((item) => item.configured) ?? [];
+  const lastBuildResult =
+    typeof context.lastBuildResult === 'string' ? context.lastBuildResult : buildResult;
+  const lastBuildNumber =
+    typeof context.lastBuildNumber === 'number' ? context.lastBuildNumber : buildNumber;
+  const broken = lastBuildResult === 'FAILURE' || lastBuildResult === 'UNSTABLE';
+  const setupRequired = accounts
+    ? accounts.providers.length === 0
+    : session?.config.setupRequired ?? true;
+  const currentSession = sessions.find((item) => item.id === conversationId);
+
+  useEffect(() => {
+    if (session?.isAdmin && setupRequired && !openedSettings.current) {
+      openedSettings.current = true;
+      setView('settings');
+    }
+  }, [session?.isAdmin, setupRequired]);
 
   const addItem = useCallback((item: Item) => {
     setItems((current) => [...current, item]);
@@ -319,13 +400,13 @@ export function App(): React.ReactElement {
         case 'done':
           setBusy(false);
           setPhase(null);
-          void listConversations().then(setConversations).catch(() => undefined);
+          void refreshSessions();
           break;
         default:
           break;
       }
     },
-    [addItem, updateTool],
+    [addItem, refreshSessions, updateTool],
   );
 
   const addFiles = useCallback(
@@ -347,23 +428,29 @@ export function App(): React.ReactElement {
   );
 
   const send = useCallback(
-    async (text: string) => {
+    async (text: string, options?: { conversationId?: string }) => {
       const message = text.trim();
       if (busy || (!message && attachments.length === 0)) {
         return;
       }
-      if (!session || session.config.setupRequired) {
-        setSetupMode(true);
+      if (!session) {
         return;
       }
-      if (configuredProviders.length === 0) {
-        setSetupMode(true);
+      if (setupRequired) {
+        if (session.isAdmin) {
+          setView('settings');
+        }
+        return;
+      }
+      if (!providerAccountId) {
+        setError('Choose a provider account first');
         return;
       }
       if (!model) {
         setError('Choose a model first');
         return;
       }
+      const targetId = options?.conversationId ?? conversationId;
       setError(null);
       setInput('');
       addItem({
@@ -383,9 +470,9 @@ export function App(): React.ReactElement {
       try {
         await streamChat(
           {
-            conversationId,
+            ...(targetId ? { conversationId: targetId } : { pipeline: pipelineKey }),
             message,
-            provider,
+            providerAccountId,
             model,
             thinking,
             context,
@@ -416,8 +503,78 @@ export function App(): React.ReactElement {
         abortRef.current = null;
       }
     },
-    [addItem, attachments, busy, configuredProviders.length, conversationId, handleEvent, model, provider, session, thinking],
+    [
+      addItem,
+      attachments,
+      busy,
+      context,
+      conversationId,
+      handleEvent,
+      model,
+      pipelineKey,
+      providerAccountId,
+      session,
+      setupRequired,
+      thinking,
+    ],
   );
+
+  const newSession = useCallback(
+    async (pipeline?: string) => {
+      abortRef.current?.abort();
+      setBusy(false);
+      try {
+        const created = await createConversation(pipeline || pipelineKey || 'General', {
+          providerAccountId,
+          model,
+          thinking,
+        });
+        streamingId.current = null;
+        setConversationId(created.id);
+        setItems([]);
+        setError(null);
+        setInput('');
+        setAttachments([]);
+        setPhase(null);
+        if (created.providerAccountId) {
+          setProviderAccountId(created.providerAccountId);
+        }
+        if (created.model) {
+          setModel(created.model);
+        }
+        setView('chat');
+        await refreshSessions();
+        window.setTimeout(() => textareaRef.current?.focus(), 60);
+      } catch (createError) {
+        setError(createError instanceof Error ? createError.message : 'Could not create a session');
+      }
+    },
+    [model, pipelineKey, providerAccountId, refreshSessions, thinking],
+  );
+
+  const quickAnalyse = useCallback(async () => {
+    if (busy || !jobName) {
+      return;
+    }
+    try {
+      const pipeline = pipelineKey || jobName;
+      const created = await createConversation(pipeline, { providerAccountId, model, thinking });
+      streamingId.current = null;
+      setConversationId(created.id);
+      setItems([]);
+      setAttachments([]);
+      setView('chat');
+      await refreshSessions();
+      const where = lastBuildNumber ? ` #${lastBuildNumber}` : ' latest build';
+      await send(
+        `Investigate the failing${where} of ${jobName}. Pull the console log and recent changes, identify the ` +
+          `failing stage and root cause, then propose the smallest safe fix. Do not change anything without approval.`,
+        { conversationId: created.id },
+      );
+    } catch (analyseError) {
+      setError(analyseError instanceof Error ? analyseError.message : 'Could not start the analysis');
+    }
+  }, [busy, jobName, lastBuildNumber, model, pipelineKey, providerAccountId, refreshSessions, send, thinking]);
 
   const decide = useCallback(
     async (approval: ApprovalItem, approved: boolean, comment: string) => {
@@ -462,7 +619,7 @@ export function App(): React.ReactElement {
         abortRef.current = null;
       }
     },
-    [addItem, busy, conversationId, handleEvent],
+    [addItem, busy, context, conversationId, handleEvent],
   );
 
   const stop = useCallback(() => {
@@ -488,22 +645,11 @@ export function App(): React.ReactElement {
     setPhase(null);
   }, []);
 
-  const deleteCurrent = useCallback(async () => {
-    if (conversationId) {
-      try {
-        await deleteConversation(conversationId);
-        setConversations(await listConversations());
-      } catch (deleteError) {
-        setError(deleteError instanceof Error ? deleteError.message : 'Could not delete the conversation');
-      }
-    }
-    reset();
-  }, [conversationId, reset]);
-
-  const selectConversation = useCallback(
+  const selectSession = useCallback(
     async (id: string) => {
       if (!id) {
         reset();
+        setView('chat');
         return;
       }
       abortRef.current?.abort();
@@ -513,19 +659,46 @@ export function App(): React.ReactElement {
         const stored: StoredConversation = await loadConversation(id);
         setItems(mapStoredConversation(stored, id));
         setConversationId(id);
-        const nextProvider = stored.conversation.provider || provider;
-        setProvider(nextProvider);
         setThinking(stored.conversation.thinking || 'AUTO');
-        setModel(stored.conversation.model || model);
-        if (stored.conversation.provider) {
-          void refreshModels(stored.conversation.provider, true);
+        setModel(stored.conversation.model || '');
+        if (stored.conversation.providerAccountId) {
+          setProviderAccountId(stored.conversation.providerAccountId);
+          void loadModels(stored.conversation.providerAccountId);
         }
-        setSetupMode(false);
+        setError(null);
+        setView('chat');
       } catch (loadError) {
         setError(loadError instanceof Error ? loadError.message : 'Could not load the conversation');
       }
     },
-    [model, provider, refreshModels, reset],
+    [loadModels, reset],
+  );
+
+  const renameSession = useCallback(
+    async (id: string, title: string) => {
+      try {
+        await renameConversation(id, title);
+        await refreshSessions();
+      } catch (renameError) {
+        setError(renameError instanceof Error ? renameError.message : 'Could not rename the session');
+      }
+    },
+    [refreshSessions],
+  );
+
+  const removeSession = useCallback(
+    async (id: string) => {
+      try {
+        await deleteConversation(id);
+        if (id === conversationId) {
+          reset();
+        }
+        await refreshSessions();
+      } catch (deleteError) {
+        setError(deleteError instanceof Error ? deleteError.message : 'Could not delete the session');
+      }
+    },
+    [conversationId, refreshSessions, reset],
   );
 
   const startResize = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
@@ -549,6 +722,16 @@ export function App(): React.ReactElement {
     window.addEventListener('pointerup', onUp);
   }, []);
 
+  const changeTheme = useCallback((next: 'light' | 'dark') => {
+    setTheme(next);
+    localStorage.setItem('cp.theme', next);
+  }, []);
+
+  const changeThinking = useCallback((next: string) => {
+    setThinking(next);
+    localStorage.setItem('cp.thinking', next);
+  }, []);
+
   const drawerWidth = expanded ? Math.min(760, Math.max(width, 640)) : width;
   const quickActions = useMemo(() => {
     const actions = [
@@ -565,22 +748,33 @@ export function App(): React.ReactElement {
     return actions.slice(0, 4);
   }, [jobName]);
 
-  const setupRequired = session?.config.setupRequired ?? true;
-  const showSetup = setupMode || (setupRequired && session?.isAdmin !== false);
-  const selectedModelLabel =
-    models.find((item) => item.id === model)?.label || model || 'select model';
+  const placeholder = busy
+    ? phase === 'thinking'
+      ? 'Thinking…'
+      : phase === 'tools'
+        ? 'Running tools…'
+        : 'Working…'
+    : setupRequired
+      ? 'Finish provider setup first…'
+      : jobName
+        ? `Ask about ${jobName}…`
+        : 'Ask about a job, build, pipeline, or deployment…';
 
   return (
     <div className="cp-shell" data-theme={theme}>
       {!open && (
         <button
           type="button"
-          className="cp-fab"
-          aria-label="Open Jenkins Copilot"
-          title="Jenkins Copilot (Ctrl+J)"
+          className={`cp-fab ${broken ? 'cp-fab-alert' : ''}`}
+          aria-label={broken ? 'Open Jenkins Copilot — latest build failed' : 'Open Jenkins Copilot'}
+          title={
+            broken
+              ? `Latest build ${lastBuildResult ?? 'failed'} — open Copilot`
+              : 'Jenkins Copilot (Ctrl+J)'
+          }
           onClick={() => setOpen(true)}
         >
-          <ChatIcon />
+          <BotIcon />
         </button>
       )}
       <aside
@@ -596,175 +790,222 @@ export function App(): React.ReactElement {
           aria-label="Resize assistant"
           onPointerDown={startResize}
         />
-        <header className="cp-head">
-          <div className="cp-head-row">
-            <div className="cp-logo">
-              <ChatIcon />
-            </div>
-            <div>
-              <div className="cp-title">Jenkins Copilot</div>
-              <div className="cp-sub">{session?.user ? `@${session.user}` : 'agentic CI/CD operator'}</div>
-            </div>
-            <div className="cp-grow" />
-            {session?.isAdmin && (
-              <button
-                type="button"
-                className="cp-iconbtn"
-                title="Providers and models"
-                aria-label="Providers and models"
-                onClick={() => setSetupMode((value) => !value)}
-              >
-                <GearIcon />
-              </button>
-            )}
-            <button
-              type="button"
-              className="cp-iconbtn"
-              title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-              aria-label="Toggle theme"
-              onClick={() => {
-                const next = theme === 'dark' ? 'light' : 'dark';
-                setTheme(next);
-                localStorage.setItem('cp.theme', next);
-              }}
-            >
-              {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-            </button>
-            <button
-              type="button"
-              className="cp-iconbtn"
-              title="Expand"
-              aria-label="Expand assistant"
-              onClick={() => setExpanded((value) => !value)}
-            >
-              <ExpandIcon />
-            </button>
-            <button
-              type="button"
-              className="cp-iconbtn"
-              title="New conversation"
-              aria-label="New conversation"
-              onClick={reset}
-            >
-              <PlusIcon />
-            </button>
-            <button
-              type="button"
-              className="cp-iconbtn"
-              title="Close"
-              aria-label="Close assistant"
-              onClick={() => setOpen(false)}
-            >
-              <CloseIcon />
-            </button>
-          </div>
 
-          <div className="cp-convbar">
-            <select
-              className="cp-select"
-              aria-label="Conversation history"
-              value={conversationId ?? ''}
-              onChange={(event) => void selectConversation(event.target.value)}
-            >
-              <option value="">New conversation</option>
-              {conversations.map((conversation) => (
-                <option key={conversation.id} value={conversation.id}>
-                  {conversation.title}
-                </option>
-              ))}
-            </select>
-            <button
-              type="button"
-              className="cp-iconbtn"
-              title="Delete this conversation"
-              aria-label="Delete this conversation"
-              onClick={() => void deleteCurrent()}
-            >
-              <TrashIcon />
-            </button>
-          </div>
-
-          <div className="cp-chips">
-            {jobName && (
-              <span className="cp-chip" title={jobName}>
-                job <b>{jobName}</b>
-              </span>
-            )}
-            {buildNumber !== undefined && (
-              <span
-                className={`cp-chip ${
-                  buildResult === 'FAILURE' ? 'cp-fail' : buildResult === 'SUCCESS' ? 'cp-ok' : ''
-                }`}
-              >
-                build <b>#{buildNumber}</b>
-                {buildResult ? ` · ${buildResult}` : ''}
-              </span>
-            )}
-            {!jobName && <span className="cp-chip">no job context</span>}
-            {setupRequired && <span className="cp-chip cp-fail">setup required</span>}
-            {!session?.config.githubConfigured && <span className="cp-chip">GitHub not configured</span>}
-          </div>
-        </header>
-
-        {error && <div className="cp-banner">{error}</div>}
-
-        {showSetup && session ? (
-          <div className="cp-thread">
-            <SetupCard
-              session={session}
-              initialProvider={provider}
-              initialBaseUrl={configuredProviders.find((item) => item.id === provider)?.baseUrl}
-              onCancel={
-                !setupRequired
-                  ? () => {
-                      setSetupMode(false);
-                      setError(null);
-                    }
-                  : undefined
-              }
-              onSaved={(savedProvider, savedModel, savedModels) => {
-                setProvider(savedProvider);
-                setModel(savedModel);
-                setModels(savedModels);
-                setSession((current) =>
-                  current
-                    ? {
-                        ...current,
-                        config: {
-                          ...current.config,
-                          setupRequired: false,
-                          defaultProvider: savedProvider,
-                          defaultModel: savedModel,
-                          providers: current.config.providers.map((item) =>
-                            item.id === savedProvider ? { ...item, configured: true } : item,
-                          ),
-                        },
-                      }
-                    : current,
-                );
-                setSetupMode(false);
-                setError(null);
-                void listConversations().then(setConversations).catch(() => undefined);
-              }}
-            />
-          </div>
+        {view === 'settings' && session ? (
+          <SettingsPage
+            accounts={accounts}
+            isAdmin={session.isAdmin}
+            version={runtime.version}
+            theme={theme}
+            onThemeChange={changeTheme}
+            onClose={() => setView('chat')}
+            onReload={reloadAccounts}
+            onAccountsChanged={setAccounts}
+          />
+        ) : view === 'sessions' ? (
+          <SessionList
+            sessions={sessions}
+            activeId={conversationId}
+            currentPipeline={pipelineKey}
+            collapsed={collapsed}
+            onToggle={(pipeline) =>
+              setCollapsed((current) => {
+                const next = new Set(current);
+                if (next.has(pipeline)) {
+                  next.delete(pipeline);
+                } else {
+                  next.add(pipeline);
+                }
+                return next;
+              })
+            }
+            onSelect={(id) => void selectSession(id)}
+            onNew={(pipeline) => void newSession(pipeline)}
+            onDelete={(id) => void removeSession(id)}
+            onRename={(id, title) => void renameSession(id, title)}
+            onClose={() => setView('chat')}
+          />
         ) : (
           <>
+            <header className="cp-head">
+              <div className="cp-head-row">
+                <div className={`cp-logo ${broken ? 'cp-logo-alert' : ''}`}>
+                  <BotIcon />
+                </div>
+                <div className="cp-head-text">
+                  <div className="cp-title">Jenkins Copilot</div>
+                  <div className="cp-sub">
+                    {session?.user ? `@${session.user}` : 'agentic CI/CD operator'}
+                  </div>
+                </div>
+                <div className="cp-grow" />
+                <button
+                  type="button"
+                  className="cp-iconbtn"
+                  title="Sessions and pipelines"
+                  aria-label="Sessions and pipelines"
+                  onClick={() => setView('sessions')}
+                >
+                  <ListIcon />
+                </button>
+                {session?.isAdmin && (
+                  <button
+                    type="button"
+                    className="cp-iconbtn"
+                    title="Settings"
+                    aria-label="Settings"
+                    onClick={() => setView('settings')}
+                  >
+                    <GearIcon />
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="cp-iconbtn"
+                  title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+                  aria-label="Toggle theme"
+                  onClick={() => changeTheme(theme === 'dark' ? 'light' : 'dark')}
+                >
+                  {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+                </button>
+                <button
+                  type="button"
+                  className="cp-iconbtn"
+                  title={expanded ? 'Restore width' : 'Expand'}
+                  aria-label="Expand assistant"
+                  onClick={() => setExpanded((value) => !value)}
+                >
+                  <ExpandIcon />
+                </button>
+                <button
+                  type="button"
+                  className="cp-iconbtn"
+                  title="New session"
+                  aria-label="New session"
+                  onClick={() => void newSession(pipelineKey)}
+                >
+                  <PlusIcon />
+                </button>
+                <button
+                  type="button"
+                  className="cp-iconbtn"
+                  title="Close"
+                  aria-label="Close assistant"
+                  onClick={() => setOpen(false)}
+                >
+                  <XIcon />
+                </button>
+              </div>
+
+              <div className="cp-chips">
+                {jobName && (
+                  <span className="cp-chip" title={jobName}>
+                    job <b>{jobName}</b>
+                  </span>
+                )}
+                {lastBuildNumber !== undefined && (
+                  <span
+                    className={`cp-chip ${
+                      lastBuildResult === 'FAILURE'
+                        ? 'cp-fail'
+                        : lastBuildResult === 'SUCCESS'
+                          ? 'cp-ok'
+                          : ''
+                    }`}
+                  >
+                    build <b>#{lastBuildNumber}</b>
+                    {lastBuildResult ? ` · ${lastBuildResult}` : ''}
+                  </span>
+                )}
+                {currentSession && (
+                  <span className="cp-chip" title={currentSession.title}>
+                    session <b>{currentSession.title}</b>
+                  </span>
+                )}
+                {!jobName && <span className="cp-chip">no job context</span>}
+                {setupRequired && <span className="cp-chip cp-fail">setup required</span>}
+                {!session?.config.githubConfigured && <span className="cp-chip">GitHub not configured</span>}
+              </div>
+            </header>
+
+            {error && <div className="cp-banner">{error}</div>}
+
             <div className="cp-thread" ref={threadRef}>
               {items.length === 0 && (
                 <div className="cp-empty">
-                  <h3>What are we fixing?</h3>
-                  <p>
-                    I can inspect jobs and builds, diagnose failures, generate and review Jenkinsfiles, and
-                    prepare approved pipeline or deployment recovery changes.
-                  </p>
-                  <div className="cp-quick">
-                    {quickActions.map((action) => (
-                      <button key={action} type="button" onClick={() => void send(action)}>
-                        {action}
-                      </button>
-                    ))}
-                  </div>
+                  {broken && (
+                    <div className="cp-alert">
+                      <div className="cp-alert-title">
+                        <AlertIcon />
+                        {`Build ${lastBuildNumber ? `#${lastBuildNumber} ` : ''}${lastBuildResult ?? 'failed'}`}
+                      </div>
+                      <p>
+                        {jobName ?? 'This pipeline'} did not finish cleanly. I can read the console log,
+                        compare recent changes, and point at the failing stage before proposing a fix.
+                      </p>
+                      <div className="cp-alert-actions">
+                        <button
+                          type="button"
+                          className="cp-btn cp-primary"
+                          onClick={() => void quickAnalyse()}
+                          disabled={busy || !jobName}
+                        >
+                          Quickly analyse
+                        </button>
+                        <button
+                          type="button"
+                          className="cp-btn"
+                          onClick={() =>
+                            void send(`Show me the console log of the latest build of ${jobName ?? 'this job'}.`)
+                          }
+                          disabled={busy}
+                        >
+                          Show log
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {setupRequired ? (
+                    <>
+                      <h3>Finish setup</h3>
+                      <p>
+                        An administrator needs to add a provider account before the assistant can answer
+                        questions.
+                      </p>
+                      {session?.isAdmin && (
+                        <button
+                          type="button"
+                          className="cp-btn cp-primary"
+                          onClick={() => setView('settings')}
+                        >
+                          Open settings
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <h3>{broken ? 'Let’s get this build green' : 'What are we fixing?'}</h3>
+                      <p>
+                        I can inspect jobs and builds, diagnose failures, generate and review Jenkinsfiles,
+                        and prepare approved pipeline or deployment recovery changes.
+                      </p>
+                      {currentSession && (
+                        <p className="cp-empty-session">
+                          Continuing <b>{currentSession.title}</b> ·{' '}
+                          {currentSession.messageCount} message
+                          {currentSession.messageCount === 1 ? '' : 's'}
+                        </p>
+                      )}
+                      <div className="cp-quick">
+                        {quickActions.map((action) => (
+                          <button key={action} type="button" onClick={() => void send(action)}>
+                            {action}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
@@ -850,19 +1091,7 @@ export function App(): React.ReactElement {
                 <textarea
                   ref={textareaRef}
                   className="cp-textarea"
-                  placeholder={
-                    busy
-                      ? phase === 'thinking'
-                        ? 'Thinking…'
-                        : phase === 'tools'
-                          ? 'Running tools…'
-                          : 'Working…'
-                      : setupRequired
-                        ? 'Finish provider setup first…'
-                        : jobName
-                          ? `Ask about ${jobName}…`
-                          : 'Ask about a job, build, pipeline, or deployment…'
-                  }
+                  placeholder={placeholder}
                   value={input}
                   rows={1}
                   disabled={busy}
@@ -924,89 +1153,32 @@ export function App(): React.ReactElement {
                   </div>
 
                   <div className="cp-bar-right">
-                    {configuredProviders.length > 0 && (
-                      <label className="cp-pill" title="Provider">
-                        <ProviderIcon className="cp-pill-icon" />
-                        <select
-                          className="cp-pill-native"
-                          aria-label="Provider"
-                          value={provider}
-                          onChange={(event) => {
-                            const next = event.target.value;
-                            setProvider(next);
-                            setModel('');
-                            void refreshModels(next, false);
-                          }}
-                        >
-                          {configuredProviders.map((item) => (
-                            <option key={item.id} value={item.id}>
-                              {item.label}
-                            </option>
-                          ))}
-                        </select>
-                        <ChevronIcon className="cp-pill-chevron" />
-                      </label>
+                    {accounts && accounts.providers.length > 0 && (
+                      <ProviderPicker
+                        accounts={accounts.providers}
+                        value={providerAccountId}
+                        onSelect={(account) => {
+                          setProviderAccountId(account.id);
+                          setModel(account.defaultModel || '');
+                          void loadModels(account.id);
+                        }}
+                      />
                     )}
 
-                    <label className="cp-pill cp-pill-model" title="Model">
-                      <ModelIcon className="cp-pill-icon" />
-                      {models.length > 0 ? (
-                        <select
-                          className="cp-pill-native"
-                          aria-label="Model"
-                          value={model}
-                          onChange={(event) => setModel(event.target.value)}
-                        >
-                          {models.some((item) => item.id === model) ? null : (
-                            <option value={model}>{selectedModelLabel}</option>
-                          )}
-                          {models.map((item) => (
-                            <option key={item.id} value={item.id}>
-                              {item.label || item.id}
-                            </option>
-                          ))}
-                        </select>
-                      ) : (
-                        <input
-                          className="cp-pill-input"
-                          aria-label="Model id"
-                          placeholder={modelsLoading ? 'loading…' : 'model id'}
-                          value={model}
-                          onChange={(event) => setModel(event.target.value)}
-                        />
-                      )}
-                      <ChevronIcon className="cp-pill-chevron" />
-                    </label>
+                    <ModelPicker
+                      accounts={accounts?.providers ?? []}
+                      accountId={providerAccountId}
+                      model={model}
+                      models={modelsState}
+                      onOpen={(accountId) => void loadModels(accountId)}
+                      onSelect={(accountId, nextModel) => {
+                        setProviderAccountId(accountId);
+                        setModel(nextModel);
+                      }}
+                      onRefresh={() => void loadModels(providerAccountId, true)}
+                    />
 
-                    <label className="cp-pill" title={`Thinking: ${thinking.toLowerCase()}`}>
-                      <ThinkingIcon className="cp-pill-icon" />
-                      <select
-                        className="cp-pill-native cp-thinking-native"
-                        aria-label="Thinking"
-                        value={thinking}
-                        onChange={(event) => {
-                          setThinking(event.target.value);
-                          localStorage.setItem('cp.thinking', event.target.value);
-                        }}
-                      >
-                        <option value="AUTO">Auto</option>
-                        <option value="OFF">Off</option>
-                        <option value="LOW">Low</option>
-                        <option value="MEDIUM">Medium</option>
-                        <option value="HIGH">High</option>
-                      </select>
-                      <ChevronIcon className="cp-pill-chevron" />
-                    </label>
-
-                    <button
-                      type="button"
-                      className="cp-bar-btn"
-                      title="Refresh models"
-                      aria-label="Refresh models"
-                      onClick={() => void refreshModels(provider, true)}
-                    >
-                      <RefreshIcon />
-                    </button>
+                    <ThinkingPicker value={thinking} onChange={changeThinking} />
 
                     {busy ? (
                       <button type="button" className="cp-send" onClick={stop} aria-label="Stop">
@@ -1030,6 +1202,7 @@ export function App(): React.ReactElement {
           </>
         )}
       </aside>
+      <div id="cp-portal" className="cp-portal-root" />
     </div>
   );
 }

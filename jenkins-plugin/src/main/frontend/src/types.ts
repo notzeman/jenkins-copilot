@@ -6,6 +6,11 @@ export interface SessionContext {
   buildNumber?: number;
   buildUrl?: string;
   buildResult?: string | null;
+  pipeline?: string;
+  lastBuildNumber?: number;
+  lastBuildResult?: string | null;
+  lastBuildUrl?: string;
+  jobHealthScore?: number;
 }
 
 export interface ProviderInfo {
@@ -30,8 +35,59 @@ export interface SessionResponse {
     maxAttachmentMb: number;
     autoApproveLevel2: boolean;
     githubConfigured: boolean;
+    accountsConfigured?: boolean;
+    defaultProviderId?: string;
     providers: ProviderInfo[];
   };
+}
+
+export interface ProviderAccount {
+  id: string;
+  provider: string;
+  providerLabel: string;
+  label: string;
+  baseUrl: string;
+  defaultModel: string;
+  hasKey: boolean;
+  default: boolean;
+}
+
+export interface GitHubAccount {
+  id: string;
+  label: string;
+  apiUrl: string;
+  hasToken: boolean;
+  default: boolean;
+}
+
+export interface AccountsResponse {
+  providers: ProviderAccount[];
+  github: GitHubAccount[];
+  defaultProviderId: string;
+  defaultGithubId: string;
+}
+
+export interface SessionCreated {
+  id: string;
+  title?: string;
+  provider?: string;
+  providerAccountId?: string;
+  model?: string;
+  thinking?: string;
+  pipeline?: string;
+}
+
+export interface SessionSummary {
+  id: string;
+  title: string;
+  status: string;
+  updatedAt: number;
+  createdAt: number;
+  provider: string;
+  model: string;
+  pipeline: string;
+  providerAccountId: string;
+  messageCount: number;
 }
 
 export interface ModelInfo {
@@ -91,6 +147,9 @@ export interface StoredConversation {
     model: string;
     thinking: string;
     updatedAt: number;
+    pipeline?: string;
+    providerAccountId?: string;
+    status?: string;
   };
   messages: StoredMessage[];
   pendingApprovals: ApprovalRecord[];

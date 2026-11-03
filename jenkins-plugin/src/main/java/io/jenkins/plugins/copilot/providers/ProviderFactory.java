@@ -7,8 +7,9 @@ public final class ProviderFactory {
     public static final String OPENAI = "openai";
     public static final String ANTHROPIC = "anthropic";
     public static final String OPENCODE_GO = "opencode-go";
+    public static final String OPENAI_COMPATIBLE = "openai-compatible";
 
-    public static final List<String> SUPPORTED = List.of(OPENAI, ANTHROPIC, OPENCODE_GO);
+    public static final List<String> SUPPORTED = List.of(OPENAI, ANTHROPIC, OPENCODE_GO, OPENAI_COMPATIBLE);
 
     private ProviderFactory() {}
 
@@ -17,6 +18,7 @@ public final class ProviderFactory {
             case OPENAI -> new OpenAiProvider(OPENAI, "https://api.openai.com/v1");
             case ANTHROPIC -> new AnthropicProvider();
             case OPENCODE_GO -> new OpenAiProvider(OPENCODE_GO, opencodeGoBaseUrl);
+            case OPENAI_COMPATIBLE -> new OpenAiProvider(OPENAI_COMPATIBLE, opencodeGoBaseUrl);
             default -> throw new IllegalArgumentException("Unsupported provider: " + providerId);
         };
     }
@@ -26,6 +28,7 @@ public final class ProviderFactory {
             case OPENAI -> "OpenAI";
             case ANTHROPIC -> "Claude";
             case OPENCODE_GO -> "opencode go";
+            case OPENAI_COMPATIBLE -> "OpenAI-compatible";
             default -> providerId;
         };
     }

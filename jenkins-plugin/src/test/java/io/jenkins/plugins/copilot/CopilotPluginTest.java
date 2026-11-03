@@ -257,6 +257,7 @@ public class CopilotPluginTest {
         @Override
         public ProviderResult stream(
                 ProviderConfig config,
+                String sessionId,
                 String model,
                 List<ChatMessage> messages,
                 List<ToolSpec> tools,
@@ -304,6 +305,87 @@ public class CopilotPluginTest {
         public void approvalRequired(ApprovalRecord approval) {
             approvals.add(approval.getToolName());
         }
+    }
+
+    @Test
+    public void providerAccountsAreMaskedAndAdminOnlyForWrites() throws Exception {
+        String payload = Jackson.write(Jackson.obj()
+                .put("provider", "openai")
+                .put("label", "Work")
+                .put("apiKey", "sk-live-secret")
+                .put("defaultModel", "gpt-5"));
+
+        Response forbidden = post("jenkins-ai-copilot/saveProvider", payload, "alice");
+        assertEquals(403, forbidden.status);
+
+        Response saved = post("jenkins-ai-copilot/saveProvider", payload, "admin");
+        assertEquals(200, saved.status);
+        assertFalse(saved.body.contains("sk-live-secret"));
+        JsonNode accounts = Jackson.parse(saved.body).path("accounts");
+        assertEquals(1, accounts.path("providers").size());
+        assertTrue(accounts.path("providers").get(0).path("hasKey").asBoolean());
+        assertEquals("Work", accounts.path("providers").get(0).path("label").asText());
+        assertTrue(accounts.path("providers").get(0).path("default").asBoolean());
+
+        Response readable = get("jenkins-ai-copilot/settingsAccounts", "alice");
+        assertEquals(200, readable.status);
+        assertFalse(readable.body.contains("sk-live-secret"));
+        assertTrue(readable.body.contains("\"Work\""));
+    }
+
+    @Test
+    public void githubTokensAreEncryptedAndMasked() throws Exception {
+        Response saved = post(
+                "jenkins-ai-copilot/saveGithub",
+                Jackson.write(Jackson.obj().put("label", "Team").put("token", "ghp_live_secret")),
+                "admin");
+        assertEquals(200, saved.status);
+        assertFalse(saved.body.contains("ghp_live_secret"));
+        JsonNode account = Jackson.parse(saved.body).path("accounts").path("github").get(0);
+        assertTrue(account.path("hasToken").asBoolean());
+        assertEquals("Team", account.path("label").asText());
+    }
+
+    @Test
+    public void sessionsKeepTheirPipelineAndSurfaceItInTheList() throws Exception {
+        post(
+                "jenkins-ai-copilot/saveProvider",
+                Jackson.write(Jackson.obj()
+                        .put("provider", "openai")
+                        .put("label", "Work")
+                        .put("apiKey", "sk-live-secret")
+                        .put("defaultModel", "gpt-5")),
+                "admin");
+
+        Response created = post(
+                "jenkins-ai-copilot/createConversation",
+                Jackson.write(Jackson.obj()
+                        .put("pipeline", "team/app")
+                        .put("thinking", "LOW")
+                        .put("model", "gpt-5")),
+                "admin");
+        assertEquals(200, created.status);
+        JsonNode conversation = Jackson.parse(created.body);
+        assertEquals("team/app", conversation.path("pipeline").asText());
+        assertEquals("LOW", conversation.path("thinking").asText());
+        assertFalse(conversation.path("providerAccountId").asText().isBlank());
+
+        Response list = get("jenkins-ai-copilot/conversations", "admin");
+        JsonNode sessions = Jackson.parse(list.body).path("conversations");
+        assertEquals(1, sessions.size());
+        assertEquals("team/app", sessions.get(0).path("pipeline").asText());
+
+        Response renamed = post(
+                "jenkins-ai-copilot/renameConversation",
+                Jackson.write(Jackson.obj()
+                        .put("id", conversation.path("id").asText())
+                        .put("title", "Broken Docker build")),
+                "admin");
+        assertEquals(200, renamed.status);
+        assertTrue(renamed.body.contains("Broken Docker build"));
+
+        Response otherUser = get("jenkins-ai-copilot/conversations", "alice");
+        assertEquals(0, Jackson.parse(otherUser.body).path("conversations").size());
     }
 
     private Response get(String path, String user) throws Exception {

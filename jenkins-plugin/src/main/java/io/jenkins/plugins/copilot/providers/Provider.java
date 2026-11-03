@@ -10,6 +10,7 @@ public interface Provider {
 
     ProviderResult stream(
             ProviderConfig config,
+            String sessionId,
             String model,
             List<ChatMessage> messages,
             List<ToolSpec> tools,

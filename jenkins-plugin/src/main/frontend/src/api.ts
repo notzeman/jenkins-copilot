@@ -1,4 +1,14 @@
-import type { ModelInfo, ServerEvent, SessionResponse, StoredConversation } from './types';
+import type {
+  AccountsResponse,
+  GitHubAccount,
+  ModelInfo,
+  ProviderAccount,
+  ServerEvent,
+  SessionCreated,
+  SessionResponse,
+  SessionSummary,
+  StoredConversation,
+} from './types';
 
 const root = document.getElementById('jenkins-ai-copilot-root');
 if (!root) {
@@ -92,20 +102,79 @@ export async function listModels(body: {
   return payload.models ?? [];
 }
 
-export async function listConversations(): Promise<
-  Array<{ id: string; title: string; status: string; updatedAt: number; provider: string; model: string }>
-> {
-  const payload = await getJson<{
-    conversations: Array<{
-      id: string;
-      title: string;
-      status: string;
-      updatedAt: number;
-      provider: string;
-      model: string;
-    }>;
-  }>('conversations');
+export async function listConversations(): Promise<SessionSummary[]> {
+  const payload = await getJson<{ conversations: SessionSummary[] }>('conversations');
   return payload.conversations ?? [];
+}
+
+export interface CreateConversationOptions {
+  providerAccountId?: string;
+  model?: string;
+  thinking?: string;
+}
+
+export async function createConversation(
+  pipeline: string,
+  options: CreateConversationOptions = {},
+): Promise<SessionCreated> {
+  return postJson<SessionCreated>('createConversation', { pipeline, ...options });
+}
+
+export function renameConversation(id: string, title: string): Promise<{ renamed: boolean }> {
+  return postJson<{ renamed: boolean }>('renameConversation', { id, title });
+}
+
+export function getAccounts(): Promise<AccountsResponse> {
+  return getJson<AccountsResponse>('settingsAccounts');
+}
+
+export interface SaveProviderRequest {
+  id?: string;
+  provider: string;
+  label: string;
+  apiKey?: string;
+  baseUrl?: string;
+  defaultModel?: string;
+}
+
+export function saveProviderAccount(body: SaveProviderRequest): Promise<{ saved: boolean; id: string; accounts: AccountsResponse }> {
+  return postJson('saveProvider', body);
+}
+
+export function deleteProviderAccount(id: string): Promise<{ accounts: AccountsResponse }> {
+  return postJson('deleteProvider', { id });
+}
+
+export function setDefaultProvider(id: string): Promise<{ accounts: AccountsResponse }> {
+  return postJson('defaultProvider', { id });
+}
+
+export function fetchProviderModels(body: {
+  id?: string;
+  provider?: string;
+  apiKey?: string;
+  baseUrl?: string;
+}): Promise<{ provider: string; accountId: string; models: ModelInfo[] }> {
+  return postJson('providerModels', body);
+}
+
+export interface SaveGitHubRequest {
+  id?: string;
+  label: string;
+  token?: string;
+  apiUrl?: string;
+}
+
+export function saveGithubAccount(body: SaveGitHubRequest): Promise<{ accounts: AccountsResponse }> {
+  return postJson('saveGithub', body);
+}
+
+export function deleteGithubAccount(id: string): Promise<{ accounts: AccountsResponse }> {
+  return postJson('deleteGithub', { id });
+}
+
+export function setDefaultGithub(id: string): Promise<{ accounts: AccountsResponse }> {
+  return postJson('defaultGithub', { id });
 }
 
 export function loadConversation(id: string): Promise<StoredConversation> {
@@ -128,6 +197,8 @@ export interface ChatBody {
   provider?: string;
   model?: string;
   thinking?: string;
+  providerAccountId?: string;
+  pipeline?: string;
   context?: Record<string, unknown>;
   attachments?: Array<{ mediaType: string; fileName: string; dataBase64: string }>;
 }

@@ -10,6 +10,94 @@ const base = {
   'aria-hidden': true,
 } as const;
 
+export function BotIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 3v2M9 3h6" strokeLinecap="round" />
+      <rect x="4.5" y="7" width="15" height="12" rx="3.5" />
+      <circle cx="9" cy="12" r="1.2" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="12" r="1.2" fill="currentColor" stroke="none" />
+      <path d="M9.5 15.5c.7.7 1.5 1 2.5 1s1.8-.3 2.5-1" strokeLinecap="round" />
+      <path d="M4.5 11H2.5M21.5 11h-2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function PlusIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg {...base} strokeWidth={2} className={className}>
+      <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function GearIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg {...base} strokeWidth={1.7} className={className}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.14.36.36.7.6 1 .3.3.7.4 1.1.4H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51.6Z" />
+    </svg>
+  );
+}
+
+export function ExpandIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg {...base} className={className}>
+      <path d="M4 9V4h5M20 15v5h-5M15 4h5v5M9 20H4v-5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function SendIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg {...base} strokeWidth={2} className={className}>
+      <path d="M4 12 20 4l-5 16-4-6-7-2Z" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function AlertIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 3.5 21 19.5H3L12 3.5Z" strokeLinejoin="round" />
+      <path d="M12 9.5v4M12 16.6h.01" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function GitHubIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
+      <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z" />
+    </svg>
+  );
+}
+
+export function FolderIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg {...base} className={className}>
+      <path d="M3.5 6.5A1.5 1.5 0 0 1 5 5h4l2 2h8a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 19 18H5a1.5 1.5 0 0 1-1.5-1.5v-10Z" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function PencilIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg {...base} className={className}>
+      <path d="m4 20 4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20Z" strokeLinejoin="round" />
+      <path d="m14 7 3 3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ListIcon({ className }: IconProps): React.ReactElement {
+  return (
+    <svg {...base} className={className}>
+      <path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function TrashIcon({ className }: IconProps): React.ReactElement {
   return (
     <svg {...base} className={className}>

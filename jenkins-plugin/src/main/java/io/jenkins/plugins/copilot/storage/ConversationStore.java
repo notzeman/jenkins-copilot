@@ -30,12 +30,24 @@ public class ConversationStore {
     }
 
     public Conversation create(String userId, String provider, String model, String thinking) {
+        return create(userId, provider, model, thinking, "General", "");
+    }
+
+    public Conversation create(
+            String userId,
+            String provider,
+            String model,
+            String thinking,
+            String pipeline,
+            String providerAccountId) {
         Conversation conversation = new Conversation();
         conversation.setId(UUID.randomUUID().toString());
         conversation.setUserId(userId);
         conversation.setProvider(provider);
         conversation.setModel(model);
         conversation.setThinking(thinking == null ? "AUTO" : thinking);
+        conversation.setPipeline(pipeline);
+        conversation.setProviderAccountId(providerAccountId);
         save(conversation);
         return conversation;
     }
@@ -93,15 +105,29 @@ public class ConversationStore {
                 delete(userId, conversation.getId());
                 continue;
             }
+            RunState run = loadRun(userId, conversation.getId());
+            String status = run != null && !run.pendingApprovals().isEmpty()
+                    ? "awaiting_approval"
+                    : conversation.getStatus();
             out.add(Jackson.obj()
                     .put("id", conversation.getId())
                     .put("title", conversation.getTitle())
                     .put("updatedAt", conversation.getUpdatedAt())
+                    .put("createdAt", conversation.getCreatedAt())
                     .put("provider", conversation.getProvider())
                     .put("model", conversation.getModel())
-                    .put("status", loadRun(userId, conversation.getId()) != null ? "awaiting_approval" : "idle"));
+                    .put("pipeline", conversation.getPipeline())
+                    .put("providerAccountId", conversation.getProviderAccountId())
+                    .put("messageCount", conversation.getMessages().size())
+                    .put("status", status));
         }
         return out;
+    }
+
+    public void rename(String userId, String conversationId, String title) {
+        Conversation conversation = get(userId, conversationId);
+        conversation.setTitle(title);
+        save(conversation);
     }
 
     public void delete(String userId, String conversationId) {

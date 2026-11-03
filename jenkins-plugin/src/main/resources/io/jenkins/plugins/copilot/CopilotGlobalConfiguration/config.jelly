@@ -30,7 +30,7 @@
       <f:password/>
     </f:entry>
     <f:entry title="opencode go base URL" field="opencodeGoBaseUrl"
-             description="OpenAI-compatible base URL, for example https://your-gateway/v1">
+             description="OpenAI-compatible base URL. For OpenCode Go use https://opencode.ai/inference/go">
       <f:textbox/>
     </f:entry>
     <f:entry title="opencode go API key" field="opencodeGoApiKey">

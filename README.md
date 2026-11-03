@@ -69,22 +69,30 @@ run `./mvnw -Djetty.port=8081 hpi:run` from `jenkins-plugin` after building the 
 
 1. Sign in as a Jenkins administrator.
 2. Click the floating button in the bottom-right corner (or press `Ctrl+J`).
-3. The drawer shows **Set up Jenkins Copilot**.
-4. Choose **OpenAI**, **Claude**, or **opencode go**.
-5. Paste the API key (and the base URL for opencode go).
-6. Click **Load models**, choose a model, then **Test and save**.
+3. With no provider configured, the drawer opens **Settings → Providers**.
+4. Click **Add provider** and choose **OpenAI**, **Claude**, **opencode go**, or a custom
+   OpenAI-compatible endpoint.
+5. Paste the API key (and the base URL for opencode go / custom endpoints).
+6. Click **Load models**, choose a default model, then **Save provider**.
+7. Add the GitHub token under **Settings → GitHub** if you want repository tools.
+
+Add more provider accounts at any time; each one keeps its own encrypted key and default model. The model
+picker in the composer groups models by account and searches across all of them.
 
 Keys are stored as Jenkins `Secret` values. They are sent only to the configured provider endpoint
-(use HTTPS in production), never to the browser, logs, conversation files, or model context. The setup card is available later through the gear
-icon. The same settings are also on **Manage Jenkins → System → Jenkins AI Copilot**.
+(use HTTPS in production), never to the browser, logs, conversation files, or model context. Settings are
+available later through the gear icon. The same legacy fields also remain on
+**Manage Jenkins → System → Jenkins AI Copilot** and are imported into the account store on first use.
 
-For **opencode go**, enter an OpenAI-compatible base URL such as `https://your-gateway/v1`. The same field
-works for OpenRouter or a self-hosted OpenAI-compatible gateway.
+For **opencode go**, enter `https://opencode.ai/inference/go` (the plugin appends `/v1`). The documented
+`https://opencode.ai/zen/go/v1` endpoint also works. The same field works for OpenRouter or a self-hosted
+OpenAI-compatible gateway.
 
 ## Chat features
 
 - **Streaming** responses and tool execution events.
-- **Model switching** in the composer; the model list is fetched from the provider.
+- **Model switching** in the composer through a searchable, provider-grouped picker; model lists are fetched
+  per provider account.
 - **Thinking control**: Auto / Off / Low / Medium / High.
   - OpenAI and OpenAI-compatible: `reasoning_effort`.
   - Claude: `thinking` with a token budget.
@@ -92,7 +100,10 @@ works for OpenRouter or a self-hosted OpenAI-compatible gateway.
   and validated server-side.
 - **Tool cards** with arguments and results.
 - **Approval cards** for privileged operations, with risk, diff, validation, comment, approve, and reject.
-- **Conversation history** stored per user, with delete and new-conversation actions.
+- **Session manager** grouped by pipeline, with rename, delete, search, and new-session actions. Multibranch
+  branch jobs are grouped under the parent multibranch project.
+- **Broken-build CTA**: a failing or unstable latest build pulses the floating icon and offers
+  **Quickly analyse**, which starts an investigation session with the console log and recent changes.
 - **Current job/build context** read from the Jenkins page, not from the browser.
 
 ## Operation levels

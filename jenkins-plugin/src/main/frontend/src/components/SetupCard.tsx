@@ -142,9 +142,10 @@ export function SetupCard({
           <input
             type="url"
             value={baseUrl}
-            placeholder="https://your-gateway/v1"
+            placeholder="https://opencode.ai/inference/go"
             onChange={(event) => setBaseUrl(event.target.value)}
           />
+          <span className="cp-field-hint">OpenCode Go: https://opencode.ai/inference/go</span>
         </label>
       )}
 
