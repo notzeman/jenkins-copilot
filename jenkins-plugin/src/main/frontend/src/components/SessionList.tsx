@@ -1,6 +1,16 @@
 import { useMemo, useState } from 'react';
 import type { SessionSummary } from '../types';
-import { ChevronIcon, FolderIcon, PencilIcon, PlusIcon, StatusIcon, TrashIcon, type StatusState } from './icons';
+import {
+  ChevronIcon,
+  FolderIcon,
+  GearIcon,
+  PencilIcon,
+  PlusIcon,
+  StatusIcon,
+  TrashIcon,
+  XIcon,
+  type StatusState,
+} from './icons';
 import { ConfirmDialog } from './ConfirmDialog';
 
 interface Props {
@@ -14,6 +24,8 @@ interface Props {
   onDelete: (id: string) => void;
   onRename: (id: string, title: string) => void;
   onClose?: () => void;
+  onSettings?: () => void;
+  onCloseSidebar?: () => void;
 }
 
 const SESSION_STATUS: Record<string, { state: StatusState; label: string }> = {
@@ -61,6 +73,8 @@ export function SessionList({
   onDelete,
   onRename,
   onClose,
+  onSettings,
+  onCloseSidebar,
 }: Props): React.ReactElement {
   const [query, setQuery] = useState('');
   const [renamingId, setRenamingId] = useState<string | null>(null);
@@ -98,12 +112,34 @@ export function SessionList({
     <div className="cp-sessions">
       <div className="cp-sessions-head">
         <div className="cp-sessions-title-row">
+          {onCloseSidebar && (
+            <button
+              type="button"
+              className="cp-bar-btn"
+              onClick={onCloseSidebar}
+              data-tip="Close sidebar"
+              aria-label="Close sidebar"
+            >
+              <XIcon />
+            </button>
+          )}
           <span className="cp-sessions-title">Pipelines</span>
           <span className="cp-sessions-count">{sessions.length}</span>
           <span className="cp-grow" />
           {onClose && (
             <button type="button" className="cp-bar-btn" onClick={onClose} data-tip="Back to chat" aria-label="Back to chat">
               <ChevronIcon className="cp-back-chevron" />
+            </button>
+          )}
+          {onSettings && (
+            <button
+              type="button"
+              className="cp-bar-btn"
+              onClick={onSettings}
+              data-tip="Settings"
+              aria-label="Settings"
+            >
+              <GearIcon />
             </button>
           )}
           <button

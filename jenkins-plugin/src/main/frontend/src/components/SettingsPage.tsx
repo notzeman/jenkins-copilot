@@ -239,7 +239,7 @@ export function SettingsPage({
   return (
     <div className="cp-settings">
       <div className="cp-settings-head">
-        <button type="button" className="cp-bar-btn" onClick={onClose} data-tip="Back to chat" aria-label="Back to chat">
+        <button type="button" className="cp-bar-btn" onClick={onClose} data-tip="Back" aria-label="Back">
           <ChevronIcon className="cp-back-chevron" />
         </button>
         <span className="cp-settings-title">Settings</span>

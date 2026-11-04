@@ -44,8 +44,6 @@ import {
   AlertIcon,
   CopilotMark,
   ChevronIcon,
-  ContractIcon,
-  ExpandIcon,
   GearIcon,
   GitHubIcon,
   MoonIcon,
@@ -76,7 +74,6 @@ export function App(): React.ReactElement {
     const saved = Number(localStorage.getItem('cp.width'));
     return Number.isFinite(saved) && saved >= 360 && saved <= 760 ? saved : 440;
   });
-  const [expanded, setExpanded] = useState(false);
   const [view, setView] = useState<View>('chat');
   const [items, setItems] = useState<Item[]>([]);
   const [conversationId, setConversationId] = useState<string | undefined>();
@@ -93,6 +90,7 @@ export function App(): React.ReactElement {
   const [phase, setPhase] = useState<'thinking' | 'tools' | 'streaming' | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [approvalBusy, setApprovalBusy] = useState(false);
+  const [settingsReturn, setSettingsReturn] = useState<'chat' | 'sessions'>('chat');
   const [thinking, setThinking] = useState(() => localStorage.getItem('cp.thinking') ?? 'AUTO');
   const [attachments, setAttachments] = useState<LocalAttachment[]>([]);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -827,7 +825,7 @@ export function App(): React.ReactElement {
     localStorage.setItem('cp.thinking', next);
   }, []);
 
-  const drawerWidth = expanded ? Math.min(760, Math.max(width, 640)) : width;
+  const drawerWidth = width;
   const quickActions = useMemo(() => {
     const actions = [
       'List my agents and executor usage',
@@ -899,7 +897,7 @@ export function App(): React.ReactElement {
             onThemeChange={changeTheme}
             accent={accent}
             onAccentChange={changeAccent}
-            onClose={() => setView('chat')}
+            onClose={() => setView(settingsReturn)}
             onReload={reloadAccounts}
             onAccountsChanged={setAccounts}
           />
@@ -925,6 +923,11 @@ export function App(): React.ReactElement {
             onDelete={(id) => void removeSession(id)}
             onRename={(id, title) => void renameSession(id, title)}
             onClose={() => setView('chat')}
+            onSettings={() => {
+              setSettingsReturn('sessions');
+              setView('settings');
+            }}
+            onCloseSidebar={() => setOpen(false)}
           />
         ) : (
           <>
@@ -960,7 +963,10 @@ export function App(): React.ReactElement {
                   className="cp-iconbtn"
                   data-tip="Settings"
                   aria-label="Settings"
-                  onClick={() => setView('settings')}
+                  onClick={() => {
+                    setSettingsReturn('chat');
+                    setView('settings');
+                  }}
                 >
                   <GearIcon />
                 </button>
@@ -972,16 +978,6 @@ export function App(): React.ReactElement {
                   onClick={() => changeTheme(theme === 'dark' ? 'light' : 'dark')}
                 >
                   {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-                </button>
-                <button
-                  type="button"
-                  className="cp-iconbtn"
-                  data-tip={expanded ? 'Restore width' : 'Expand'}
-                  aria-label="Expand assistant"
-                  aria-pressed={expanded}
-                  onClick={() => setExpanded((value) => !value)}
-                >
-                  {expanded ? <ContractIcon /> : <ExpandIcon />}
                 </button>
                 <button
                   type="button"
