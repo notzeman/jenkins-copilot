@@ -108,6 +108,7 @@ export const css = `
   gap: 10px;
 }
 .cp-head-row { display: flex; align-items: center; gap: 7px; }
+.cp-header-back { margin-left: -4px; }
 .cp-logo {
   width: 30px; height: 30px; border-radius: 9px;
   background: var(--cp-accent-soft); color: var(--cp-accent);

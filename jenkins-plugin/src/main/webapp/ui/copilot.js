@@ -14528,23 +14528,13 @@ function Di({ className: e }) {
 		...U,
 		className: e,
 		children: /* @__PURE__ */ (0, H.jsx)("path", {
-			d: "M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01",
-			strokeLinecap: "round"
-		})
-	});
-}
-function Oi({ className: e }) {
-	return /* @__PURE__ */ (0, H.jsx)("svg", {
-		...U,
-		className: e,
-		children: /* @__PURE__ */ (0, H.jsx)("path", {
 			d: "M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v6M14 11v6",
 			strokeLinecap: "round",
 			strokeLinejoin: "round"
 		})
 	});
 }
-function ki({ className: e }) {
+function Oi({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsxs)("svg", {
 		...U,
 		className: e,
@@ -14558,7 +14548,7 @@ function ki({ className: e }) {
 		})]
 	});
 }
-function Ai({ className: e }) {
+function ki({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsx)("svg", {
 		...U,
 		className: e,
@@ -14568,7 +14558,7 @@ function Ai({ className: e }) {
 		})
 	});
 }
-function ji({ className: e }) {
+function Ai({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsxs)("svg", {
 		...U,
 		className: e,
@@ -14582,7 +14572,7 @@ function ji({ className: e }) {
 		})]
 	});
 }
-function Mi({ className: e }) {
+function ji({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsx)("svg", {
 		...U,
 		strokeWidth: 2,
@@ -14593,7 +14583,7 @@ function Mi({ className: e }) {
 		})
 	});
 }
-function Ni({ className: e }) {
+function Mi({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsxs)("svg", {
 		...U,
 		className: e,
@@ -14607,7 +14597,7 @@ function Ni({ className: e }) {
 		})]
 	});
 }
-function Pi({ className: e }) {
+function Ni({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsxs)("svg", {
 		...U,
 		className: e,
@@ -14621,7 +14611,7 @@ function Pi({ className: e }) {
 		})]
 	});
 }
-function Fi({ className: e }) {
+function Pi({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsxs)("svg", {
 		...U,
 		className: e,
@@ -14634,7 +14624,7 @@ function Fi({ className: e }) {
 		})]
 	});
 }
-function Ii({ className: e }) {
+function Fi({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsxs)("svg", {
 		...U,
 		className: e,
@@ -14647,7 +14637,7 @@ function Ii({ className: e }) {
 		})]
 	});
 }
-function Li({ className: e }) {
+function Ii({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsx)("svg", {
 		...U,
 		strokeWidth: 2,
@@ -14659,7 +14649,7 @@ function Li({ className: e }) {
 		})
 	});
 }
-function Ri({ className: e }) {
+function Li({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		fill: "currentColor",
@@ -14674,7 +14664,7 @@ function Ri({ className: e }) {
 		})
 	});
 }
-function zi({ className: e }) {
+function Ri({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsx)("svg", {
 		...U,
 		className: e,
@@ -14685,7 +14675,7 @@ function zi({ className: e }) {
 		})
 	});
 }
-function Bi({ className: e }) {
+function zi({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsxs)("svg", {
 		...U,
 		className: e,
@@ -14701,7 +14691,7 @@ function Bi({ className: e }) {
 		})]
 	});
 }
-function Vi({ className: e }) {
+function Bi({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsx)("svg", {
 		...U,
 		strokeWidth: 2.2,
@@ -14713,7 +14703,7 @@ function Vi({ className: e }) {
 		})
 	});
 }
-function Hi({ className: e }) {
+function Vi({ className: e }) {
 	return /* @__PURE__ */ (0, H.jsx)("svg", {
 		...U,
 		className: e,
@@ -14725,7 +14715,7 @@ function Hi({ className: e }) {
 	});
 }
 // src/components/ApprovalCard.tsx
-function Ui({ item: e, onDecide: t }) {
+function Hi({ item: e, onDecide: t }) {
 	let [n, r] = (0, _.useState)(""), [i, a] = (0, _.useState)(!1), o = (0, _.useRef)(null), s = e.status !== "pending";
 	(0, _.useEffect)(() => {
 		if (s) return;
@@ -14748,7 +14738,7 @@ function Ui({ item: e, onDecide: t }) {
 		children: [/* @__PURE__ */ (0, H.jsxs)("div", {
 			className: "cp-approval-head",
 			children: [
-				/* @__PURE__ */ (0, H.jsx)(zi, {}),
+				/* @__PURE__ */ (0, H.jsx)(Ri, {}),
 				/* @__PURE__ */ (0, H.jsx)("span", {
 					className: "cp-approval-title",
 					children: s ? `Change ${e.status}` : "Approval required"
@@ -14778,7 +14768,7 @@ function Ui({ item: e, onDecide: t }) {
 				}),
 				l && /* @__PURE__ */ (0, H.jsxs)("div", {
 					className: `cp-validation ${l.validated ? "cp-ok" : "cp-bad"}`,
-					children: [l.validated ? /* @__PURE__ */ (0, H.jsx)(Vi, {}) : /* @__PURE__ */ (0, H.jsx)(Mi, {}), /* @__PURE__ */ (0, H.jsx)("span", { children: l.validated ? `Jenkinsfile validated (${l.kind ?? "declarative"})` : `Validation failed: ${(l.errors ?? []).slice(0, 2).join("; ")}` })]
+					children: [l.validated ? /* @__PURE__ */ (0, H.jsx)(Bi, {}) : /* @__PURE__ */ (0, H.jsx)(ji, {}), /* @__PURE__ */ (0, H.jsx)("span", { children: l.validated ? `Jenkinsfile validated (${l.kind ?? "declarative"})` : `Validation failed: ${(l.errors ?? []).slice(0, 2).join("; ")}` })]
 				}),
 				e.diff && /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)("button", {
 					type: "button",
@@ -14819,13 +14809,13 @@ function Ui({ item: e, onDecide: t }) {
 	});
 }
 // src/components/ApprovalDock.tsx
-function Wi({ approvals: e, onDecide: t }) {
+function Ui({ approvals: e, onDecide: t }) {
 	let n = e[0];
 	return n ? /* @__PURE__ */ (0, H.jsxs)("div", {
 		className: `cp-approval-dock ${n.risk >= 3 ? "cp-approval-dock-risk3" : ""}`,
 		children: [/* @__PURE__ */ (0, H.jsxs)("div", {
 			className: "cp-approval-dock-main",
-			children: [/* @__PURE__ */ (0, H.jsx)(zi, {}), /* @__PURE__ */ (0, H.jsxs)("div", {
+			children: [/* @__PURE__ */ (0, H.jsx)(Ri, {}), /* @__PURE__ */ (0, H.jsxs)("div", {
 				className: "cp-approval-dock-text",
 				children: [/* @__PURE__ */ (0, H.jsx)("div", {
 					className: "cp-approval-dock-title",
@@ -14852,7 +14842,7 @@ function Wi({ approvals: e, onDecide: t }) {
 	}) : null;
 }
 // src/components/ReasoningPanel.tsx
-function Gi({ item: e }) {
+function Wi({ item: e }) {
 	let [t, n] = (0, _.useState)(!e.done);
 	return (0, _.useEffect)(() => {
 		e.done && n(!1);
@@ -14871,7 +14861,7 @@ function Gi({ item: e }) {
 					children: e.done ? "Analysis" : "Thinking…"
 				}),
 				/* @__PURE__ */ (0, H.jsx)("span", { className: "cp-grow" }),
-				/* @__PURE__ */ (0, H.jsx)(Li, { className: `cp-reasoning-chevron ${t ? "cp-reasoning-chevron-open" : ""}` })
+				/* @__PURE__ */ (0, H.jsx)(Ii, { className: `cp-reasoning-chevron ${t ? "cp-reasoning-chevron-open" : ""}` })
 			]
 		}), t && /* @__PURE__ */ (0, H.jsx)("div", {
 			className: "cp-reasoning-body",
@@ -14880,7 +14870,7 @@ function Gi({ item: e }) {
 	});
 }
 // src/components/CopyButton.tsx
-async function Ki(e) {
+async function Gi(e) {
 	if (navigator.clipboard?.writeText) {
 		await navigator.clipboard.writeText(e);
 		return;
@@ -14890,14 +14880,14 @@ async function Ki(e) {
 	let n = document.execCommand("copy");
 	if (t.remove(), !n) throw Error("Clipboard is not available");
 }
-function qi({ text: e, label: t = "Copy response" }) {
+function Ki({ text: e, label: t = "Copy response" }) {
 	let [n, r] = (0, _.useState)("idle"), i = (0, _.useRef)(null);
 	(0, _.useEffect)(() => () => {
 		i.current !== null && window.clearTimeout(i.current);
 	}, []);
 	let a = async () => {
 		try {
-			await Ki(e), r("copied");
+			await Gi(e), r("copied");
 		} catch {
 			r("failed");
 		}
@@ -14910,18 +14900,18 @@ function qi({ text: e, label: t = "Copy response" }) {
 		"aria-label": n === "copied" ? "Copied" : t,
 		onClick: () => void a(),
 		disabled: !e.trim(),
-		children: [n === "copied" ? /* @__PURE__ */ (0, H.jsx)(Vi, {}) : /* @__PURE__ */ (0, H.jsx)(Bi, {}), /* @__PURE__ */ (0, H.jsx)("span", { children: n === "copied" ? "Copied" : n === "failed" ? "Failed" : "Copy" })]
+		children: [n === "copied" ? /* @__PURE__ */ (0, H.jsx)(Bi, {}) : /* @__PURE__ */ (0, H.jsx)(zi, {}), /* @__PURE__ */ (0, H.jsx)("span", { children: n === "copied" ? "Copied" : n === "failed" ? "Failed" : "Copy" })]
 	});
 }
 // src/components/Menu.tsx
-var Ji = m();
-function Yi() {
+var qi = m();
+function Ji() {
 	let e = document.getElementById("jenkins-ai-copilot-root")?.shadowRoot;
 	if (!e) return null;
 	let t = e.getElementById("cp-portal");
 	return t || (t = document.createElement("div"), t.id = "cp-portal", t.className = "cp-portal-root", e.appendChild(t)), t;
 }
-function Xi({ open: e, anchor: t, onClose: n, children: r, width: i = 300, maxHeight: a = 380, align: o = "end" }) {
+function Yi({ open: e, anchor: t, onClose: n, children: r, width: i = 300, maxHeight: a = 380, align: o = "end" }) {
 	let s = (0, _.useRef)(null), [c, l] = (0, _.useState)({
 		left: -9999,
 		top: -9999,
@@ -14969,8 +14959,8 @@ function Xi({ open: e, anchor: t, onClose: n, children: r, width: i = 300, maxHe
 		t,
 		n
 	]), !e) return null;
-	let d = Yi();
-	return d ? (0, Ji.createPortal)(/* @__PURE__ */ (0, H.jsx)("div", {
+	let d = Ji();
+	return d ? (0, qi.createPortal)(/* @__PURE__ */ (0, H.jsx)("div", {
 		ref: s,
 		className: "cp-menu",
 		style: {
@@ -14986,7 +14976,7 @@ function Xi({ open: e, anchor: t, onClose: n, children: r, width: i = 300, maxHe
 	}), d) : null;
 }
 // src/components/Pickers.tsx
-var Zi = [
+var Xi = [
 	{
 		value: "AUTO",
 		label: "Auto",
@@ -15013,7 +15003,7 @@ var Zi = [
 		description: "Deep reasoning"
 	}
 ];
-function Qi({ icon: e, value: t, title: n, muted: r, onClick: i, active: a }) {
+function Zi({ icon: e, value: t, title: n, muted: r, onClick: i, active: a }) {
 	let o = (0, _.useRef)(null);
 	return /* @__PURE__ */ (0, H.jsxs)("button", {
 		ref: o,
@@ -15030,14 +15020,14 @@ function Qi({ icon: e, value: t, title: n, muted: r, onClick: i, active: a }) {
 				className: `cp-pill-value ${r ? "cp-pill-muted" : ""}`,
 				children: t
 			}),
-			/* @__PURE__ */ (0, H.jsx)(Li, { className: "cp-pill-chevron" })
+			/* @__PURE__ */ (0, H.jsx)(Ii, { className: "cp-pill-chevron" })
 		]
 	});
 }
-function $i({ accounts: e, value: t, onSelect: n }) {
+function Qi({ accounts: e, value: t, onSelect: n }) {
 	let [r, i] = (0, _.useState)(!1), [a, o] = (0, _.useState)(null), s = e.find((e) => e.id === t) ?? e[0];
-	return /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)(Qi, {
-		icon: /* @__PURE__ */ (0, H.jsx)(Pi, {}),
+	return /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)(Zi, {
+		icon: /* @__PURE__ */ (0, H.jsx)(Ni, {}),
 		value: s ? s.label : "No provider",
 		title: "Provider",
 		muted: !s,
@@ -15045,7 +15035,7 @@ function $i({ accounts: e, value: t, onSelect: n }) {
 		onClick: (e) => {
 			o(e), i((e) => !e);
 		}
-	}), /* @__PURE__ */ (0, H.jsxs)(Xi, {
+	}), /* @__PURE__ */ (0, H.jsxs)(Yi, {
 		open: r,
 		anchor: a,
 		onClose: () => i(!1),
@@ -15066,7 +15056,7 @@ function $i({ accounts: e, value: t, onSelect: n }) {
 					n(e), i(!1);
 				},
 				children: [
-					/* @__PURE__ */ (0, H.jsx)(Pi, { className: "cp-menu-item-icon" }),
+					/* @__PURE__ */ (0, H.jsx)(Ni, { className: "cp-menu-item-icon" }),
 					/* @__PURE__ */ (0, H.jsxs)("span", {
 						className: "cp-menu-item-main",
 						children: [/* @__PURE__ */ (0, H.jsx)("span", {
@@ -15077,13 +15067,13 @@ function $i({ accounts: e, value: t, onSelect: n }) {
 							children: [e.providerLabel, e.default ? " · default" : ""]
 						})]
 					}),
-					e.id === s?.id && /* @__PURE__ */ (0, H.jsx)(Vi, { className: "cp-menu-check" })
+					e.id === s?.id && /* @__PURE__ */ (0, H.jsx)(Bi, { className: "cp-menu-check" })
 				]
 			}, e.id))
 		]
 	})] });
 }
-function ea({ accounts: e, accountId: t, model: n, models: r, onOpen: i, onSelect: a, onRefresh: o }) {
+function $i({ accounts: e, accountId: t, model: n, models: r, onOpen: i, onSelect: a, onRefresh: o }) {
 	let [s, c] = (0, _.useState)(!1), [l, u] = (0, _.useState)(null), [d, f] = (0, _.useState)(""), [p, m] = (0, _.useState)(0), h = (0, _.useRef)(null), g = (0, _.useRef)(e), v = (0, _.useRef)(r), y = (0, _.useRef)(i);
 	g.current = e, v.current = r, y.current = i, (0, _.useEffect)(() => {
 		if (!s) return;
@@ -15116,8 +15106,8 @@ function ea({ accounts: e, accountId: t, model: n, models: r, onOpen: i, onSelec
 	let x = e.find((e) => e.id === t), S = b.find((e) => e.model.id === n && e.account.id === t)?.model.label ?? n, C = S || "Select model", w = (e, t) => {
 		a(e.id, t.id), c(!1);
 	};
-	return /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)(Qi, {
-		icon: /* @__PURE__ */ (0, H.jsx)(Fi, {}),
+	return /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)(Zi, {
+		icon: /* @__PURE__ */ (0, H.jsx)(Pi, {}),
 		value: C,
 		title: x ? `Model · ${x.label}` : "Model",
 		muted: !S,
@@ -15125,7 +15115,7 @@ function ea({ accounts: e, accountId: t, model: n, models: r, onOpen: i, onSelec
 		onClick: (e) => {
 			u(e), c((e) => !e);
 		}
-	}), /* @__PURE__ */ (0, H.jsxs)(Xi, {
+	}), /* @__PURE__ */ (0, H.jsxs)(Yi, {
 		open: s,
 		anchor: l,
 		onClose: () => c(!1),
@@ -15153,7 +15143,7 @@ function ea({ accounts: e, accountId: t, model: n, models: r, onOpen: i, onSelec
 				title: "Refresh models",
 				"aria-label": "Refresh models",
 				onClick: o,
-				children: /* @__PURE__ */ (0, H.jsx)(ji, {})
+				children: /* @__PURE__ */ (0, H.jsx)(Ai, {})
 			})]
 		}), /* @__PURE__ */ (0, H.jsxs)("div", {
 			className: "cp-menu-scroll",
@@ -15193,7 +15183,7 @@ function ea({ accounts: e, accountId: t, model: n, models: r, onOpen: i, onSelec
 								onMouseEnter: () => m(r),
 								onClick: () => w(e.account, e.model),
 								children: [
-									/* @__PURE__ */ (0, H.jsx)(Fi, { className: "cp-menu-item-icon" }),
+									/* @__PURE__ */ (0, H.jsx)(Pi, { className: "cp-menu-item-icon" }),
 									/* @__PURE__ */ (0, H.jsxs)("span", {
 										className: "cp-menu-item-main",
 										children: [/* @__PURE__ */ (0, H.jsx)("span", {
@@ -15204,7 +15194,7 @@ function ea({ accounts: e, accountId: t, model: n, models: r, onOpen: i, onSelec
 											children: e.model.id
 										})]
 									}),
-									i && /* @__PURE__ */ (0, H.jsx)(Vi, { className: "cp-menu-check" })
+									i && /* @__PURE__ */ (0, H.jsx)(Bi, { className: "cp-menu-check" })
 								]
 							}, `${e.account.id}-${e.model.id}`);
 						})
@@ -15217,17 +15207,17 @@ function ea({ accounts: e, accountId: t, model: n, models: r, onOpen: i, onSelec
 		})]
 	})] });
 }
-function W({ value: e, onChange: t }) {
-	let [n, r] = (0, _.useState)(!1), [i, a] = (0, _.useState)(null), o = Zi.find((t) => t.value === e) ?? Zi[0];
-	return /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)(Qi, {
-		icon: /* @__PURE__ */ (0, H.jsx)(Ii, {}),
+function ea({ value: e, onChange: t }) {
+	let [n, r] = (0, _.useState)(!1), [i, a] = (0, _.useState)(null), o = Xi.find((t) => t.value === e) ?? Xi[0];
+	return /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)(Zi, {
+		icon: /* @__PURE__ */ (0, H.jsx)(Fi, {}),
 		value: o.label,
 		title: "Thinking",
 		active: n,
 		onClick: (e) => {
 			a(e), r((e) => !e);
 		}
-	}), /* @__PURE__ */ (0, H.jsxs)(Xi, {
+	}), /* @__PURE__ */ (0, H.jsxs)(Yi, {
 		open: n,
 		anchor: i,
 		onClose: () => r(!1),
@@ -15235,7 +15225,7 @@ function W({ value: e, onChange: t }) {
 		children: [/* @__PURE__ */ (0, H.jsx)("div", {
 			className: "cp-menu-label",
 			children: "Thinking"
-		}), Zi.map((n) => /* @__PURE__ */ (0, H.jsxs)("button", {
+		}), Xi.map((n) => /* @__PURE__ */ (0, H.jsxs)("button", {
 			type: "button",
 			className: `cp-menu-item ${n.value === e ? "cp-menu-item-selected" : ""}`,
 			onClick: () => {
@@ -15250,14 +15240,14 @@ function W({ value: e, onChange: t }) {
 					className: "cp-menu-item-meta",
 					children: n.description
 				})]
-			}), n.value === e && /* @__PURE__ */ (0, H.jsx)(Vi, { className: "cp-menu-check" })]
+			}), n.value === e && /* @__PURE__ */ (0, H.jsx)(Bi, { className: "cp-menu-check" })]
 		}, n.value))]
 	})] });
 }
-function ta({ value: e, options: t, placeholder: n, onSelect: r, icon: i, title: a }) {
+function W({ value: e, options: t, placeholder: n, onSelect: r, icon: i, title: a }) {
 	let [o, s] = (0, _.useState)(!1), [c, l] = (0, _.useState)(null), u = t.find((t) => t.value === e);
-	return /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)(Qi, {
-		icon: i ?? /* @__PURE__ */ (0, H.jsx)(Fi, {}),
+	return /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)(Zi, {
+		icon: i ?? /* @__PURE__ */ (0, H.jsx)(Pi, {}),
 		value: u?.label ?? n,
 		title: a,
 		muted: !u,
@@ -15265,7 +15255,7 @@ function ta({ value: e, options: t, placeholder: n, onSelect: r, icon: i, title:
 		onClick: (e) => {
 			l(e), s((e) => !e);
 		}
-	}), /* @__PURE__ */ (0, H.jsx)(Xi, {
+	}), /* @__PURE__ */ (0, H.jsx)(Yi, {
 		open: o,
 		anchor: c,
 		onClose: () => s(!1),
@@ -15285,12 +15275,12 @@ function ta({ value: e, options: t, placeholder: n, onSelect: r, icon: i, title:
 					className: "cp-menu-item-meta",
 					children: t.description
 				})]
-			}), t.value === e && /* @__PURE__ */ (0, H.jsx)(Vi, { className: "cp-menu-check" })]
+			}), t.value === e && /* @__PURE__ */ (0, H.jsx)(Bi, { className: "cp-menu-check" })]
 		}, t.value))
 	})] });
 }
 // src/components/SettingsPage.tsx
-var na = ["Jenkins AI Copilot is an agentic CI/CD assistant built into Jenkins. It diagnoses failing builds, reviews Jenkinsfiles, prepares fixes, and manages views, folders, jobs, queue items, agents, credentials, permissions, plugins, and controller settings — with privileged actions gated behind explicit approval and provider keys kept encrypted on the controller.", "Works with OpenAI, Claude, opencode go, or any OpenAI-compatible endpoint."], ra = [
+var ta = ["Jenkins AI Copilot is an agentic CI/CD assistant built into Jenkins. It diagnoses failing builds, reviews Jenkinsfiles, prepares fixes, and manages views, folders, jobs, queue items, agents, credentials, permissions, plugins, and controller settings — with privileged actions gated behind explicit approval and provider keys kept encrypted on the controller.", "Works with OpenAI, Claude, opencode go, or any OpenAI-compatible endpoint."], na = [
 	{
 		id: "openai",
 		label: "OpenAI"
@@ -15308,7 +15298,7 @@ var na = ["Jenkins AI Copilot is an agentic CI/CD assistant built into Jenkins. 
 		label: "Custom"
 	}
 ];
-function ia(e = "openai") {
+function ra(e = "openai") {
 	return {
 		provider: e,
 		label: "",
@@ -15320,14 +15310,14 @@ function ia(e = "openai") {
 		error: null
 	};
 }
-function aa() {
+function ia() {
 	return {
 		label: "",
 		token: "",
 		apiUrl: "https://api.github.com"
 	};
 }
-function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, onClose: a, onReload: o, onAccountsChanged: s }) {
+function aa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, onClose: a, onReload: o, onAccountsChanged: s }) {
 	let [c, l] = (0, _.useState)("providers"), [u, d] = (0, _.useState)(null), [f, p] = (0, _.useState)(null), [m, h] = (0, _.useState)(!1), [g, v] = (0, _.useState)(null), [y, b] = (0, _.useState)(null);
 	(0, _.useEffect)(() => {
 		v(null);
@@ -15492,7 +15482,7 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 								children: [/* @__PURE__ */ (0, H.jsxs)("div", { children: [/* @__PURE__ */ (0, H.jsx)("h3", { children: "Providers" }), /* @__PURE__ */ (0, H.jsx)("p", { children: "Add multiple accounts. The model picker groups models by account." })] }), t && !u && /* @__PURE__ */ (0, H.jsx)("button", {
 									type: "button",
 									className: "cp-btn cp-primary",
-									onClick: () => d(ia()),
+									onClick: () => d(ra()),
 									children: "Add provider"
 								})]
 							}),
@@ -15505,7 +15495,7 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 								children: [
 									/* @__PURE__ */ (0, H.jsx)("div", {
 										className: "cp-settings-card-icon",
-										children: /* @__PURE__ */ (0, H.jsx)(Pi, {})
+										children: /* @__PURE__ */ (0, H.jsx)(Ni, {})
 									}),
 									/* @__PURE__ */ (0, H.jsxs)("div", {
 										className: "cp-settings-card-main",
@@ -15513,7 +15503,7 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 											className: "cp-settings-card-title",
 											children: [e.label, e.default && /* @__PURE__ */ (0, H.jsxs)("span", {
 												className: "cp-settings-badge",
-												children: [/* @__PURE__ */ (0, H.jsx)(Vi, {}), " default"]
+												children: [/* @__PURE__ */ (0, H.jsx)(Bi, {}), " default"]
 											})]
 										}), /* @__PURE__ */ (0, H.jsxs)("div", {
 											className: "cp-settings-card-meta",
@@ -15555,7 +15545,7 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 												className: "cp-iconbtn",
 												title: "Delete",
 												onClick: () => b(e.id),
-												children: /* @__PURE__ */ (0, H.jsx)(Oi, {})
+												children: /* @__PURE__ */ (0, H.jsx)(Di, {})
 											})
 										]
 									})
@@ -15575,7 +15565,7 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 									}),
 									/* @__PURE__ */ (0, H.jsx)("div", {
 										className: "cp-provider-grid",
-										children: ra.map((e) => /* @__PURE__ */ (0, H.jsx)("button", {
+										children: na.map((e) => /* @__PURE__ */ (0, H.jsx)("button", {
 											type: "button",
 											className: `cp-provider ${u.provider === e.id ? "cp-provider-active" : ""}`,
 											onClick: () => d({
@@ -15639,8 +15629,8 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 											onClick: () => void w(),
 											disabled: u.loading,
 											children: u.loading ? "Loading…" : "Load models"
-										}), u.models.length > 0 && /* @__PURE__ */ (0, H.jsx)(ta, {
-											icon: /* @__PURE__ */ (0, H.jsx)(Pi, {}),
+										}), u.models.length > 0 && /* @__PURE__ */ (0, H.jsx)(W, {
+											icon: /* @__PURE__ */ (0, H.jsx)(Ni, {}),
 											title: "Default model",
 											value: u.model,
 											placeholder: "Select model",
@@ -15680,7 +15670,7 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 								children: [/* @__PURE__ */ (0, H.jsxs)("div", { children: [/* @__PURE__ */ (0, H.jsx)("h3", { children: "GitHub" }), /* @__PURE__ */ (0, H.jsx)("p", { children: "Repository tools use the default token. Multiple tokens are stored; one is active." })] }), t && !f && /* @__PURE__ */ (0, H.jsx)("button", {
 									type: "button",
 									className: "cp-btn cp-primary",
-									onClick: () => p(aa()),
+									onClick: () => p(ia()),
 									children: "Add token"
 								})]
 							}),
@@ -15701,7 +15691,7 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 											className: "cp-settings-card-title",
 											children: [e.label, e.default && /* @__PURE__ */ (0, H.jsxs)("span", {
 												className: "cp-settings-badge",
-												children: [/* @__PURE__ */ (0, H.jsx)(Vi, {}), " default"]
+												children: [/* @__PURE__ */ (0, H.jsx)(Bi, {}), " default"]
 											})]
 										}), /* @__PURE__ */ (0, H.jsxs)("div", {
 											className: "cp-settings-card-meta",
@@ -15744,7 +15734,7 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 												className: "cp-iconbtn",
 												title: "Delete",
 												onClick: () => b(e.id),
-												children: /* @__PURE__ */ (0, H.jsx)(Oi, {})
+												children: /* @__PURE__ */ (0, H.jsx)(Di, {})
 											})
 										]
 									})
@@ -15817,12 +15807,12 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 							/* @__PURE__ */ (0, H.jsx)("p", { children: "Defaults used for new sessions. Each session can switch provider and model." }),
 							/* @__PURE__ */ (0, H.jsxs)("div", {
 								className: "cp-settings-row",
-								children: [/* @__PURE__ */ (0, H.jsx)("span", { children: "Default provider" }), /* @__PURE__ */ (0, H.jsx)(ta, {
+								children: [/* @__PURE__ */ (0, H.jsx)("span", { children: "Default provider" }), /* @__PURE__ */ (0, H.jsx)(W, {
 									title: "Default provider",
 									value: e?.defaultProviderId ?? "",
 									placeholder: "No provider",
 									options: te,
-									icon: /* @__PURE__ */ (0, H.jsx)(Pi, {}),
+									icon: /* @__PURE__ */ (0, H.jsx)(Ni, {}),
 									onSelect: (e) => {
 										t && k(e).then((e) => C(e.accounts));
 									}
@@ -15861,7 +15851,7 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 									children: ["v", n]
 								})]
 							}),
-							na.map((e) => /* @__PURE__ */ (0, H.jsx)("p", {
+							ta.map((e) => /* @__PURE__ */ (0, H.jsx)("p", {
 								className: "cp-about-lede",
 								children: e
 							}, e)),
@@ -15887,13 +15877,13 @@ function oa({ accounts: e, isAdmin: t, version: n, theme: r, onThemeChange: i, o
 	});
 }
 // src/components/ConfirmDialog.tsx
-function sa() {
+function oa() {
 	let e = document.getElementById("jenkins-ai-copilot-root")?.shadowRoot;
 	if (!e) return null;
 	let t = e.getElementById("cp-portal");
 	return t || (t = document.createElement("div"), t.id = "cp-portal", t.className = "cp-portal-root", e.appendChild(t)), t;
 }
-function ca({ open: e, title: t, message: n, confirmLabel: r = "Delete", onCancel: i, onConfirm: a }) {
+function sa({ open: e, title: t, message: n, confirmLabel: r = "Delete", onCancel: i, onConfirm: a }) {
 	let o = (0, _.useRef)(null);
 	if ((0, _.useEffect)(() => {
 		if (!e) return;
@@ -15903,8 +15893,8 @@ function ca({ open: e, title: t, message: n, confirmLabel: r = "Delete", onCance
 		};
 		return window.addEventListener("keydown", t, !0), () => window.removeEventListener("keydown", t, !0);
 	}, [i, e]), !e) return null;
-	let s = sa();
-	return s ? (0, Ji.createPortal)(/* @__PURE__ */ (0, H.jsx)("div", {
+	let s = oa();
+	return s ? (0, qi.createPortal)(/* @__PURE__ */ (0, H.jsx)("div", {
 		className: "cp-confirm-backdrop",
 		onPointerDown: (e) => {
 			e.target === e.currentTarget && i();
@@ -15940,7 +15930,7 @@ function ca({ open: e, title: t, message: n, confirmLabel: r = "Delete", onCance
 	}), s) : null;
 }
 // src/components/SessionList.tsx
-function la(e) {
+function ca(e) {
 	let t = Date.now() - e, n = Math.floor(t / 6e4);
 	if (n < 1) return "now";
 	if (n < 60) return `${n}m`;
@@ -15952,12 +15942,12 @@ function la(e) {
 		day: "numeric"
 	});
 }
-function ua(e) {
+function la(e) {
 	if (e === "General") return "General";
 	let t = e.split("/").filter(Boolean);
 	return t.length > 1 ? `${t[t.length - 2]}/${t[t.length - 1]}` : e;
 }
-function da({ sessions: e, activeId: t, currentPipeline: n, collapsed: r, onToggle: i, onSelect: a, onNew: o, onDelete: s, onRename: c, onClose: l }) {
+function ua({ sessions: e, activeId: t, currentPipeline: n, collapsed: r, onToggle: i, onSelect: a, onNew: o, onDelete: s, onRename: c, onClose: l }) {
 	let [u, d] = (0, _.useState)(""), [f, p] = (0, _.useState)(null), [m, h] = (0, _.useState)(""), [g, v] = (0, _.useState)(null), y = (0, _.useMemo)(() => {
 		let t = u.trim().toLowerCase(), n = e.filter((e) => !t || e.title.toLowerCase().includes(t) || e.pipeline.toLowerCase().includes(t) || e.model.toLowerCase().includes(t)), r = /* @__PURE__ */ new Map();
 		for (let e of n) {
@@ -15994,7 +15984,7 @@ function da({ sessions: e, activeId: t, currentPipeline: n, collapsed: r, onTogg
 							onClick: l,
 							title: "Back to chat",
 							"aria-label": "Back to chat",
-							children: /* @__PURE__ */ (0, H.jsx)(Li, { className: "cp-back-chevron" })
+							children: /* @__PURE__ */ (0, H.jsx)(Ii, { className: "cp-back-chevron" })
 						}),
 						/* @__PURE__ */ (0, H.jsx)("button", {
 							type: "button",
@@ -16031,11 +16021,11 @@ function da({ sessions: e, activeId: t, currentPipeline: n, collapsed: r, onTogg
 								"aria-expanded": !n,
 								title: e.pipeline,
 								children: [
-									/* @__PURE__ */ (0, H.jsx)(Li, { className: `cp-session-chevron ${n ? "cp-collapsed" : ""}` }),
+									/* @__PURE__ */ (0, H.jsx)(Ii, { className: `cp-session-chevron ${n ? "cp-collapsed" : ""}` }),
 									/* @__PURE__ */ (0, H.jsx)(Ti, { className: "cp-session-folder" }),
 									/* @__PURE__ */ (0, H.jsx)("span", {
 										className: "cp-session-pipeline",
-										children: ua(e.pipeline)
+										children: la(e.pipeline)
 									}),
 									/* @__PURE__ */ (0, H.jsx)("span", {
 										className: "cp-session-group-count",
@@ -16091,7 +16081,7 @@ function da({ sessions: e, activeId: t, currentPipeline: n, collapsed: r, onTogg
 												children: r
 											}), /* @__PURE__ */ (0, H.jsxs)("span", {
 												className: "cp-session-meta",
-												children: [la(e.updatedAt), e.model ? ` · ${e.model}` : ""]
+												children: [ca(e.updatedAt), e.model ? ` · ${e.model}` : ""]
 											})]
 										})]
 									}), f !== e.id && /* @__PURE__ */ (0, H.jsxs)("span", {
@@ -16109,7 +16099,7 @@ function da({ sessions: e, activeId: t, currentPipeline: n, collapsed: r, onTogg
 											title: "Delete session",
 											"aria-label": "Delete session",
 											onClick: () => v(e),
-											children: /* @__PURE__ */ (0, H.jsx)(Oi, {})
+											children: /* @__PURE__ */ (0, H.jsx)(Di, {})
 										})]
 									})]
 								}, e.id);
@@ -16118,7 +16108,7 @@ function da({ sessions: e, activeId: t, currentPipeline: n, collapsed: r, onTogg
 					}, e.pipeline);
 				})]
 			}),
-			/* @__PURE__ */ (0, H.jsx)(ca, {
+			/* @__PURE__ */ (0, H.jsx)(sa, {
 				open: g !== null,
 				title: "Delete session?",
 				message: g ? `"${g.title === "New conversation" || !g.title ? "New session" : g.title}" will be permanently deleted, including its messages and attachments.` : "",
@@ -16133,10 +16123,10 @@ function da({ sessions: e, activeId: t, currentPipeline: n, collapsed: r, onTogg
 	});
 }
 // src/App.tsx
-function fa(e) {
+function da(e) {
 	return { error: e instanceof Error ? e.message : "Could not load models" };
 }
-function pa() {
+function fa() {
 	let [e, t] = (0, _.useState)(null), [n, r] = (0, _.useState)(!1), [i, a] = (0, _.useState)(() => {
 		let e = Number(localStorage.getItem("cp.width"));
 		return Number.isFinite(e) && e >= 360 && e <= 760 ? e : 440;
@@ -16166,7 +16156,7 @@ function pa() {
 			} catch (t) {
 				ie((n) => ({
 					...n,
-					[e]: fa(t)
+					[e]: da(t)
 				}));
 			} finally {
 				De.current.delete(e);
@@ -16534,7 +16524,7 @@ function pa() {
 			N.current?.abort(), Te.current = null, ce(!1);
 			try {
 				let t = await le(e);
-				d(ma(t, e)), p(e), A(t.conversation.thinking || "AUTO"), T(t.conversation.model || ""), t.conversation.providerAccountId && (C(t.conversation.providerAccountId), Ae(t.conversation.providerAccountId)), ge(null), l("chat");
+				d(pa(t, e)), p(e), A(t.conversation.thinking || "AUTO"), T(t.conversation.model || ""), t.conversation.providerAccountId && (C(t.conversation.providerAccountId), Ae(t.conversation.providerAccountId)), ge(null), l("chat");
 			} catch (e) {
 				ge(e instanceof Error ? e.message : "Could not load the conversation");
 			}
@@ -16624,7 +16614,7 @@ function pa() {
 					"aria-orientation": "vertical",
 					"aria-label": "Resize assistant",
 					onPointerDown: nt
-				}), c === "settings" && e ? /* @__PURE__ */ (0, H.jsx)(oa, {
+				}), c === "settings" && e ? /* @__PURE__ */ (0, H.jsx)(aa, {
 					accounts: y,
 					isAdmin: e.isAdmin,
 					version: b.version,
@@ -16633,7 +16623,7 @@ function pa() {
 					onClose: () => l("chat"),
 					onReload: je,
 					onAccountsChanged: x
-				}) : c === "sessions" ? /* @__PURE__ */ (0, H.jsx)(da, {
+				}) : c === "sessions" ? /* @__PURE__ */ (0, H.jsx)(ua, {
 					sessions: m,
 					activeId: f,
 					currentPipeline: Pe,
@@ -16653,6 +16643,14 @@ function pa() {
 						children: [/* @__PURE__ */ (0, H.jsxs)("div", {
 							className: "cp-head-row",
 							children: [
+								/* @__PURE__ */ (0, H.jsx)("button", {
+									type: "button",
+									className: "cp-iconbtn cp-header-back",
+									title: "Back to sessions",
+									"aria-label": "Back to sessions",
+									onClick: () => l("sessions"),
+									children: /* @__PURE__ */ (0, H.jsx)(Ii, { className: "cp-back-chevron" })
+								}),
 								/* @__PURE__ */ (0, H.jsx)("div", {
 									className: `cp-logo ${Re ? "cp-logo-alert" : ""}`,
 									children: /* @__PURE__ */ (0, H.jsx)(vi, {})
@@ -16668,14 +16666,6 @@ function pa() {
 									})]
 								}),
 								/* @__PURE__ */ (0, H.jsx)("div", { className: "cp-grow" }),
-								/* @__PURE__ */ (0, H.jsx)("button", {
-									type: "button",
-									className: "cp-iconbtn",
-									title: "Sessions and pipelines",
-									"aria-label": "Sessions and pipelines",
-									onClick: () => l("sessions"),
-									children: /* @__PURE__ */ (0, H.jsx)(Di, {})
-								}),
 								e?.isAdmin && /* @__PURE__ */ (0, H.jsx)("button", {
 									type: "button",
 									className: "cp-iconbtn",
@@ -16690,7 +16680,7 @@ function pa() {
 									title: M === "dark" ? "Switch to light theme" : "Switch to dark theme",
 									"aria-label": "Toggle theme",
 									onClick: () => rt(M === "dark" ? "light" : "dark"),
-									children: M === "dark" ? /* @__PURE__ */ (0, H.jsx)(ki, {}) : /* @__PURE__ */ (0, H.jsx)(Ai, {})
+									children: M === "dark" ? /* @__PURE__ */ (0, H.jsx)(Oi, {}) : /* @__PURE__ */ (0, H.jsx)(ki, {})
 								}),
 								/* @__PURE__ */ (0, H.jsx)("button", {
 									type: "button",
@@ -16714,7 +16704,7 @@ function pa() {
 									title: "Close",
 									"aria-label": "Close assistant",
 									onClick: () => r(!1),
-									children: /* @__PURE__ */ (0, H.jsx)(Mi, {})
+									children: /* @__PURE__ */ (0, H.jsx)(ji, {})
 								})
 							]
 						}), /* @__PURE__ */ (0, H.jsxs)("div", {
@@ -16824,14 +16814,14 @@ function pa() {
 									}, e))
 								})
 							] })]
-						}), u.map((e) => e.kind === "reasoning" ? /* @__PURE__ */ (0, H.jsx)(Gi, { item: e }, e.id) : e.kind === "message" ? /* @__PURE__ */ (0, H.jsxs)("div", {
+						}), u.map((e) => e.kind === "reasoning" ? /* @__PURE__ */ (0, H.jsx)(Wi, { item: e }, e.id) : e.kind === "message" ? /* @__PURE__ */ (0, H.jsxs)("div", {
 							className: `cp-msg ${e.role === "user" ? "cp-user" : ""} ${e.role === "assistant" && e.narration ? "cp-narration-msg" : ""}`,
 							children: [/* @__PURE__ */ (0, H.jsxs)("div", {
 								className: "cp-msg-head",
 								children: [
 									/* @__PURE__ */ (0, H.jsx)("span", { className: "cp-dot" }),
 									e.role === "user" ? "You" : e.narration ? "Copilot · analysis" : "Copilot",
-									e.role === "assistant" && /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)("span", { className: "cp-grow" }), /* @__PURE__ */ (0, H.jsx)(qi, {
+									e.role === "assistant" && /* @__PURE__ */ (0, H.jsxs)(H.Fragment, { children: [/* @__PURE__ */ (0, H.jsx)("span", { className: "cp-grow" }), /* @__PURE__ */ (0, H.jsx)(Ki, {
 										text: e.text,
 										label: e.narration ? "Copy analysis" : "Copy response"
 									})] })
@@ -16857,7 +16847,7 @@ function pa() {
 								className: "cp-cursor",
 								"aria-label": "Streaming"
 							})] }) : /* @__PURE__ */ (0, H.jsx)(mi, { text: e.text })]
-						}, e.id) : e.kind === "tool" ? /* @__PURE__ */ (0, H.jsx)(hi, { item: e }, e.id) : e.kind === "approval" ? /* @__PURE__ */ (0, H.jsx)(Ui, {
+						}, e.id) : e.kind === "tool" ? /* @__PURE__ */ (0, H.jsx)(hi, { item: e }, e.id) : e.kind === "approval" ? /* @__PURE__ */ (0, H.jsx)(Hi, {
 							item: e,
 							onDecide: Ze
 						}, e.id) : /* @__PURE__ */ (0, H.jsx)("div", {
@@ -16866,7 +16856,7 @@ function pa() {
 							children: e.text
 						}, e.id))]
 					}),
-					/* @__PURE__ */ (0, H.jsx)(Wi, {
+					/* @__PURE__ */ (0, H.jsx)(Ui, {
 						approvals: He,
 						onDecide: Ze
 					}),
@@ -16889,7 +16879,7 @@ function pa() {
 									type: "button",
 									"aria-label": `Remove ${e.fileName}`,
 									onClick: () => xe((e) => e.filter((e, n) => n !== t)),
-									children: /* @__PURE__ */ (0, H.jsx)(Mi, {})
+									children: /* @__PURE__ */ (0, H.jsx)(ji, {})
 								})]
 							}, `${e.fileName}-${t}`))
 						}), /* @__PURE__ */ (0, H.jsxs)("div", {
@@ -16923,7 +16913,7 @@ function pa() {
 											title: "Attach image",
 											"aria-label": "Attach image",
 											onClick: () => we.current?.click(),
-											children: /* @__PURE__ */ (0, H.jsx)(Hi, {})
+											children: /* @__PURE__ */ (0, H.jsx)(Vi, {})
 										}),
 										/* @__PURE__ */ (0, H.jsx)("input", {
 											ref: we,
@@ -16944,20 +16934,20 @@ function pa() {
 											"aria-pressed": Ve,
 											disabled: !e?.isAdmin || ve,
 											onClick: () => void L(),
-											children: /* @__PURE__ */ (0, H.jsx)(Ni, {})
+											children: /* @__PURE__ */ (0, H.jsx)(Mi, {})
 										})
 									]
 								}), /* @__PURE__ */ (0, H.jsxs)("div", {
 									className: "cp-bar-right",
 									children: [
-										y && y.providers.length > 0 && /* @__PURE__ */ (0, H.jsx)($i, {
+										y && y.providers.length > 0 && /* @__PURE__ */ (0, H.jsx)(Qi, {
 											accounts: y.providers,
 											value: S,
 											onSelect: (e) => {
 												C(e.id), T(e.defaultModel || ""), Ae(e.id);
 											}
 										}),
-										/* @__PURE__ */ (0, H.jsx)(ea, {
+										/* @__PURE__ */ (0, H.jsx)($i, {
 											accounts: y?.providers ?? [],
 											accountId: S,
 											model: w,
@@ -16968,7 +16958,7 @@ function pa() {
 											},
 											onRefresh: () => void Ae(S, !0)
 										}),
-										/* @__PURE__ */ (0, H.jsx)(W, {
+										/* @__PURE__ */ (0, H.jsx)(ea, {
 											value: be,
 											onChange: it
 										}),
@@ -16977,7 +16967,7 @@ function pa() {
 											className: "cp-send",
 											onClick: Qe,
 											"aria-label": "Stop",
-											children: /* @__PURE__ */ (0, H.jsx)(Ri, {})
+											children: /* @__PURE__ */ (0, H.jsx)(Li, {})
 										}) : /* @__PURE__ */ (0, H.jsx)("button", {
 											type: "button",
 											className: "cp-send",
@@ -17000,7 +16990,7 @@ function pa() {
 		]
 	});
 }
-function ma(e, t) {
+function pa(e, t) {
 	let n = [], r = /* @__PURE__ */ new Map();
 	for (let t of e.messages) t.role === "TOOL" && t.toolCallId && r.set(t.toolCallId, t);
 	for (let i of e.messages) if (i.role === "USER") n.push({
@@ -17081,10 +17071,10 @@ function ma(e, t) {
 	return n;
 }
 // src/styles.ts
-var ha = "\n.cp-reset { all: initial; }\n.cp-shell {\n  --cp-bg: #f6f7f9;\n  --cp-panel: #ffffff;\n  --cp-panel-2: #fbfbfd;\n  --cp-text: #111827;\n  --cp-muted: #667085;\n  --cp-border: #e4e7ec;\n  --cp-border-strong: #d0d5dd;\n  --cp-accent: #4f46e5;\n  --cp-accent-soft: #eef2ff;\n  --cp-cyan: #0e7490;\n  --cp-success: #15803d;\n  --cp-success-soft: #ecfdf3;\n  --cp-warning: #b45309;\n  --cp-warning-soft: #fffbeb;\n  --cp-danger: #b42318;\n  --cp-danger-soft: #fef3f2;\n  --cp-code: #0f172a;\n  --cp-shadow: 0 18px 50px rgba(16, 24, 40, .18), 0 2px 8px rgba(16, 24, 40, .08);\n  --cp-mono: ui-monospace, SFMono-Regular, \"SF Mono\", Menlo, Consolas, \"Liberation Mono\", monospace;\n  --cp-sans: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  position: fixed;\n  inset: 0;\n  z-index: 2147483000;\n  pointer-events: none;\n  font-family: var(--cp-sans);\n  color: var(--cp-text);\n  font-size: 13px;\n  line-height: 1.5;\n  -webkit-font-smoothing: antialiased;\n}\n.cp-shell[data-theme=\"dark\"] {\n  --cp-bg: #0b0f16;\n  --cp-panel: #101722;\n  --cp-panel-2: #0d141d;\n  --cp-text: #e6eaf0;\n  --cp-muted: #94a3b8;\n  --cp-border: #1e293b;\n  --cp-border-strong: #2b3a4f;\n  --cp-accent: #818cf8;\n  --cp-accent-soft: #1e1b4b;\n  --cp-cyan: #22d3ee;\n  --cp-success: #4ade80;\n  --cp-success-soft: #052e16;\n  --cp-warning: #fbbf24;\n  --cp-warning-soft: #2a1a02;\n  --cp-danger: #f87171;\n  --cp-danger-soft: #2a0b0b;\n  --cp-code: #050810;\n  --cp-shadow: 0 24px 60px rgba(0, 0, 0, .55), 0 2px 10px rgba(0, 0, 0, .4);\n}\n.cp-shell * { box-sizing: border-box; }\n.cp-fab {\n  pointer-events: auto;\n  position: fixed;\n  right: 22px;\n  bottom: 22px;\n  width: 48px;\n  height: 48px;\n  border-radius: 14px;\n  border: 1px solid color-mix(in srgb, var(--cp-accent) 55%, transparent);\n  background: linear-gradient(145deg, var(--cp-accent), color-mix(in srgb, var(--cp-accent) 55%, #000));\n  color: #fff;\n  display: grid;\n  place-items: center;\n  cursor: pointer;\n  box-shadow: 0 10px 24px rgba(79, 70, 229, .35);\n  transition: transform .15s ease, box-shadow .15s ease;\n}\n.cp-fab:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(79, 70, 229, .45); }\n.cp-fab:focus-visible { outline: 2px solid var(--cp-cyan); outline-offset: 3px; }\n.cp-fab svg { width: 24px; height: 24px; }\n.cp-drawer {\n  pointer-events: auto;\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  width: 440px;\n  max-width: 100vw;\n  background: var(--cp-panel);\n  border-left: 1px solid var(--cp-border);\n  box-shadow: var(--cp-shadow);\n  display: flex;\n  flex-direction: column;\n  transform: translateX(100%);\n  transition: transform .22s cubic-bezier(.2, .8, .2, 1);\n}\n.cp-drawer.cp-open { transform: translateX(0); }\n.cp-resize {\n  position: absolute;\n  left: -3px;\n  top: 0;\n  bottom: 0;\n  width: 6px;\n  cursor: col-resize;\n  background: transparent;\n}\n.cp-resize:hover { background: color-mix(in srgb, var(--cp-accent) 35%, transparent); }\n.cp-head {\n  padding: 14px 16px 12px;\n  border-bottom: 1px solid var(--cp-border);\n  background: linear-gradient(180deg, var(--cp-panel-2), var(--cp-panel));\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n}\n.cp-head-row { display: flex; align-items: center; gap: 7px; }\n.cp-logo {\n  width: 30px; height: 30px; border-radius: 9px;\n  background: var(--cp-accent-soft); color: var(--cp-accent);\n  display: grid; place-items: center; flex: 0 0 auto;\n}\n.cp-logo svg { width: 18px; height: 18px; }\n.cp-title { font-weight: 650; font-size: 14px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.cp-sub { color: var(--cp-muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.cp-grow { flex: 1; }\n.cp-iconbtn {\n  border: 1px solid transparent; background: transparent; color: var(--cp-muted);\n  width: 28px; height: 28px; border-radius: 7px; cursor: pointer;\n  display: grid; place-items: center; flex: 0 0 auto;\n}\n.cp-iconbtn:hover { background: var(--cp-panel-2); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-iconbtn:focus-visible { outline: 2px solid var(--cp-accent); outline-offset: 1px; }\n.cp-iconbtn svg { width: 15px; height: 15px; }\n.cp-convbar { display: flex; gap: 6px; align-items: center; }\n.cp-select {\n  flex: 1; min-width: 0; background: var(--cp-panel); color: var(--cp-text);\n  border: 1px solid var(--cp-border); border-radius: 8px; padding: 5px 8px;\n  font-size: 12px; font-family: var(--cp-sans); height: 30px;\n}\n.cp-model {\n  font-family: var(--cp-mono); font-size: 10px; color: var(--cp-muted);\n  border: 1px solid var(--cp-border); border-radius: 6px; padding: 3px 6px;\n  background: var(--cp-panel-2); max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;\n  cursor: pointer;\n}\n.cp-chips { display: flex; gap: 6px; flex-wrap: wrap; }\n.cp-chip {\n  display: inline-flex; align-items: center; gap: 5px; max-width: 100%;\n  border: 1px solid var(--cp-border); background: var(--cp-panel-2);\n  border-radius: 999px; padding: 2px 8px; font-size: 10.5px; color: var(--cp-muted);\n  font-family: var(--cp-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;\n}\n.cp-chip b { color: var(--cp-text); font-weight: 600; }\n.cp-chip.cp-fail { border-color: color-mix(in srgb, var(--cp-danger) 40%, var(--cp-border)); color: var(--cp-danger); }\n.cp-chip.cp-ok { border-color: color-mix(in srgb, var(--cp-success) 40%, var(--cp-border)); color: var(--cp-success); }\n.cp-thread {\n  flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 14px 14px 8px;\n  display: flex; flex-direction: column; gap: 12px;\n  scrollbar-width: thin; scrollbar-color: var(--cp-border-strong) transparent;\n}\n/* Never let cards shrink and clip their own content when the thread is short. */\n.cp-thread > * { flex: 0 0 auto; }\n.cp-thread::-webkit-scrollbar { width: 8px; }\n.cp-thread::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 8px; }\n.cp-empty {\n  margin: auto; text-align: left; max-width: 330px; padding: 24px 6px;\n  display: flex; flex-direction: column; gap: 10px;\n}\n.cp-empty h3 { margin: 0; font-size: 15px; font-weight: 650; letter-spacing: -.01em; }\n.cp-empty p { margin: 0; color: var(--cp-muted); font-size: 12px; }\n.cp-empty-session { color: var(--cp-muted); font-size: 11px; font-family: var(--cp-mono); }\n.cp-head-text { min-width: 0; overflow: hidden; }\n.cp-quick { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }\n.cp-quick button {\n  text-align: left; border: 1px solid var(--cp-border); background: var(--cp-panel-2);\n  color: var(--cp-text); border-radius: 8px; padding: 8px 10px; font-size: 12px; cursor: pointer;\n}\n.cp-quick button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }\n.cp-msg { display: flex; flex-direction: column; gap: 5px; }\n.cp-msg-head { display: flex; align-items: center; gap: 6px; font-size: 10.5px; color: var(--cp-muted); text-transform: uppercase; letter-spacing: .06em; }\n.cp-msg-head .cp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cp-accent); }\n.cp-copy-btn {\n  display: inline-flex; align-items: center; gap: 4px; height: 20px;\n  padding: 0 6px; border: 1px solid transparent; border-radius: 5px;\n  background: transparent; color: var(--cp-muted); cursor: pointer;\n  font-family: var(--cp-sans); font-size: 9.5px; text-transform: none; letter-spacing: 0;\n}\n.cp-copy-btn:hover { background: var(--cp-panel-2); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-copy-btn:disabled { opacity: .4; cursor: not-allowed; }\n.cp-copy-btn svg { width: 11px; height: 11px; }\n.cp-copy-btn-done { color: var(--cp-success); }\n.cp-copy-btn-done:hover { color: var(--cp-success); }\n.cp-msg.cp-user .cp-msg-head .cp-dot { background: var(--cp-cyan); }\n.cp-msg-body {\n  border: 1px solid var(--cp-border); border-radius: 10px; padding: 9px 11px;\n  background: var(--cp-panel); overflow-wrap: anywhere;\n}\n.cp-msg.cp-user .cp-msg-body { background: var(--cp-panel-2); }\n.cp-msg-narration .cp-msg-body { color: var(--cp-muted); background: var(--cp-panel-2); }\n.cp-narration-msg .cp-msg-head .cp-dot { background: var(--cp-muted); }\n.cp-msg-body > :first-child { margin-top: 0; }\n.cp-msg-body > :last-child { margin-bottom: 0; }\n.cp-msg-body p { margin: 0 0 8px; }\n.cp-msg-body h1, .cp-msg-body h2, .cp-msg-body h3, .cp-msg-body h4 {\n  margin: 12px 0 6px; font-size: 13px; font-weight: 650;\n}\n.cp-msg-body ul, .cp-msg-body ol { margin: 4px 0 8px; padding-left: 18px; }\n.cp-msg-body li { margin: 2px 0; }\n.cp-msg-body code {\n  font-family: var(--cp-mono); font-size: 11.5px; background: var(--cp-panel-2);\n  border: 1px solid var(--cp-border); border-radius: 4px; padding: 0 4px;\n}\n.cp-msg-body a { color: var(--cp-accent); text-decoration: underline; text-underline-offset: 2px; }\n.cp-msg-body blockquote {\n  margin: 6px 0; padding: 4px 10px; border-left: 3px solid var(--cp-accent);\n  background: var(--cp-accent-soft); color: var(--cp-text); border-radius: 0 6px 6px 0;\n}\n.cp-msg-body table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: 11.5px; }\n.cp-msg-body th, .cp-msg-body td { border: 1px solid var(--cp-border); padding: 4px 6px; text-align: left; }\n.cp-msg-body th { background: var(--cp-panel-2); }\n.cp-code {\n  margin: 8px 0; border: 1px solid var(--cp-border); border-radius: 8px; overflow: hidden;\n  background: var(--cp-code);\n}\n.cp-code-head {\n  display: flex; align-items: center; gap: 8px; padding: 5px 8px;\n  background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.08);\n  color: #9aa7b8; font-size: 10px; font-family: var(--cp-mono);\n}\n.cp-code-head .cp-grow { flex: 1; }\n.cp-copy {\n  border: 0; background: transparent; color: #9aa7b8; cursor: pointer; font-size: 10px;\n  font-family: var(--cp-mono); padding: 2px 5px; border-radius: 4px;\n}\n.cp-copy:hover { color: #fff; background: rgba(255,255,255,.08); }\n.cp-code pre {\n  margin: 0; padding: 9px 10px; overflow-x: auto; color: #e6edf7;\n  font-family: var(--cp-mono); font-size: 11.5px; line-height: 1.55;\n}\n.cp-code pre code { background: transparent; border: 0; padding: 0; color: inherit; font-size: inherit; }\n.cp-cursor { display: inline-block; width: 7px; height: 13px; background: var(--cp-accent); vertical-align: -2px; animation: cp-blink 1s steps(2) infinite; }\n@keyframes cp-blink { 50% { opacity: 0; } }\n.cp-tool {\n  border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-accent);\n  border-radius: 8px; background: var(--cp-panel-2); overflow: hidden;\n}\n.cp-tool.cp-failed { border-left-color: var(--cp-danger); }\n.cp-tool.cp-done { border-left-color: var(--cp-success); }\n.cp-tool-head {\n  display: flex; align-items: center; gap: 8px; padding: 7px 9px; cursor: pointer;\n}\n.cp-tool-name { font-family: var(--cp-mono); font-size: 11px; font-weight: 600; }\n.cp-tool-target { color: var(--cp-muted); font-family: var(--cp-mono); font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 190px; }\n.cp-status {\n  margin-left: auto; font-size: 9.5px; font-family: var(--cp-mono); text-transform: uppercase;\n  letter-spacing: .05em; padding: 2px 6px; border-radius: 999px; border: 1px solid var(--cp-border);\n  color: var(--cp-muted); white-space: nowrap;\n}\n.cp-status.cp-running { color: var(--cp-warning); background: var(--cp-warning-soft); border-color: color-mix(in srgb, var(--cp-warning) 30%, transparent); }\n.cp-status.cp-succeeded { color: var(--cp-success); background: var(--cp-success-soft); border-color: color-mix(in srgb, var(--cp-success) 30%, transparent); }\n.cp-status.cp-failed { color: var(--cp-danger); background: var(--cp-danger-soft); border-color: color-mix(in srgb, var(--cp-danger) 30%, transparent); }\n.cp-spin { width: 11px; height: 11px; border: 2px solid var(--cp-border); border-top-color: var(--cp-warning); border-radius: 50%; animation: cp-spin .8s linear infinite; }\n@keyframes cp-spin { to { transform: rotate(360deg); } }\n.cp-tool-body { border-top: 1px solid var(--cp-border); padding: 8px 9px; display: flex; flex-direction: column; gap: 6px; }\n.cp-label { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--cp-muted); }\n.cp-pre {\n  margin: 0; padding: 7px 8px; background: var(--cp-code); color: #dbe4f0; border-radius: 6px;\n  font-family: var(--cp-mono); font-size: 10.5px; line-height: 1.5; max-height: 220px; overflow: auto;\n  white-space: pre-wrap; overflow-wrap: anywhere;\n}\n.cp-approval {\n  border: 1px solid color-mix(in srgb, var(--cp-warning) 45%, var(--cp-border));\n  border-radius: 10px; background: var(--cp-panel); overflow: hidden;\n  box-shadow: 0 4px 14px rgba(0,0,0,.06);\n}\n.cp-approval.cp-risk3 { border-color: color-mix(in srgb, var(--cp-danger) 55%, var(--cp-border)); }\n.cp-approval-head { padding: 9px 10px; background: var(--cp-warning-soft); display: flex; align-items: center; gap: 8px; }\n.cp-approval.cp-risk3 .cp-approval-head { background: var(--cp-danger-soft); }\n.cp-approval-title { font-weight: 650; font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-approval-head-actions { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }\n.cp-btn.cp-btn-sm { padding: 3px 7px; font-size: 10px; border-radius: 6px; }\n.cp-risk { margin-left: auto; font-size: 9px; text-transform: uppercase; letter-spacing: .06em; font-family: var(--cp-mono); padding: 2px 7px; border-radius: 999px; border: 1px solid currentColor; }\n.cp-risk.cp-r2 { color: var(--cp-warning); }\n.cp-risk.cp-r3 { color: var(--cp-danger); }\n.cp-approval-body { padding: 9px 10px; display: flex; flex-direction: column; gap: 8px; }\n.cp-kv { display: grid; grid-template-columns: 74px 1fr; gap: 4px 8px; font-size: 11.5px; }\n.cp-kv dt { color: var(--cp-muted); }\n.cp-kv dd { margin: 0; font-family: var(--cp-mono); font-size: 11px; overflow-wrap: anywhere; }\n.cp-actions { display: flex; gap: 6px; align-items: center; }\n.cp-input {\n  flex: 1; min-width: 0; background: var(--cp-panel-2); border: 1px solid var(--cp-border);\n  border-radius: 7px; padding: 6px 8px; color: var(--cp-text); font-size: 11.5px; font-family: var(--cp-sans);\n}\n.cp-input:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; }\n.cp-btn {\n  border: 1px solid var(--cp-border-strong); background: var(--cp-panel); color: var(--cp-text);\n  border-radius: 7px; padding: 6px 10px; font-size: 11.5px; font-weight: 600; cursor: pointer;\n  font-family: var(--cp-sans); white-space: nowrap;\n}\n.cp-btn:hover { border-color: var(--cp-accent); color: var(--cp-accent); }\n.cp-btn.cp-primary { background: var(--cp-accent); border-color: var(--cp-accent); color: #fff; }\n.cp-btn.cp-primary:hover { filter: brightness(1.08); color: #fff; }\n.cp-btn.cp-danger { color: var(--cp-danger); border-color: color-mix(in srgb, var(--cp-danger) 45%, var(--cp-border)); }\n.cp-btn:disabled { opacity: .5; cursor: not-allowed; }\n.cp-diff { border: 1px solid var(--cp-border); border-radius: 8px; overflow: hidden; background: var(--cp-code); }\n.cp-diff-head { display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: rgba(255,255,255,.04); color: #9aa7b8; font-size: 10px; font-family: var(--cp-mono); }\n.cp-diff pre { margin: 0; padding: 6px 0; overflow: auto; max-height: 300px; font-family: var(--cp-mono); font-size: 10.5px; line-height: 1.5; color: #cbd5e1; }\n.cp-diff .cp-line { display: block; padding: 0 8px; white-space: pre; }\n.cp-diff .cp-add { background: rgba(34,197,94,.12); color: #86efac; }\n.cp-diff .cp-del { background: rgba(239,68,68,.12); color: #fca5a5; }\n.cp-diff .cp-hunk { color: #93c5fd; background: rgba(59,130,246,.08); }\n.cp-validation { display: flex; gap: 6px; align-items: center; font-size: 11px; }\n.cp-validation.cp-ok { color: var(--cp-success); }\n.cp-validation.cp-bad { color: var(--cp-danger); }\n.cp-errline { border: 1px solid color-mix(in srgb, var(--cp-danger) 40%, var(--cp-border)); background: var(--cp-danger-soft); color: var(--cp-danger); border-radius: 8px; padding: 7px 9px; font-size: 11.5px; }\n.cp-banner { padding: 6px 12px; background: var(--cp-warning-soft); color: var(--cp-warning); font-size: 11px; border-bottom: 1px solid var(--cp-border); }\n.cp-composer { border-top: 1px solid var(--cp-border); padding: 10px 12px 12px; background: var(--cp-panel); display: flex; flex-direction: column; gap: 7px; }\n.cp-composer-row { display: flex; gap: 8px; align-items: flex-end; }\n.cp-textarea {\n  flex: 1; resize: none; min-height: 38px; max-height: 160px; padding: 9px 10px;\n  border: 1px solid var(--cp-border-strong); border-radius: 9px; background: var(--cp-panel-2);\n  color: var(--cp-text); font-family: var(--cp-sans); font-size: 12.5px; line-height: 1.45;\n}\n.cp-textarea:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; border-color: var(--cp-accent); }\n.cp-textarea::placeholder { color: var(--cp-muted); }\n.cp-send {\n  width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--cp-accent);\n  background: var(--cp-accent); color: #fff; display: grid; place-items: center; cursor: pointer;\n}\n.cp-send:disabled { opacity: .45; cursor: not-allowed; }\n.cp-send svg { width: 16px; height: 16px; }\n.cp-hint { display: flex; gap: 8px; align-items: center; color: var(--cp-muted); font-size: 10px; }\n.cp-hint kbd {\n  font-family: var(--cp-mono); font-size: 9.5px; border: 1px solid var(--cp-border);\n  border-bottom-width: 2px; border-radius: 4px; padding: 0 3px; background: var(--cp-panel-2);\n}\n\n.cp-setup {\n  display: flex; flex-direction: column; gap: 12px; padding: 8px 4px 20px;\n}\n.cp-setup h3 { margin: 0; font-size: 15px; font-weight: 650; letter-spacing: -.01em; }\n.cp-setup p { margin: 0; color: var(--cp-muted); font-size: 12px; line-height: 1.55; }\n.cp-provider-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }\n.cp-provider {\n  border: 1px solid var(--cp-border); background: var(--cp-panel-2); border-radius: 9px;\n  padding: 8px; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 4px;\n  color: var(--cp-text); font-family: var(--cp-sans);\n}\n.cp-provider:hover { border-color: var(--cp-accent); }\n.cp-provider-active { border-color: var(--cp-accent); background: var(--cp-accent-soft); }\n.cp-provider-name { font-weight: 650; font-size: 12px; }\n.cp-provider-state { font-size: 9.5px; color: var(--cp-muted); font-family: var(--cp-mono); text-transform: uppercase; letter-spacing: .04em; }\n.cp-provider-state.cp-configured { color: var(--cp-success); }\n.cp-field { display: flex; flex-direction: column; gap: 5px; }\n.cp-field > span { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--cp-muted); }\n.cp-field input, .cp-field select {\n  width: 100%; height: 34px; border: 1px solid var(--cp-border-strong); border-radius: 8px;\n  background: var(--cp-panel-2); color: var(--cp-text); padding: 0 9px; font-size: 12px;\n  font-family: var(--cp-sans);\n}\n.cp-field input:focus, .cp-field select:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; }\n.cp-field-hint { font-size: 10px; color: var(--cp-muted); font-family: var(--cp-mono); }\n.cp-setup-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }\n.cp-setup-note { color: var(--cp-muted); font-size: 11px; font-family: var(--cp-mono); }\n.cp-thumbs { display: flex; gap: 6px; flex-wrap: wrap; }\n.cp-thumb {\n  position: relative; width: 54px; height: 54px; border-radius: 8px; overflow: hidden;\n  border: 1px solid var(--cp-border); background: var(--cp-panel-2); display: inline-flex;\n}\n.cp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }\n.cp-thumb button {\n  position: absolute; top: 2px; right: 2px; width: 17px; height: 17px; border-radius: 50%;\n  border: 1px solid rgba(0,0,0,.15); background: rgba(15,23,42,.75); color: #fff;\n  font-size: 11px; line-height: 1; cursor: pointer; display: grid; place-items: center;\n}\n.cp-modelbar {\n  display: flex; align-items: center; gap: 5px; padding: 0 0 2px;\n}\n.cp-mini-select {\n  max-width: 150px; height: 26px; border: 1px solid var(--cp-border); border-radius: 6px;\n  background: var(--cp-panel-2); color: var(--cp-text); font-size: 10.5px;\n  font-family: var(--cp-mono); padding: 0 5px;\n}\n.cp-model-select { max-width: 190px; }\n.cp-mini-select:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; }\n\n\n.cp-approval-dock {\n  flex: 0 0 auto;\n  display: flex; align-items: center; gap: 8px;\n  padding: 8px 12px;\n  border-top: 1px solid color-mix(in srgb, var(--cp-warning) 45%, var(--cp-border));\n  background: var(--cp-warning-soft);\n}\n.cp-approval-dock-risk3 {\n  border-top-color: color-mix(in srgb, var(--cp-danger) 55%, var(--cp-border));\n  background: var(--cp-danger-soft);\n}\n.cp-approval-dock-main { display: flex; align-items: center; gap: 7px; min-width: 0; flex: 1; }\n.cp-approval-dock-main svg { width: 14px; height: 14px; color: var(--cp-warning); flex: 0 0 auto; }\n.cp-approval-dock-risk3 .cp-approval-dock-main svg { color: var(--cp-danger); }\n.cp-approval-dock-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }\n.cp-approval-dock-title { font-size: 11.5px; font-weight: 650; }\n.cp-approval-dock-meta {\n  font-size: 10px; font-family: var(--cp-mono); color: var(--cp-muted);\n  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;\n}\n.cp-approval-dock-actions { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }\n.cp-composer {\n  border-top: 1px solid var(--cp-border);\n  padding: 10px 12px 12px;\n  background: var(--cp-panel);\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.cp-composer-box {\n  border: 1px solid var(--cp-border-strong);\n  border-radius: 12px;\n  background: var(--cp-panel-2);\n  padding: 8px 8px 6px;\n  display: flex;\n  flex-direction: column;\n  gap: 2px;\n  transition: border-color .15s ease, box-shadow .15s ease;\n}\n.cp-composer-box:focus-within {\n  border-color: color-mix(in srgb, var(--cp-accent) 60%, var(--cp-border));\n  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cp-accent) 12%, transparent);\n}\n.cp-composer-box .cp-textarea {\n  border: 0;\n  background: transparent;\n  padding: 4px 5px;\n  min-height: 32px;\n  max-height: 160px;\n  border-radius: 0;\n  font-size: 13px;\n}\n.cp-composer-box .cp-textarea:focus { outline: none; border: 0; }\n.cp-composer-bar { display: flex; align-items: center; gap: 2px; min-width: 0; }\n.cp-bar-left { display: flex; align-items: center; gap: 1px; }\n.cp-bar-right { display: flex; align-items: center; gap: 1px; margin-left: auto; min-width: 0; }\n.cp-bar-btn {\n  width: 28px; height: 28px; padding: 0; border: 1px solid transparent; background: transparent;\n  color: var(--cp-muted); border-radius: 7px; display: grid; place-items: center; cursor: pointer;\n}\n.cp-bar-btn:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-bar-btn svg { width: 15px; height: 15px; }\n.cp-shield {\n  width: 28px; height: 28px; padding: 0; display: grid; place-items: center;\n  color: var(--cp-success); opacity: .9; cursor: pointer;\n  border: 1px solid transparent; background: transparent; border-radius: 7px;\n}\n.cp-shield:hover { background: var(--cp-panel); border-color: var(--cp-border); opacity: 1; }\n.cp-shield:disabled { cursor: not-allowed; opacity: .45; }\n.cp-shield svg { width: 15px; height: 15px; }\n.cp-shield-bypass {\n  color: var(--cp-danger); opacity: 1;\n  background: var(--cp-danger-soft);\n  border-color: color-mix(in srgb, var(--cp-danger) 45%, var(--cp-border));\n}\n.cp-pill {\n  display: inline-flex; align-items: center; gap: 4px; height: 28px;\n  padding: 0 5px 0 7px; border-radius: 7px; border: 1px solid transparent;\n  color: var(--cp-muted); min-width: 0;\n}\n.cp-pill:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-pill-icon { width: 13px; height: 13px; flex: 0 0 auto; }\n.cp-pill-chevron { width: 10px; height: 10px; opacity: .55; flex: 0 0 auto; }\n.cp-pill-native {\n  appearance: none; -webkit-appearance: none; border: 0; background: transparent;\n  color: inherit; font-family: var(--cp-mono); font-size: 10.5px; padding: 0;\n  max-width: 118px; cursor: pointer; text-overflow: ellipsis;\n}\n.cp-pill-native:focus { outline: none; }\n.cp-pill-model .cp-pill-native { max-width: 175px; }\n.cp-pill-input {\n  border: 0; background: transparent; color: inherit; font-family: var(--cp-mono);\n  font-size: 10.5px; padding: 0; width: 116px;\n}\n.cp-pill-input:focus { outline: none; }\n.cp-thinking-native { max-width: 64px; }\n.cp-composer .cp-send {\n  width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--cp-accent);\n  background: var(--cp-accent); color: #fff; display: grid; place-items: center;\n  cursor: pointer; padding: 0; margin-left: 2px;\n}\n.cp-composer .cp-send svg { width: 15px; height: 15px; }\n.cp-composer .cp-send:disabled { opacity: .4; cursor: not-allowed; }\n.cp-thumb button svg { width: 9px; height: 9px; }\n.cp-approval-head > svg { width: 13px; height: 13px; color: var(--cp-warning); flex: 0 0 auto; }\n.cp-validation svg { width: 13px; height: 13px; flex: 0 0 auto; }\n\n/* Confirmation dialog */\n.cp-confirm-backdrop {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483003;\n  display: grid;\n  place-items: center;\n  padding: 20px;\n  background: rgba(2, 6, 23, .62);\n  backdrop-filter: blur(2px);\n  pointer-events: auto;\n}\n.cp-confirm {\n  width: min(360px, 100%);\n  background: var(--cp-panel);\n  color: var(--cp-text);\n  border: 1px solid var(--cp-border-strong);\n  border-radius: 14px;\n  box-shadow: var(--cp-shadow);\n  padding: 16px;\n}\n.cp-confirm h3 { margin: 0 0 7px; font-size: 14px; font-weight: 650; letter-spacing: -.01em; }\n.cp-confirm p { margin: 0; color: var(--cp-muted); font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; }\n.cp-confirm-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 15px; }\n\n/* Portal + custom menus */\n.cp-portal-root {\n  position: fixed;\n  inset: 0;\n  pointer-events: none;\n  z-index: 2147483001;\n}\n.cp-menu {\n  pointer-events: auto;\n  display: flex;\n  flex-direction: column;\n  min-height: 0;\n  overflow: hidden;\n  background: var(--cp-panel);\n  color: var(--cp-text);\n  border: 1px solid var(--cp-border-strong);\n  border-radius: 11px;\n  box-shadow: var(--cp-shadow);\n  padding: 5px;\n  font-family: var(--cp-sans);\n  font-size: 12px;\n}\n.cp-menu-search {\n  display: flex;\n  align-items: center;\n  gap: 4px;\n  padding: 2px 2px 6px;\n  border-bottom: 1px solid var(--cp-border);\n  margin-bottom: 4px;\n}\n.cp-menu-search input {\n  flex: 1;\n  min-width: 0;\n  height: 30px;\n  border: 1px solid var(--cp-border);\n  border-radius: 7px;\n  background: var(--cp-panel-2);\n  color: var(--cp-text);\n  padding: 0 8px;\n  font-size: 12px;\n  font-family: var(--cp-sans);\n}\n.cp-menu-search input:focus { outline: 2px solid var(--cp-accent); outline-offset: 0; border-color: var(--cp-accent); }\n.cp-menu-refresh {\n  width: 28px; height: 28px; border: 1px solid transparent; background: transparent;\n  color: var(--cp-muted); border-radius: 7px; display: grid; place-items: center; cursor: pointer;\n}\n.cp-menu-refresh:hover { background: var(--cp-panel-2); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-menu-refresh svg { width: 13px; height: 13px; }\n.cp-menu-scroll { overflow-y: auto; min-height: 0; scrollbar-width: thin; }\n.cp-menu-scroll::-webkit-scrollbar { width: 7px; }\n.cp-menu-scroll::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 7px; }\n.cp-menu-label {\n  display: flex; align-items: center; gap: 6px;\n  padding: 7px 7px 4px; font-size: 9.5px; font-weight: 650;\n  text-transform: uppercase; letter-spacing: .07em; color: var(--cp-muted);\n}\n.cp-menu-label-meta { margin-left: auto; font-weight: 500; text-transform: none; letter-spacing: 0; font-family: var(--cp-mono); font-size: 9.5px; }\n.cp-menu-group + .cp-menu-group { border-top: 1px solid var(--cp-border); margin-top: 3px; }\n.cp-menu-empty { padding: 8px 8px 10px; color: var(--cp-muted); font-size: 11px; }\n.cp-menu-error { color: var(--cp-danger); overflow-wrap: anywhere; }\n.cp-menu-item {\n  display: flex; align-items: center; gap: 8px; width: 100%;\n  border: 0; background: transparent; color: var(--cp-text);\n  padding: 7px 8px; border-radius: 7px; cursor: pointer; text-align: left;\n  font-family: var(--cp-sans); font-size: 12px;\n}\n.cp-menu-item:hover, .cp-menu-item-active { background: var(--cp-panel-2); }\n.cp-menu-item-selected { background: var(--cp-accent-soft); }\n.cp-menu-item-selected:hover, .cp-menu-item-selected.cp-menu-item-active { background: var(--cp-accent-soft); }\n.cp-menu-item-icon { width: 14px; height: 14px; color: var(--cp-muted); flex: 0 0 auto; }\n.cp-menu-item-selected .cp-menu-item-icon { color: var(--cp-accent); }\n.cp-menu-item-main { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }\n.cp-menu-item-title { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-menu-item-meta { color: var(--cp-muted); font-size: 10px; font-family: var(--cp-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-menu-check { width: 13px; height: 13px; color: var(--cp-accent); flex: 0 0 auto; }\n\n/* Composer pills (buttons) */\n.cp-pill {\n  display: inline-flex; align-items: center; gap: 4px; height: 28px;\n  padding: 0 5px 0 7px; border-radius: 7px; border: 1px solid transparent;\n  background: transparent; color: var(--cp-muted); min-width: 0; cursor: pointer;\n  font-family: var(--cp-sans);\n}\n.cp-pill:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-pill-active { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-pill-value { font-family: var(--cp-mono); font-size: 10.5px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-pill-muted { color: var(--cp-muted); }\n.cp-pill svg.cp-pill-icon { width: 13px; height: 13px; flex: 0 0 auto; }\n\n/* Session manager */\n.cp-sessions { display: flex; flex-direction: column; min-height: 0; flex: 1; background: var(--cp-panel); }\n.cp-sessions-head { padding: 12px 12px 10px; border-bottom: 1px solid var(--cp-border); display: flex; flex-direction: column; gap: 8px; background: linear-gradient(180deg, var(--cp-panel-2), var(--cp-panel)); }\n.cp-sessions-title-row { display: flex; align-items: center; gap: 7px; }\n.cp-sessions-title { font-weight: 650; font-size: 14px; letter-spacing: -.01em; }\n.cp-sessions-count { font-family: var(--cp-mono); font-size: 10px; color: var(--cp-muted); border: 1px solid var(--cp-border); border-radius: 999px; padding: 0 6px; }\n.cp-back-chevron { transform: rotate(90deg); }\n.cp-session-search {\n  width: 100%; height: 32px; border: 1px solid var(--cp-border); border-radius: 8px;\n  background: var(--cp-panel-2); color: var(--cp-text); padding: 0 9px; font-size: 12px;\n  font-family: var(--cp-sans);\n}\n.cp-session-search:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; border-color: var(--cp-accent); }\n.cp-sessions-scroll { flex: 1; overflow-y: auto; padding: 8px 8px 18px; scrollbar-width: thin; }\n.cp-sessions-scroll::-webkit-scrollbar { width: 8px; }\n.cp-sessions-scroll::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 8px; }\n.cp-session-empty { padding: 24px 12px; text-align: center; color: var(--cp-muted); font-size: 12px; }\n.cp-session-group { margin-bottom: 6px; }\n.cp-session-group-head { display: flex; align-items: center; gap: 2px; padding: 2px 2px 2px 0; border-radius: 8px; }\n.cp-session-group-head:hover { background: var(--cp-panel-2); }\n.cp-session-group-toggle {\n  flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px;\n  border: 0; background: transparent; color: var(--cp-text); cursor: pointer;\n  padding: 6px 6px; border-radius: 7px; font-family: var(--cp-sans); font-size: 12px; text-align: left;\n}\n.cp-session-chevron { width: 12px; height: 12px; color: var(--cp-muted); transition: transform .15s ease; flex: 0 0 auto; }\n.cp-session-chevron.cp-collapsed { transform: rotate(-90deg); }\n.cp-session-folder { width: 14px; height: 14px; color: var(--cp-accent); flex: 0 0 auto; }\n.cp-session-pipeline { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-session-group-count { margin-left: auto; font-family: var(--cp-mono); font-size: 9.5px; color: var(--cp-muted); border: 1px solid var(--cp-border); border-radius: 999px; padding: 0 5px; }\n.cp-session-new {\n  width: 24px; height: 24px; border: 1px solid transparent; background: transparent; color: var(--cp-muted);\n  border-radius: 6px; display: grid; place-items: center; cursor: pointer; margin-right: 4px;\n}\n.cp-session-new:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-session-new svg { width: 13px; height: 13px; }\n.cp-session-rows { display: flex; flex-direction: column; gap: 1px; padding: 1px 0 4px 14px; }\n.cp-session-row {\n  display: flex; align-items: center; gap: 2px; border-radius: 8px; border: 1px solid transparent;\n}\n.cp-session-row:hover { background: var(--cp-panel-2); }\n.cp-session-row-active { background: var(--cp-accent-soft); border-color: color-mix(in srgb, var(--cp-accent) 22%, transparent); }\n.cp-session-row-main {\n  flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px;\n  border: 0; background: transparent; color: inherit; text-align: left;\n  padding: 7px 6px; cursor: pointer; font-family: var(--cp-sans); border-radius: 7px;\n}\n.cp-session-status { width: 7px; height: 7px; border-radius: 50%; background: var(--cp-border-strong); flex: 0 0 auto; }\n.cp-status-awaiting_approval { background: var(--cp-warning); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cp-warning) 18%, transparent); }\n.cp-status-error { background: var(--cp-danger); }\n.cp-status-idle { background: var(--cp-success); opacity: .65; }\n.cp-session-row-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }\n.cp-session-name { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-session-meta { color: var(--cp-muted); font-size: 10px; font-family: var(--cp-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-session-rename {\n  flex: 1; min-width: 0; height: 25px; border: 1px solid var(--cp-accent); border-radius: 6px;\n  background: var(--cp-panel); color: var(--cp-text); padding: 0 6px; font-size: 12px; font-family: var(--cp-sans);\n}\n.cp-session-rename:focus { outline: 2px solid var(--cp-accent); outline-offset: 0; }\n.cp-session-actions { display: none; align-items: center; gap: 1px; padding-right: 4px; }\n.cp-session-row:hover .cp-session-actions, .cp-session-row-active .cp-session-actions { display: flex; }\n.cp-session-action {\n  width: 23px; height: 23px; border: 1px solid transparent; background: transparent;\n  color: var(--cp-muted); border-radius: 6px; display: grid; place-items: center; cursor: pointer;\n}\n.cp-session-action:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-session-action svg { width: 12px; height: 12px; }\n@media (hover: none) {\n  .cp-session-actions { display: flex; }\n}\n\n/* Settings */\n.cp-settings { display: flex; flex-direction: column; min-height: 0; flex: 1; background: var(--cp-panel); }\n.cp-settings-head { display: flex; align-items: center; gap: 7px; padding: 12px 12px 10px; border-bottom: 1px solid var(--cp-border); background: linear-gradient(180deg, var(--cp-panel-2), var(--cp-panel)); }\n.cp-settings-back { font-size: 16px; line-height: 1; }\n.cp-settings-title { font-weight: 650; font-size: 14px; letter-spacing: -.01em; }\n.cp-settings-tabs { display: flex; gap: 2px; padding: 7px 10px 0; border-bottom: 1px solid var(--cp-border); background: var(--cp-panel); }\n.cp-settings-tab {\n  border: 0; background: transparent; color: var(--cp-muted); cursor: pointer;\n  padding: 7px 9px; font-size: 11.5px; font-weight: 600; font-family: var(--cp-sans);\n  border-bottom: 2px solid transparent; margin-bottom: -1px;\n}\n.cp-settings-tab:hover { color: var(--cp-text); }\n.cp-settings-tab-active { color: var(--cp-accent); border-bottom-color: var(--cp-accent); }\n.cp-settings-scroll { flex: 1; overflow-y: auto; padding: 12px 12px 24px; scrollbar-width: thin; }\n.cp-settings-scroll::-webkit-scrollbar { width: 8px; }\n.cp-settings-scroll::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 8px; }\n.cp-settings-section { display: flex; flex-direction: column; gap: 10px; }\n.cp-settings-section h3 { margin: 0; font-size: 14px; font-weight: 650; }\n.cp-settings-section p { margin: 3px 0 0; color: var(--cp-muted); font-size: 11.5px; line-height: 1.5; }\n.cp-about-head { display: flex; align-items: center; gap: 8px; }\n.cp-settings-version {\n  font-family: var(--cp-mono); font-size: 10px; color: var(--cp-muted);\n  border: 1px solid var(--cp-border); border-radius: 999px; padding: 1px 7px;\n  background: var(--cp-panel-2);\n}\n.cp-about-lede { color: var(--cp-text) !important; font-size: 12.5px !important; line-height: 1.6 !important; }\n.cp-settings-section-head { display: flex; align-items: flex-start; gap: 8px; justify-content: space-between; }\n.cp-settings-note { color: var(--cp-muted); font-size: 11px; line-height: 1.55; padding: 8px 10px; border: 1px dashed var(--cp-border); border-radius: 8px; }\n.cp-settings-card {\n  display: flex; align-items: center; gap: 9px; padding: 9px 10px;\n  border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-panel-2);\n}\n.cp-settings-card-icon {\n  width: 28px; height: 28px; border-radius: 8px; background: var(--cp-accent-soft);\n  color: var(--cp-accent); display: grid; place-items: center; flex: 0 0 auto;\n}\n.cp-settings-card-icon svg { width: 15px; height: 15px; }\n.cp-settings-card-main { min-width: 0; flex: 1; }\n.cp-settings-card-title { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; }\n.cp-settings-card-meta { color: var(--cp-muted); font-size: 10.5px; font-family: var(--cp-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-settings-card-actions { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }\n.cp-settings-badge {\n  display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 600;\n  text-transform: uppercase; letter-spacing: .05em; color: var(--cp-success);\n  border: 1px solid color-mix(in srgb, var(--cp-success) 35%, transparent);\n  background: var(--cp-success-soft); border-radius: 999px; padding: 1px 6px;\n}\n.cp-settings-badge svg { width: 10px; height: 10px; }\n.cp-settings-form { border: 1px solid var(--cp-border); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 9px; background: var(--cp-panel-2); }\n.cp-settings-form-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12.5px; }\n.cp-settings-form .cp-provider-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }\n.cp-settings-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }\n.cp-settings-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--cp-border); }\n.cp-settings-row > span { font-size: 12px; font-weight: 500; }\n.cp-settings .cp-pill { border-color: var(--cp-border); background: var(--cp-panel-2); }\n.cp-settings .cp-field input { background: var(--cp-panel); }\n.cp-settings .cp-menu { z-index: 2147483002; }\n\n/* Thinking / analysis */\n.cp-reasoning {\n  border-left: 2px solid var(--cp-border-strong);\n  margin-left: 2px;\n  padding-left: 9px;\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n}\n.cp-reasoning-open { border-left-color: color-mix(in srgb, var(--cp-accent) 55%, var(--cp-border-strong)); }\n.cp-reasoning-head {\n  display: flex; align-items: center; gap: 6px; width: 100%;\n  border: 0; background: transparent; color: var(--cp-muted); cursor: pointer;\n  padding: 2px 0; font-family: var(--cp-sans); font-size: 11px; text-align: left;\n}\n.cp-reasoning-head:hover { color: var(--cp-text); }\n.cp-reasoning-title { font-weight: 600; letter-spacing: .01em; }\n.cp-reasoning-dot {\n  width: 6px; height: 6px; border-radius: 50%; flex: 0 0 auto;\n  background: var(--cp-accent); animation: cp-reasoning-pulse 1.2s ease-in-out infinite;\n}\n.cp-reasoning-dot-done { background: var(--cp-border-strong); animation: none; }\n@keyframes cp-reasoning-pulse {\n  0%, 100% { opacity: .35; transform: scale(.85); }\n  50% { opacity: 1; transform: scale(1); }\n}\n.cp-reasoning-chevron { width: 12px; height: 12px; transition: transform .15s ease; }\n.cp-reasoning-chevron-open { transform: rotate(180deg); }\n.cp-reasoning-body {\n  color: var(--cp-muted); font-size: 11.5px; line-height: 1.6;\n  white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow-y: auto;\n  font-family: var(--cp-sans);\n  scrollbar-width: thin;\n}\n.cp-reasoning-body::-webkit-scrollbar { width: 7px; }\n.cp-reasoning-body::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 7px; }\n\n/* Broken pipeline alert */\n.cp-alert {\n  border: 1px solid color-mix(in srgb, var(--cp-danger) 38%, var(--cp-border));\n  background: var(--cp-danger-soft); border-radius: 11px; padding: 10px 11px;\n  display: flex; flex-direction: column; gap: 7px;\n}\n.cp-alert-title { display: flex; align-items: center; gap: 6px; color: var(--cp-danger); font-weight: 650; font-size: 12px; }\n.cp-alert-title svg { width: 14px; height: 14px; }\n.cp-alert p { margin: 0; color: var(--cp-text); font-size: 11.5px; line-height: 1.5; }\n.cp-alert-actions { display: flex; gap: 6px; flex-wrap: wrap; }\n.cp-fab-alert {\n  animation: cp-fab-pulse 1.9s ease-in-out infinite;\n  border-color: color-mix(in srgb, var(--cp-danger) 70%, transparent);\n  background: linear-gradient(145deg, var(--cp-danger), #7f1d1d);\n  box-shadow: 0 10px 26px rgba(220, 38, 38, .45);\n}\n.cp-logo-alert { color: var(--cp-danger); background: var(--cp-danger-soft); animation: cp-logo-pulse 1.9s ease-in-out infinite; }\n@keyframes cp-fab-pulse {\n  0%, 100% { box-shadow: 0 10px 24px rgba(220, 38, 38, .35); }\n  50% { box-shadow: 0 10px 24px rgba(220, 38, 38, .35), 0 0 0 8px rgba(220, 38, 38, .12); }\n}\n@keyframes cp-logo-pulse {\n  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, .25); }\n  50% { box-shadow: 0 0 0 5px rgba(220, 38, 38, .06); }\n}\n\n@media (max-width: 640px) {\n  .cp-drawer { width: 100vw !important; }\n  .cp-fab { right: 14px; bottom: 14px; }\n}\n@media (prefers-reduced-motion: reduce) {\n  .cp-drawer, .cp-fab { transition: none; }\n  .cp-cursor, .cp-spin, .cp-fab-alert, .cp-logo-alert, .cp-reasoning-dot { animation: none; }\n}\n", ga = document.getElementById("jenkins-ai-copilot-root");
-if (ga && !ga.shadowRoot) {
-	let e = ga.attachShadow({ mode: "open" }), t = document.createElement("style");
-	t.textContent = ha;
+var ma = "\n.cp-reset { all: initial; }\n.cp-shell {\n  --cp-bg: #f6f7f9;\n  --cp-panel: #ffffff;\n  --cp-panel-2: #fbfbfd;\n  --cp-text: #111827;\n  --cp-muted: #667085;\n  --cp-border: #e4e7ec;\n  --cp-border-strong: #d0d5dd;\n  --cp-accent: #4f46e5;\n  --cp-accent-soft: #eef2ff;\n  --cp-cyan: #0e7490;\n  --cp-success: #15803d;\n  --cp-success-soft: #ecfdf3;\n  --cp-warning: #b45309;\n  --cp-warning-soft: #fffbeb;\n  --cp-danger: #b42318;\n  --cp-danger-soft: #fef3f2;\n  --cp-code: #0f172a;\n  --cp-shadow: 0 18px 50px rgba(16, 24, 40, .18), 0 2px 8px rgba(16, 24, 40, .08);\n  --cp-mono: ui-monospace, SFMono-Regular, \"SF Mono\", Menlo, Consolas, \"Liberation Mono\", monospace;\n  --cp-sans: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  position: fixed;\n  inset: 0;\n  z-index: 2147483000;\n  pointer-events: none;\n  font-family: var(--cp-sans);\n  color: var(--cp-text);\n  font-size: 13px;\n  line-height: 1.5;\n  -webkit-font-smoothing: antialiased;\n}\n.cp-shell[data-theme=\"dark\"] {\n  --cp-bg: #0b0f16;\n  --cp-panel: #101722;\n  --cp-panel-2: #0d141d;\n  --cp-text: #e6eaf0;\n  --cp-muted: #94a3b8;\n  --cp-border: #1e293b;\n  --cp-border-strong: #2b3a4f;\n  --cp-accent: #818cf8;\n  --cp-accent-soft: #1e1b4b;\n  --cp-cyan: #22d3ee;\n  --cp-success: #4ade80;\n  --cp-success-soft: #052e16;\n  --cp-warning: #fbbf24;\n  --cp-warning-soft: #2a1a02;\n  --cp-danger: #f87171;\n  --cp-danger-soft: #2a0b0b;\n  --cp-code: #050810;\n  --cp-shadow: 0 24px 60px rgba(0, 0, 0, .55), 0 2px 10px rgba(0, 0, 0, .4);\n}\n.cp-shell * { box-sizing: border-box; }\n.cp-fab {\n  pointer-events: auto;\n  position: fixed;\n  right: 22px;\n  bottom: 22px;\n  width: 48px;\n  height: 48px;\n  border-radius: 14px;\n  border: 1px solid color-mix(in srgb, var(--cp-accent) 55%, transparent);\n  background: linear-gradient(145deg, var(--cp-accent), color-mix(in srgb, var(--cp-accent) 55%, #000));\n  color: #fff;\n  display: grid;\n  place-items: center;\n  cursor: pointer;\n  box-shadow: 0 10px 24px rgba(79, 70, 229, .35);\n  transition: transform .15s ease, box-shadow .15s ease;\n}\n.cp-fab:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(79, 70, 229, .45); }\n.cp-fab:focus-visible { outline: 2px solid var(--cp-cyan); outline-offset: 3px; }\n.cp-fab svg { width: 24px; height: 24px; }\n.cp-drawer {\n  pointer-events: auto;\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  width: 440px;\n  max-width: 100vw;\n  background: var(--cp-panel);\n  border-left: 1px solid var(--cp-border);\n  box-shadow: var(--cp-shadow);\n  display: flex;\n  flex-direction: column;\n  transform: translateX(100%);\n  transition: transform .22s cubic-bezier(.2, .8, .2, 1);\n}\n.cp-drawer.cp-open { transform: translateX(0); }\n.cp-resize {\n  position: absolute;\n  left: -3px;\n  top: 0;\n  bottom: 0;\n  width: 6px;\n  cursor: col-resize;\n  background: transparent;\n}\n.cp-resize:hover { background: color-mix(in srgb, var(--cp-accent) 35%, transparent); }\n.cp-head {\n  padding: 14px 16px 12px;\n  border-bottom: 1px solid var(--cp-border);\n  background: linear-gradient(180deg, var(--cp-panel-2), var(--cp-panel));\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n}\n.cp-head-row { display: flex; align-items: center; gap: 7px; }\n.cp-header-back { margin-left: -4px; }\n.cp-logo {\n  width: 30px; height: 30px; border-radius: 9px;\n  background: var(--cp-accent-soft); color: var(--cp-accent);\n  display: grid; place-items: center; flex: 0 0 auto;\n}\n.cp-logo svg { width: 18px; height: 18px; }\n.cp-title { font-weight: 650; font-size: 14px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.cp-sub { color: var(--cp-muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.cp-grow { flex: 1; }\n.cp-iconbtn {\n  border: 1px solid transparent; background: transparent; color: var(--cp-muted);\n  width: 28px; height: 28px; border-radius: 7px; cursor: pointer;\n  display: grid; place-items: center; flex: 0 0 auto;\n}\n.cp-iconbtn:hover { background: var(--cp-panel-2); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-iconbtn:focus-visible { outline: 2px solid var(--cp-accent); outline-offset: 1px; }\n.cp-iconbtn svg { width: 15px; height: 15px; }\n.cp-convbar { display: flex; gap: 6px; align-items: center; }\n.cp-select {\n  flex: 1; min-width: 0; background: var(--cp-panel); color: var(--cp-text);\n  border: 1px solid var(--cp-border); border-radius: 8px; padding: 5px 8px;\n  font-size: 12px; font-family: var(--cp-sans); height: 30px;\n}\n.cp-model {\n  font-family: var(--cp-mono); font-size: 10px; color: var(--cp-muted);\n  border: 1px solid var(--cp-border); border-radius: 6px; padding: 3px 6px;\n  background: var(--cp-panel-2); max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;\n  cursor: pointer;\n}\n.cp-chips { display: flex; gap: 6px; flex-wrap: wrap; }\n.cp-chip {\n  display: inline-flex; align-items: center; gap: 5px; max-width: 100%;\n  border: 1px solid var(--cp-border); background: var(--cp-panel-2);\n  border-radius: 999px; padding: 2px 8px; font-size: 10.5px; color: var(--cp-muted);\n  font-family: var(--cp-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;\n}\n.cp-chip b { color: var(--cp-text); font-weight: 600; }\n.cp-chip.cp-fail { border-color: color-mix(in srgb, var(--cp-danger) 40%, var(--cp-border)); color: var(--cp-danger); }\n.cp-chip.cp-ok { border-color: color-mix(in srgb, var(--cp-success) 40%, var(--cp-border)); color: var(--cp-success); }\n.cp-thread {\n  flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 14px 14px 8px;\n  display: flex; flex-direction: column; gap: 12px;\n  scrollbar-width: thin; scrollbar-color: var(--cp-border-strong) transparent;\n}\n/* Never let cards shrink and clip their own content when the thread is short. */\n.cp-thread > * { flex: 0 0 auto; }\n.cp-thread::-webkit-scrollbar { width: 8px; }\n.cp-thread::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 8px; }\n.cp-empty {\n  margin: auto; text-align: left; max-width: 330px; padding: 24px 6px;\n  display: flex; flex-direction: column; gap: 10px;\n}\n.cp-empty h3 { margin: 0; font-size: 15px; font-weight: 650; letter-spacing: -.01em; }\n.cp-empty p { margin: 0; color: var(--cp-muted); font-size: 12px; }\n.cp-empty-session { color: var(--cp-muted); font-size: 11px; font-family: var(--cp-mono); }\n.cp-head-text { min-width: 0; overflow: hidden; }\n.cp-quick { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }\n.cp-quick button {\n  text-align: left; border: 1px solid var(--cp-border); background: var(--cp-panel-2);\n  color: var(--cp-text); border-radius: 8px; padding: 8px 10px; font-size: 12px; cursor: pointer;\n}\n.cp-quick button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }\n.cp-msg { display: flex; flex-direction: column; gap: 5px; }\n.cp-msg-head { display: flex; align-items: center; gap: 6px; font-size: 10.5px; color: var(--cp-muted); text-transform: uppercase; letter-spacing: .06em; }\n.cp-msg-head .cp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cp-accent); }\n.cp-copy-btn {\n  display: inline-flex; align-items: center; gap: 4px; height: 20px;\n  padding: 0 6px; border: 1px solid transparent; border-radius: 5px;\n  background: transparent; color: var(--cp-muted); cursor: pointer;\n  font-family: var(--cp-sans); font-size: 9.5px; text-transform: none; letter-spacing: 0;\n}\n.cp-copy-btn:hover { background: var(--cp-panel-2); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-copy-btn:disabled { opacity: .4; cursor: not-allowed; }\n.cp-copy-btn svg { width: 11px; height: 11px; }\n.cp-copy-btn-done { color: var(--cp-success); }\n.cp-copy-btn-done:hover { color: var(--cp-success); }\n.cp-msg.cp-user .cp-msg-head .cp-dot { background: var(--cp-cyan); }\n.cp-msg-body {\n  border: 1px solid var(--cp-border); border-radius: 10px; padding: 9px 11px;\n  background: var(--cp-panel); overflow-wrap: anywhere;\n}\n.cp-msg.cp-user .cp-msg-body { background: var(--cp-panel-2); }\n.cp-msg-narration .cp-msg-body { color: var(--cp-muted); background: var(--cp-panel-2); }\n.cp-narration-msg .cp-msg-head .cp-dot { background: var(--cp-muted); }\n.cp-msg-body > :first-child { margin-top: 0; }\n.cp-msg-body > :last-child { margin-bottom: 0; }\n.cp-msg-body p { margin: 0 0 8px; }\n.cp-msg-body h1, .cp-msg-body h2, .cp-msg-body h3, .cp-msg-body h4 {\n  margin: 12px 0 6px; font-size: 13px; font-weight: 650;\n}\n.cp-msg-body ul, .cp-msg-body ol { margin: 4px 0 8px; padding-left: 18px; }\n.cp-msg-body li { margin: 2px 0; }\n.cp-msg-body code {\n  font-family: var(--cp-mono); font-size: 11.5px; background: var(--cp-panel-2);\n  border: 1px solid var(--cp-border); border-radius: 4px; padding: 0 4px;\n}\n.cp-msg-body a { color: var(--cp-accent); text-decoration: underline; text-underline-offset: 2px; }\n.cp-msg-body blockquote {\n  margin: 6px 0; padding: 4px 10px; border-left: 3px solid var(--cp-accent);\n  background: var(--cp-accent-soft); color: var(--cp-text); border-radius: 0 6px 6px 0;\n}\n.cp-msg-body table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: 11.5px; }\n.cp-msg-body th, .cp-msg-body td { border: 1px solid var(--cp-border); padding: 4px 6px; text-align: left; }\n.cp-msg-body th { background: var(--cp-panel-2); }\n.cp-code {\n  margin: 8px 0; border: 1px solid var(--cp-border); border-radius: 8px; overflow: hidden;\n  background: var(--cp-code);\n}\n.cp-code-head {\n  display: flex; align-items: center; gap: 8px; padding: 5px 8px;\n  background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.08);\n  color: #9aa7b8; font-size: 10px; font-family: var(--cp-mono);\n}\n.cp-code-head .cp-grow { flex: 1; }\n.cp-copy {\n  border: 0; background: transparent; color: #9aa7b8; cursor: pointer; font-size: 10px;\n  font-family: var(--cp-mono); padding: 2px 5px; border-radius: 4px;\n}\n.cp-copy:hover { color: #fff; background: rgba(255,255,255,.08); }\n.cp-code pre {\n  margin: 0; padding: 9px 10px; overflow-x: auto; color: #e6edf7;\n  font-family: var(--cp-mono); font-size: 11.5px; line-height: 1.55;\n}\n.cp-code pre code { background: transparent; border: 0; padding: 0; color: inherit; font-size: inherit; }\n.cp-cursor { display: inline-block; width: 7px; height: 13px; background: var(--cp-accent); vertical-align: -2px; animation: cp-blink 1s steps(2) infinite; }\n@keyframes cp-blink { 50% { opacity: 0; } }\n.cp-tool {\n  border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-accent);\n  border-radius: 8px; background: var(--cp-panel-2); overflow: hidden;\n}\n.cp-tool.cp-failed { border-left-color: var(--cp-danger); }\n.cp-tool.cp-done { border-left-color: var(--cp-success); }\n.cp-tool-head {\n  display: flex; align-items: center; gap: 8px; padding: 7px 9px; cursor: pointer;\n}\n.cp-tool-name { font-family: var(--cp-mono); font-size: 11px; font-weight: 600; }\n.cp-tool-target { color: var(--cp-muted); font-family: var(--cp-mono); font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 190px; }\n.cp-status {\n  margin-left: auto; font-size: 9.5px; font-family: var(--cp-mono); text-transform: uppercase;\n  letter-spacing: .05em; padding: 2px 6px; border-radius: 999px; border: 1px solid var(--cp-border);\n  color: var(--cp-muted); white-space: nowrap;\n}\n.cp-status.cp-running { color: var(--cp-warning); background: var(--cp-warning-soft); border-color: color-mix(in srgb, var(--cp-warning) 30%, transparent); }\n.cp-status.cp-succeeded { color: var(--cp-success); background: var(--cp-success-soft); border-color: color-mix(in srgb, var(--cp-success) 30%, transparent); }\n.cp-status.cp-failed { color: var(--cp-danger); background: var(--cp-danger-soft); border-color: color-mix(in srgb, var(--cp-danger) 30%, transparent); }\n.cp-spin { width: 11px; height: 11px; border: 2px solid var(--cp-border); border-top-color: var(--cp-warning); border-radius: 50%; animation: cp-spin .8s linear infinite; }\n@keyframes cp-spin { to { transform: rotate(360deg); } }\n.cp-tool-body { border-top: 1px solid var(--cp-border); padding: 8px 9px; display: flex; flex-direction: column; gap: 6px; }\n.cp-label { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--cp-muted); }\n.cp-pre {\n  margin: 0; padding: 7px 8px; background: var(--cp-code); color: #dbe4f0; border-radius: 6px;\n  font-family: var(--cp-mono); font-size: 10.5px; line-height: 1.5; max-height: 220px; overflow: auto;\n  white-space: pre-wrap; overflow-wrap: anywhere;\n}\n.cp-approval {\n  border: 1px solid color-mix(in srgb, var(--cp-warning) 45%, var(--cp-border));\n  border-radius: 10px; background: var(--cp-panel); overflow: hidden;\n  box-shadow: 0 4px 14px rgba(0,0,0,.06);\n}\n.cp-approval.cp-risk3 { border-color: color-mix(in srgb, var(--cp-danger) 55%, var(--cp-border)); }\n.cp-approval-head { padding: 9px 10px; background: var(--cp-warning-soft); display: flex; align-items: center; gap: 8px; }\n.cp-approval.cp-risk3 .cp-approval-head { background: var(--cp-danger-soft); }\n.cp-approval-title { font-weight: 650; font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-approval-head-actions { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }\n.cp-btn.cp-btn-sm { padding: 3px 7px; font-size: 10px; border-radius: 6px; }\n.cp-risk { margin-left: auto; font-size: 9px; text-transform: uppercase; letter-spacing: .06em; font-family: var(--cp-mono); padding: 2px 7px; border-radius: 999px; border: 1px solid currentColor; }\n.cp-risk.cp-r2 { color: var(--cp-warning); }\n.cp-risk.cp-r3 { color: var(--cp-danger); }\n.cp-approval-body { padding: 9px 10px; display: flex; flex-direction: column; gap: 8px; }\n.cp-kv { display: grid; grid-template-columns: 74px 1fr; gap: 4px 8px; font-size: 11.5px; }\n.cp-kv dt { color: var(--cp-muted); }\n.cp-kv dd { margin: 0; font-family: var(--cp-mono); font-size: 11px; overflow-wrap: anywhere; }\n.cp-actions { display: flex; gap: 6px; align-items: center; }\n.cp-input {\n  flex: 1; min-width: 0; background: var(--cp-panel-2); border: 1px solid var(--cp-border);\n  border-radius: 7px; padding: 6px 8px; color: var(--cp-text); font-size: 11.5px; font-family: var(--cp-sans);\n}\n.cp-input:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; }\n.cp-btn {\n  border: 1px solid var(--cp-border-strong); background: var(--cp-panel); color: var(--cp-text);\n  border-radius: 7px; padding: 6px 10px; font-size: 11.5px; font-weight: 600; cursor: pointer;\n  font-family: var(--cp-sans); white-space: nowrap;\n}\n.cp-btn:hover { border-color: var(--cp-accent); color: var(--cp-accent); }\n.cp-btn.cp-primary { background: var(--cp-accent); border-color: var(--cp-accent); color: #fff; }\n.cp-btn.cp-primary:hover { filter: brightness(1.08); color: #fff; }\n.cp-btn.cp-danger { color: var(--cp-danger); border-color: color-mix(in srgb, var(--cp-danger) 45%, var(--cp-border)); }\n.cp-btn:disabled { opacity: .5; cursor: not-allowed; }\n.cp-diff { border: 1px solid var(--cp-border); border-radius: 8px; overflow: hidden; background: var(--cp-code); }\n.cp-diff-head { display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: rgba(255,255,255,.04); color: #9aa7b8; font-size: 10px; font-family: var(--cp-mono); }\n.cp-diff pre { margin: 0; padding: 6px 0; overflow: auto; max-height: 300px; font-family: var(--cp-mono); font-size: 10.5px; line-height: 1.5; color: #cbd5e1; }\n.cp-diff .cp-line { display: block; padding: 0 8px; white-space: pre; }\n.cp-diff .cp-add { background: rgba(34,197,94,.12); color: #86efac; }\n.cp-diff .cp-del { background: rgba(239,68,68,.12); color: #fca5a5; }\n.cp-diff .cp-hunk { color: #93c5fd; background: rgba(59,130,246,.08); }\n.cp-validation { display: flex; gap: 6px; align-items: center; font-size: 11px; }\n.cp-validation.cp-ok { color: var(--cp-success); }\n.cp-validation.cp-bad { color: var(--cp-danger); }\n.cp-errline { border: 1px solid color-mix(in srgb, var(--cp-danger) 40%, var(--cp-border)); background: var(--cp-danger-soft); color: var(--cp-danger); border-radius: 8px; padding: 7px 9px; font-size: 11.5px; }\n.cp-banner { padding: 6px 12px; background: var(--cp-warning-soft); color: var(--cp-warning); font-size: 11px; border-bottom: 1px solid var(--cp-border); }\n.cp-composer { border-top: 1px solid var(--cp-border); padding: 10px 12px 12px; background: var(--cp-panel); display: flex; flex-direction: column; gap: 7px; }\n.cp-composer-row { display: flex; gap: 8px; align-items: flex-end; }\n.cp-textarea {\n  flex: 1; resize: none; min-height: 38px; max-height: 160px; padding: 9px 10px;\n  border: 1px solid var(--cp-border-strong); border-radius: 9px; background: var(--cp-panel-2);\n  color: var(--cp-text); font-family: var(--cp-sans); font-size: 12.5px; line-height: 1.45;\n}\n.cp-textarea:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; border-color: var(--cp-accent); }\n.cp-textarea::placeholder { color: var(--cp-muted); }\n.cp-send {\n  width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--cp-accent);\n  background: var(--cp-accent); color: #fff; display: grid; place-items: center; cursor: pointer;\n}\n.cp-send:disabled { opacity: .45; cursor: not-allowed; }\n.cp-send svg { width: 16px; height: 16px; }\n.cp-hint { display: flex; gap: 8px; align-items: center; color: var(--cp-muted); font-size: 10px; }\n.cp-hint kbd {\n  font-family: var(--cp-mono); font-size: 9.5px; border: 1px solid var(--cp-border);\n  border-bottom-width: 2px; border-radius: 4px; padding: 0 3px; background: var(--cp-panel-2);\n}\n\n.cp-setup {\n  display: flex; flex-direction: column; gap: 12px; padding: 8px 4px 20px;\n}\n.cp-setup h3 { margin: 0; font-size: 15px; font-weight: 650; letter-spacing: -.01em; }\n.cp-setup p { margin: 0; color: var(--cp-muted); font-size: 12px; line-height: 1.55; }\n.cp-provider-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }\n.cp-provider {\n  border: 1px solid var(--cp-border); background: var(--cp-panel-2); border-radius: 9px;\n  padding: 8px; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 4px;\n  color: var(--cp-text); font-family: var(--cp-sans);\n}\n.cp-provider:hover { border-color: var(--cp-accent); }\n.cp-provider-active { border-color: var(--cp-accent); background: var(--cp-accent-soft); }\n.cp-provider-name { font-weight: 650; font-size: 12px; }\n.cp-provider-state { font-size: 9.5px; color: var(--cp-muted); font-family: var(--cp-mono); text-transform: uppercase; letter-spacing: .04em; }\n.cp-provider-state.cp-configured { color: var(--cp-success); }\n.cp-field { display: flex; flex-direction: column; gap: 5px; }\n.cp-field > span { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--cp-muted); }\n.cp-field input, .cp-field select {\n  width: 100%; height: 34px; border: 1px solid var(--cp-border-strong); border-radius: 8px;\n  background: var(--cp-panel-2); color: var(--cp-text); padding: 0 9px; font-size: 12px;\n  font-family: var(--cp-sans);\n}\n.cp-field input:focus, .cp-field select:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; }\n.cp-field-hint { font-size: 10px; color: var(--cp-muted); font-family: var(--cp-mono); }\n.cp-setup-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }\n.cp-setup-note { color: var(--cp-muted); font-size: 11px; font-family: var(--cp-mono); }\n.cp-thumbs { display: flex; gap: 6px; flex-wrap: wrap; }\n.cp-thumb {\n  position: relative; width: 54px; height: 54px; border-radius: 8px; overflow: hidden;\n  border: 1px solid var(--cp-border); background: var(--cp-panel-2); display: inline-flex;\n}\n.cp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }\n.cp-thumb button {\n  position: absolute; top: 2px; right: 2px; width: 17px; height: 17px; border-radius: 50%;\n  border: 1px solid rgba(0,0,0,.15); background: rgba(15,23,42,.75); color: #fff;\n  font-size: 11px; line-height: 1; cursor: pointer; display: grid; place-items: center;\n}\n.cp-modelbar {\n  display: flex; align-items: center; gap: 5px; padding: 0 0 2px;\n}\n.cp-mini-select {\n  max-width: 150px; height: 26px; border: 1px solid var(--cp-border); border-radius: 6px;\n  background: var(--cp-panel-2); color: var(--cp-text); font-size: 10.5px;\n  font-family: var(--cp-mono); padding: 0 5px;\n}\n.cp-model-select { max-width: 190px; }\n.cp-mini-select:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; }\n\n\n.cp-approval-dock {\n  flex: 0 0 auto;\n  display: flex; align-items: center; gap: 8px;\n  padding: 8px 12px;\n  border-top: 1px solid color-mix(in srgb, var(--cp-warning) 45%, var(--cp-border));\n  background: var(--cp-warning-soft);\n}\n.cp-approval-dock-risk3 {\n  border-top-color: color-mix(in srgb, var(--cp-danger) 55%, var(--cp-border));\n  background: var(--cp-danger-soft);\n}\n.cp-approval-dock-main { display: flex; align-items: center; gap: 7px; min-width: 0; flex: 1; }\n.cp-approval-dock-main svg { width: 14px; height: 14px; color: var(--cp-warning); flex: 0 0 auto; }\n.cp-approval-dock-risk3 .cp-approval-dock-main svg { color: var(--cp-danger); }\n.cp-approval-dock-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }\n.cp-approval-dock-title { font-size: 11.5px; font-weight: 650; }\n.cp-approval-dock-meta {\n  font-size: 10px; font-family: var(--cp-mono); color: var(--cp-muted);\n  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;\n}\n.cp-approval-dock-actions { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }\n.cp-composer {\n  border-top: 1px solid var(--cp-border);\n  padding: 10px 12px 12px;\n  background: var(--cp-panel);\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n.cp-composer-box {\n  border: 1px solid var(--cp-border-strong);\n  border-radius: 12px;\n  background: var(--cp-panel-2);\n  padding: 8px 8px 6px;\n  display: flex;\n  flex-direction: column;\n  gap: 2px;\n  transition: border-color .15s ease, box-shadow .15s ease;\n}\n.cp-composer-box:focus-within {\n  border-color: color-mix(in srgb, var(--cp-accent) 60%, var(--cp-border));\n  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cp-accent) 12%, transparent);\n}\n.cp-composer-box .cp-textarea {\n  border: 0;\n  background: transparent;\n  padding: 4px 5px;\n  min-height: 32px;\n  max-height: 160px;\n  border-radius: 0;\n  font-size: 13px;\n}\n.cp-composer-box .cp-textarea:focus { outline: none; border: 0; }\n.cp-composer-bar { display: flex; align-items: center; gap: 2px; min-width: 0; }\n.cp-bar-left { display: flex; align-items: center; gap: 1px; }\n.cp-bar-right { display: flex; align-items: center; gap: 1px; margin-left: auto; min-width: 0; }\n.cp-bar-btn {\n  width: 28px; height: 28px; padding: 0; border: 1px solid transparent; background: transparent;\n  color: var(--cp-muted); border-radius: 7px; display: grid; place-items: center; cursor: pointer;\n}\n.cp-bar-btn:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-bar-btn svg { width: 15px; height: 15px; }\n.cp-shield {\n  width: 28px; height: 28px; padding: 0; display: grid; place-items: center;\n  color: var(--cp-success); opacity: .9; cursor: pointer;\n  border: 1px solid transparent; background: transparent; border-radius: 7px;\n}\n.cp-shield:hover { background: var(--cp-panel); border-color: var(--cp-border); opacity: 1; }\n.cp-shield:disabled { cursor: not-allowed; opacity: .45; }\n.cp-shield svg { width: 15px; height: 15px; }\n.cp-shield-bypass {\n  color: var(--cp-danger); opacity: 1;\n  background: var(--cp-danger-soft);\n  border-color: color-mix(in srgb, var(--cp-danger) 45%, var(--cp-border));\n}\n.cp-pill {\n  display: inline-flex; align-items: center; gap: 4px; height: 28px;\n  padding: 0 5px 0 7px; border-radius: 7px; border: 1px solid transparent;\n  color: var(--cp-muted); min-width: 0;\n}\n.cp-pill:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-pill-icon { width: 13px; height: 13px; flex: 0 0 auto; }\n.cp-pill-chevron { width: 10px; height: 10px; opacity: .55; flex: 0 0 auto; }\n.cp-pill-native {\n  appearance: none; -webkit-appearance: none; border: 0; background: transparent;\n  color: inherit; font-family: var(--cp-mono); font-size: 10.5px; padding: 0;\n  max-width: 118px; cursor: pointer; text-overflow: ellipsis;\n}\n.cp-pill-native:focus { outline: none; }\n.cp-pill-model .cp-pill-native { max-width: 175px; }\n.cp-pill-input {\n  border: 0; background: transparent; color: inherit; font-family: var(--cp-mono);\n  font-size: 10.5px; padding: 0; width: 116px;\n}\n.cp-pill-input:focus { outline: none; }\n.cp-thinking-native { max-width: 64px; }\n.cp-composer .cp-send {\n  width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--cp-accent);\n  background: var(--cp-accent); color: #fff; display: grid; place-items: center;\n  cursor: pointer; padding: 0; margin-left: 2px;\n}\n.cp-composer .cp-send svg { width: 15px; height: 15px; }\n.cp-composer .cp-send:disabled { opacity: .4; cursor: not-allowed; }\n.cp-thumb button svg { width: 9px; height: 9px; }\n.cp-approval-head > svg { width: 13px; height: 13px; color: var(--cp-warning); flex: 0 0 auto; }\n.cp-validation svg { width: 13px; height: 13px; flex: 0 0 auto; }\n\n/* Confirmation dialog */\n.cp-confirm-backdrop {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483003;\n  display: grid;\n  place-items: center;\n  padding: 20px;\n  background: rgba(2, 6, 23, .62);\n  backdrop-filter: blur(2px);\n  pointer-events: auto;\n}\n.cp-confirm {\n  width: min(360px, 100%);\n  background: var(--cp-panel);\n  color: var(--cp-text);\n  border: 1px solid var(--cp-border-strong);\n  border-radius: 14px;\n  box-shadow: var(--cp-shadow);\n  padding: 16px;\n}\n.cp-confirm h3 { margin: 0 0 7px; font-size: 14px; font-weight: 650; letter-spacing: -.01em; }\n.cp-confirm p { margin: 0; color: var(--cp-muted); font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; }\n.cp-confirm-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 15px; }\n\n/* Portal + custom menus */\n.cp-portal-root {\n  position: fixed;\n  inset: 0;\n  pointer-events: none;\n  z-index: 2147483001;\n}\n.cp-menu {\n  pointer-events: auto;\n  display: flex;\n  flex-direction: column;\n  min-height: 0;\n  overflow: hidden;\n  background: var(--cp-panel);\n  color: var(--cp-text);\n  border: 1px solid var(--cp-border-strong);\n  border-radius: 11px;\n  box-shadow: var(--cp-shadow);\n  padding: 5px;\n  font-family: var(--cp-sans);\n  font-size: 12px;\n}\n.cp-menu-search {\n  display: flex;\n  align-items: center;\n  gap: 4px;\n  padding: 2px 2px 6px;\n  border-bottom: 1px solid var(--cp-border);\n  margin-bottom: 4px;\n}\n.cp-menu-search input {\n  flex: 1;\n  min-width: 0;\n  height: 30px;\n  border: 1px solid var(--cp-border);\n  border-radius: 7px;\n  background: var(--cp-panel-2);\n  color: var(--cp-text);\n  padding: 0 8px;\n  font-size: 12px;\n  font-family: var(--cp-sans);\n}\n.cp-menu-search input:focus { outline: 2px solid var(--cp-accent); outline-offset: 0; border-color: var(--cp-accent); }\n.cp-menu-refresh {\n  width: 28px; height: 28px; border: 1px solid transparent; background: transparent;\n  color: var(--cp-muted); border-radius: 7px; display: grid; place-items: center; cursor: pointer;\n}\n.cp-menu-refresh:hover { background: var(--cp-panel-2); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-menu-refresh svg { width: 13px; height: 13px; }\n.cp-menu-scroll { overflow-y: auto; min-height: 0; scrollbar-width: thin; }\n.cp-menu-scroll::-webkit-scrollbar { width: 7px; }\n.cp-menu-scroll::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 7px; }\n.cp-menu-label {\n  display: flex; align-items: center; gap: 6px;\n  padding: 7px 7px 4px; font-size: 9.5px; font-weight: 650;\n  text-transform: uppercase; letter-spacing: .07em; color: var(--cp-muted);\n}\n.cp-menu-label-meta { margin-left: auto; font-weight: 500; text-transform: none; letter-spacing: 0; font-family: var(--cp-mono); font-size: 9.5px; }\n.cp-menu-group + .cp-menu-group { border-top: 1px solid var(--cp-border); margin-top: 3px; }\n.cp-menu-empty { padding: 8px 8px 10px; color: var(--cp-muted); font-size: 11px; }\n.cp-menu-error { color: var(--cp-danger); overflow-wrap: anywhere; }\n.cp-menu-item {\n  display: flex; align-items: center; gap: 8px; width: 100%;\n  border: 0; background: transparent; color: var(--cp-text);\n  padding: 7px 8px; border-radius: 7px; cursor: pointer; text-align: left;\n  font-family: var(--cp-sans); font-size: 12px;\n}\n.cp-menu-item:hover, .cp-menu-item-active { background: var(--cp-panel-2); }\n.cp-menu-item-selected { background: var(--cp-accent-soft); }\n.cp-menu-item-selected:hover, .cp-menu-item-selected.cp-menu-item-active { background: var(--cp-accent-soft); }\n.cp-menu-item-icon { width: 14px; height: 14px; color: var(--cp-muted); flex: 0 0 auto; }\n.cp-menu-item-selected .cp-menu-item-icon { color: var(--cp-accent); }\n.cp-menu-item-main { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }\n.cp-menu-item-title { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-menu-item-meta { color: var(--cp-muted); font-size: 10px; font-family: var(--cp-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-menu-check { width: 13px; height: 13px; color: var(--cp-accent); flex: 0 0 auto; }\n\n/* Composer pills (buttons) */\n.cp-pill {\n  display: inline-flex; align-items: center; gap: 4px; height: 28px;\n  padding: 0 5px 0 7px; border-radius: 7px; border: 1px solid transparent;\n  background: transparent; color: var(--cp-muted); min-width: 0; cursor: pointer;\n  font-family: var(--cp-sans);\n}\n.cp-pill:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-pill-active { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-pill-value { font-family: var(--cp-mono); font-size: 10.5px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-pill-muted { color: var(--cp-muted); }\n.cp-pill svg.cp-pill-icon { width: 13px; height: 13px; flex: 0 0 auto; }\n\n/* Session manager */\n.cp-sessions { display: flex; flex-direction: column; min-height: 0; flex: 1; background: var(--cp-panel); }\n.cp-sessions-head { padding: 12px 12px 10px; border-bottom: 1px solid var(--cp-border); display: flex; flex-direction: column; gap: 8px; background: linear-gradient(180deg, var(--cp-panel-2), var(--cp-panel)); }\n.cp-sessions-title-row { display: flex; align-items: center; gap: 7px; }\n.cp-sessions-title { font-weight: 650; font-size: 14px; letter-spacing: -.01em; }\n.cp-sessions-count { font-family: var(--cp-mono); font-size: 10px; color: var(--cp-muted); border: 1px solid var(--cp-border); border-radius: 999px; padding: 0 6px; }\n.cp-back-chevron { transform: rotate(90deg); }\n.cp-session-search {\n  width: 100%; height: 32px; border: 1px solid var(--cp-border); border-radius: 8px;\n  background: var(--cp-panel-2); color: var(--cp-text); padding: 0 9px; font-size: 12px;\n  font-family: var(--cp-sans);\n}\n.cp-session-search:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; border-color: var(--cp-accent); }\n.cp-sessions-scroll { flex: 1; overflow-y: auto; padding: 8px 8px 18px; scrollbar-width: thin; }\n.cp-sessions-scroll::-webkit-scrollbar { width: 8px; }\n.cp-sessions-scroll::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 8px; }\n.cp-session-empty { padding: 24px 12px; text-align: center; color: var(--cp-muted); font-size: 12px; }\n.cp-session-group { margin-bottom: 6px; }\n.cp-session-group-head { display: flex; align-items: center; gap: 2px; padding: 2px 2px 2px 0; border-radius: 8px; }\n.cp-session-group-head:hover { background: var(--cp-panel-2); }\n.cp-session-group-toggle {\n  flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px;\n  border: 0; background: transparent; color: var(--cp-text); cursor: pointer;\n  padding: 6px 6px; border-radius: 7px; font-family: var(--cp-sans); font-size: 12px; text-align: left;\n}\n.cp-session-chevron { width: 12px; height: 12px; color: var(--cp-muted); transition: transform .15s ease; flex: 0 0 auto; }\n.cp-session-chevron.cp-collapsed { transform: rotate(-90deg); }\n.cp-session-folder { width: 14px; height: 14px; color: var(--cp-accent); flex: 0 0 auto; }\n.cp-session-pipeline { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-session-group-count { margin-left: auto; font-family: var(--cp-mono); font-size: 9.5px; color: var(--cp-muted); border: 1px solid var(--cp-border); border-radius: 999px; padding: 0 5px; }\n.cp-session-new {\n  width: 24px; height: 24px; border: 1px solid transparent; background: transparent; color: var(--cp-muted);\n  border-radius: 6px; display: grid; place-items: center; cursor: pointer; margin-right: 4px;\n}\n.cp-session-new:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-session-new svg { width: 13px; height: 13px; }\n.cp-session-rows { display: flex; flex-direction: column; gap: 1px; padding: 1px 0 4px 14px; }\n.cp-session-row {\n  display: flex; align-items: center; gap: 2px; border-radius: 8px; border: 1px solid transparent;\n}\n.cp-session-row:hover { background: var(--cp-panel-2); }\n.cp-session-row-active { background: var(--cp-accent-soft); border-color: color-mix(in srgb, var(--cp-accent) 22%, transparent); }\n.cp-session-row-main {\n  flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px;\n  border: 0; background: transparent; color: inherit; text-align: left;\n  padding: 7px 6px; cursor: pointer; font-family: var(--cp-sans); border-radius: 7px;\n}\n.cp-session-status { width: 7px; height: 7px; border-radius: 50%; background: var(--cp-border-strong); flex: 0 0 auto; }\n.cp-status-awaiting_approval { background: var(--cp-warning); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cp-warning) 18%, transparent); }\n.cp-status-error { background: var(--cp-danger); }\n.cp-status-idle { background: var(--cp-success); opacity: .65; }\n.cp-session-row-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }\n.cp-session-name { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-session-meta { color: var(--cp-muted); font-size: 10px; font-family: var(--cp-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-session-rename {\n  flex: 1; min-width: 0; height: 25px; border: 1px solid var(--cp-accent); border-radius: 6px;\n  background: var(--cp-panel); color: var(--cp-text); padding: 0 6px; font-size: 12px; font-family: var(--cp-sans);\n}\n.cp-session-rename:focus { outline: 2px solid var(--cp-accent); outline-offset: 0; }\n.cp-session-actions { display: none; align-items: center; gap: 1px; padding-right: 4px; }\n.cp-session-row:hover .cp-session-actions, .cp-session-row-active .cp-session-actions { display: flex; }\n.cp-session-action {\n  width: 23px; height: 23px; border: 1px solid transparent; background: transparent;\n  color: var(--cp-muted); border-radius: 6px; display: grid; place-items: center; cursor: pointer;\n}\n.cp-session-action:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }\n.cp-session-action svg { width: 12px; height: 12px; }\n@media (hover: none) {\n  .cp-session-actions { display: flex; }\n}\n\n/* Settings */\n.cp-settings { display: flex; flex-direction: column; min-height: 0; flex: 1; background: var(--cp-panel); }\n.cp-settings-head { display: flex; align-items: center; gap: 7px; padding: 12px 12px 10px; border-bottom: 1px solid var(--cp-border); background: linear-gradient(180deg, var(--cp-panel-2), var(--cp-panel)); }\n.cp-settings-back { font-size: 16px; line-height: 1; }\n.cp-settings-title { font-weight: 650; font-size: 14px; letter-spacing: -.01em; }\n.cp-settings-tabs { display: flex; gap: 2px; padding: 7px 10px 0; border-bottom: 1px solid var(--cp-border); background: var(--cp-panel); }\n.cp-settings-tab {\n  border: 0; background: transparent; color: var(--cp-muted); cursor: pointer;\n  padding: 7px 9px; font-size: 11.5px; font-weight: 600; font-family: var(--cp-sans);\n  border-bottom: 2px solid transparent; margin-bottom: -1px;\n}\n.cp-settings-tab:hover { color: var(--cp-text); }\n.cp-settings-tab-active { color: var(--cp-accent); border-bottom-color: var(--cp-accent); }\n.cp-settings-scroll { flex: 1; overflow-y: auto; padding: 12px 12px 24px; scrollbar-width: thin; }\n.cp-settings-scroll::-webkit-scrollbar { width: 8px; }\n.cp-settings-scroll::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 8px; }\n.cp-settings-section { display: flex; flex-direction: column; gap: 10px; }\n.cp-settings-section h3 { margin: 0; font-size: 14px; font-weight: 650; }\n.cp-settings-section p { margin: 3px 0 0; color: var(--cp-muted); font-size: 11.5px; line-height: 1.5; }\n.cp-about-head { display: flex; align-items: center; gap: 8px; }\n.cp-settings-version {\n  font-family: var(--cp-mono); font-size: 10px; color: var(--cp-muted);\n  border: 1px solid var(--cp-border); border-radius: 999px; padding: 1px 7px;\n  background: var(--cp-panel-2);\n}\n.cp-about-lede { color: var(--cp-text) !important; font-size: 12.5px !important; line-height: 1.6 !important; }\n.cp-settings-section-head { display: flex; align-items: flex-start; gap: 8px; justify-content: space-between; }\n.cp-settings-note { color: var(--cp-muted); font-size: 11px; line-height: 1.55; padding: 8px 10px; border: 1px dashed var(--cp-border); border-radius: 8px; }\n.cp-settings-card {\n  display: flex; align-items: center; gap: 9px; padding: 9px 10px;\n  border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-panel-2);\n}\n.cp-settings-card-icon {\n  width: 28px; height: 28px; border-radius: 8px; background: var(--cp-accent-soft);\n  color: var(--cp-accent); display: grid; place-items: center; flex: 0 0 auto;\n}\n.cp-settings-card-icon svg { width: 15px; height: 15px; }\n.cp-settings-card-main { min-width: 0; flex: 1; }\n.cp-settings-card-title { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; }\n.cp-settings-card-meta { color: var(--cp-muted); font-size: 10.5px; font-family: var(--cp-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.cp-settings-card-actions { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }\n.cp-settings-badge {\n  display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 600;\n  text-transform: uppercase; letter-spacing: .05em; color: var(--cp-success);\n  border: 1px solid color-mix(in srgb, var(--cp-success) 35%, transparent);\n  background: var(--cp-success-soft); border-radius: 999px; padding: 1px 6px;\n}\n.cp-settings-badge svg { width: 10px; height: 10px; }\n.cp-settings-form { border: 1px solid var(--cp-border); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 9px; background: var(--cp-panel-2); }\n.cp-settings-form-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12.5px; }\n.cp-settings-form .cp-provider-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }\n.cp-settings-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }\n.cp-settings-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--cp-border); }\n.cp-settings-row > span { font-size: 12px; font-weight: 500; }\n.cp-settings .cp-pill { border-color: var(--cp-border); background: var(--cp-panel-2); }\n.cp-settings .cp-field input { background: var(--cp-panel); }\n.cp-settings .cp-menu { z-index: 2147483002; }\n\n/* Thinking / analysis */\n.cp-reasoning {\n  border-left: 2px solid var(--cp-border-strong);\n  margin-left: 2px;\n  padding-left: 9px;\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n}\n.cp-reasoning-open { border-left-color: color-mix(in srgb, var(--cp-accent) 55%, var(--cp-border-strong)); }\n.cp-reasoning-head {\n  display: flex; align-items: center; gap: 6px; width: 100%;\n  border: 0; background: transparent; color: var(--cp-muted); cursor: pointer;\n  padding: 2px 0; font-family: var(--cp-sans); font-size: 11px; text-align: left;\n}\n.cp-reasoning-head:hover { color: var(--cp-text); }\n.cp-reasoning-title { font-weight: 600; letter-spacing: .01em; }\n.cp-reasoning-dot {\n  width: 6px; height: 6px; border-radius: 50%; flex: 0 0 auto;\n  background: var(--cp-accent); animation: cp-reasoning-pulse 1.2s ease-in-out infinite;\n}\n.cp-reasoning-dot-done { background: var(--cp-border-strong); animation: none; }\n@keyframes cp-reasoning-pulse {\n  0%, 100% { opacity: .35; transform: scale(.85); }\n  50% { opacity: 1; transform: scale(1); }\n}\n.cp-reasoning-chevron { width: 12px; height: 12px; transition: transform .15s ease; }\n.cp-reasoning-chevron-open { transform: rotate(180deg); }\n.cp-reasoning-body {\n  color: var(--cp-muted); font-size: 11.5px; line-height: 1.6;\n  white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow-y: auto;\n  font-family: var(--cp-sans);\n  scrollbar-width: thin;\n}\n.cp-reasoning-body::-webkit-scrollbar { width: 7px; }\n.cp-reasoning-body::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 7px; }\n\n/* Broken pipeline alert */\n.cp-alert {\n  border: 1px solid color-mix(in srgb, var(--cp-danger) 38%, var(--cp-border));\n  background: var(--cp-danger-soft); border-radius: 11px; padding: 10px 11px;\n  display: flex; flex-direction: column; gap: 7px;\n}\n.cp-alert-title { display: flex; align-items: center; gap: 6px; color: var(--cp-danger); font-weight: 650; font-size: 12px; }\n.cp-alert-title svg { width: 14px; height: 14px; }\n.cp-alert p { margin: 0; color: var(--cp-text); font-size: 11.5px; line-height: 1.5; }\n.cp-alert-actions { display: flex; gap: 6px; flex-wrap: wrap; }\n.cp-fab-alert {\n  animation: cp-fab-pulse 1.9s ease-in-out infinite;\n  border-color: color-mix(in srgb, var(--cp-danger) 70%, transparent);\n  background: linear-gradient(145deg, var(--cp-danger), #7f1d1d);\n  box-shadow: 0 10px 26px rgba(220, 38, 38, .45);\n}\n.cp-logo-alert { color: var(--cp-danger); background: var(--cp-danger-soft); animation: cp-logo-pulse 1.9s ease-in-out infinite; }\n@keyframes cp-fab-pulse {\n  0%, 100% { box-shadow: 0 10px 24px rgba(220, 38, 38, .35); }\n  50% { box-shadow: 0 10px 24px rgba(220, 38, 38, .35), 0 0 0 8px rgba(220, 38, 38, .12); }\n}\n@keyframes cp-logo-pulse {\n  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, .25); }\n  50% { box-shadow: 0 0 0 5px rgba(220, 38, 38, .06); }\n}\n\n@media (max-width: 640px) {\n  .cp-drawer { width: 100vw !important; }\n  .cp-fab { right: 14px; bottom: 14px; }\n}\n@media (prefers-reduced-motion: reduce) {\n  .cp-drawer, .cp-fab { transition: none; }\n  .cp-cursor, .cp-spin, .cp-fab-alert, .cp-logo-alert, .cp-reasoning-dot { animation: none; }\n}\n", ha = document.getElementById("jenkins-ai-copilot-root");
+if (ha && !ha.shadowRoot) {
+	let e = ha.attachShadow({ mode: "open" }), t = document.createElement("style");
+	t.textContent = ma;
 	let n = document.createElement("div");
-	n.className = "cp-reset", e.append(t, n), (0, v.createRoot)(n).render(/* @__PURE__ */ (0, H.jsx)(pa, {}));
+	n.className = "cp-reset", e.append(t, n), (0, v.createRoot)(n).render(/* @__PURE__ */ (0, H.jsx)(fa, {}));
 }

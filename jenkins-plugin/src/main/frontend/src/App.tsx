@@ -41,9 +41,9 @@ import {
 import {
   AlertIcon,
   BotIcon,
+  ChevronIcon,
   ExpandIcon,
   GearIcon,
-  ListIcon,
   MoonIcon,
   PaperclipIcon,
   PlusIcon,
@@ -910,6 +910,15 @@ export function App(): React.ReactElement {
           <>
             <header className="cp-head">
               <div className="cp-head-row">
+                <button
+                  type="button"
+                  className="cp-iconbtn cp-header-back"
+                  title="Back to sessions"
+                  aria-label="Back to sessions"
+                  onClick={() => setView('sessions')}
+                >
+                  <ChevronIcon className="cp-back-chevron" />
+                </button>
                 <div className={`cp-logo ${broken ? 'cp-logo-alert' : ''}`}>
                   <BotIcon />
                 </div>
@@ -920,15 +929,6 @@ export function App(): React.ReactElement {
                   </div>
                 </div>
                 <div className="cp-grow" />
-                <button
-                  type="button"
-                  className="cp-iconbtn"
-                  title="Sessions and pipelines"
-                  aria-label="Sessions and pipelines"
-                  onClick={() => setView('sessions')}
-                >
-                  <ListIcon />
-                </button>
                 {session?.isAdmin && (
                   <button
                     type="button"
