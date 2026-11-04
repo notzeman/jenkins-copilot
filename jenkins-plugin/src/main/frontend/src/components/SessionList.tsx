@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { SessionSummary } from '../types';
 import { ChevronIcon, FolderIcon, PencilIcon, PlusIcon, TrashIcon } from './icons';
+import { ConfirmDialog } from './ConfirmDialog';
 
 interface Props {
   sessions: SessionSummary[];
@@ -48,6 +49,7 @@ export function SessionList({
   const [query, setQuery] = useState('');
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
+  const [deleteTarget, setDeleteTarget] = useState<SessionSummary | null>(null);
 
   const groups = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -212,7 +214,7 @@ export function SessionList({
                               className="cp-session-action"
                               title="Delete session"
                               aria-label="Delete session"
-                              onClick={() => onDelete(session.id)}
+                              onClick={() => setDeleteTarget(session)}
                             >
                               <TrashIcon />
                             </button>
@@ -227,6 +229,28 @@ export function SessionList({
           );
         })}
       </div>
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title="Delete session?"
+        message={
+          deleteTarget
+            ? `"${
+                deleteTarget.title === 'New conversation' || !deleteTarget.title
+                  ? 'New session'
+                  : deleteTarget.title
+              }" will be permanently deleted, including its messages and attachments.`
+            : ''
+        }
+        confirmLabel="Delete session"
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={() => {
+          const target = deleteTarget;
+          setDeleteTarget(null);
+          if (target) {
+            onDelete(target.id);
+          }
+        }}
+      />
     </div>
   );
 }

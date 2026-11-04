@@ -67,6 +67,8 @@ The plugin was installed into a real Jenkins 2.580.2 container and exercised in 
 - A failing/unstable latest build animates the FAB and drawer icon and offers **Quickly analyse**, which starts
   a pipeline session and sends an investigation prompt.
 - The drawer uses a bot icon; the header exposes sessions, settings, theme, expand, new session, and close.
+- Deleting a session opens a confirmation modal with Escape/backdrop cancel; the session is not removed
+  until the user confirms.
 - Approval actions are mirrored in a dock above the composer, so they remain available when a tool card is
   expanded or the viewport is short. An admin-only shield toggles full approval bypass; the state is shown in
   the header and recorded in the audit log.

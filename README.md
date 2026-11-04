@@ -105,7 +105,8 @@ OpenAI-compatible gateway.
 - **Approval cards** for privileged operations, with risk, diff, validation, comment, approve, and reject.
 - **Always-visible approval dock** above the composer, plus an admin-only shield toggle that bypasses approvals
   entirely. The bypass state is shown in red and every mode change is audited.
-- **Session manager** grouped by pipeline, with rename, delete, search, and new-session actions. Multibranch
+- **Session manager** grouped by pipeline, with rename, delete, search, and new-session actions. Deleting a
+  session opens a confirmation modal first. Multibranch
   branch jobs are grouped under the parent multibranch project.
 - **Broken-build CTA**: a failing or unstable latest build pulses the floating icon and offers
   **Quickly analyse**, which starts an investigation session with the console log and recent changes.

@@ -486,6 +486,31 @@ export const css = `
 .cp-approval-head > svg { width: 13px; height: 13px; color: var(--cp-warning); flex: 0 0 auto; }
 .cp-validation svg { width: 13px; height: 13px; flex: 0 0 auto; }
 
+/* Confirmation dialog */
+.cp-confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483003;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(2, 6, 23, .62);
+  backdrop-filter: blur(2px);
+  pointer-events: auto;
+}
+.cp-confirm {
+  width: min(360px, 100%);
+  background: var(--cp-panel);
+  color: var(--cp-text);
+  border: 1px solid var(--cp-border-strong);
+  border-radius: 14px;
+  box-shadow: var(--cp-shadow);
+  padding: 16px;
+}
+.cp-confirm h3 { margin: 0 0 7px; font-size: 14px; font-weight: 650; letter-spacing: -.01em; }
+.cp-confirm p { margin: 0; color: var(--cp-muted); font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; }
+.cp-confirm-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 15px; }
+
 /* Portal + custom menus */
 .cp-portal-root {
   position: fixed;
