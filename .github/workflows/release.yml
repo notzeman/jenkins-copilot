@@ -1,0 +1,85 @@
+name: Release plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build and test
+        working-directory: jenkins-plugin
+        run: ./mvnw -B -ntp -Dspotbugs.skip=true package
+
+      - name: Verify pom version matches the tag
+        id: version
+        working-directory: jenkins-plugin
+        run: |
+          set -euo pipefail
+          VERSION=$(./mvnw -q -DforceStdout help:evaluate -Dexpression=project.version | tail -n 1 | tr -d '\r')
+          if [ "v$VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match pom version $VERSION" >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Generate checksum
+        working-directory: jenkins-plugin/target
+        run: sha256sum jenkins-ai-copilot.hpi > jenkins-ai-copilot.hpi.sha256
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jenkins-ai-copilot-${{ steps.version.outputs.version }}
+          path: |
+            jenkins-plugin/target/jenkins-ai-copilot.hpi
+            jenkins-plugin/target/jenkins-ai-copilot.hpi.sha256
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="$GITHUB_REF_NAME"
+          TITLE="Jenkins AI Copilot ${TAG#v}"
+          HPI="jenkins-plugin/target/jenkins-ai-copilot.hpi"
+          SHA="jenkins-plugin/target/jenkins-ai-copilot.hpi.sha256"
+          NOTES="docs/release-notes/${TAG}.md"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$HPI" "$SHA" --clobber
+            if [ -f "$NOTES" ]; then
+              gh release edit "$TAG" --title "$TITLE" --notes-file "$NOTES"
+            else
+              gh release edit "$TAG" --title "$TITLE"
+            fi
+          elif [ -f "$NOTES" ]; then
+            gh release create "$TAG" "$HPI" "$SHA" \
+              --title "$TITLE" \
+              --notes-file "$NOTES" \
+              --verify-tag
+          else
+            gh release create "$TAG" "$HPI" "$SHA" \
+              --title "$TITLE" \
+              --generate-notes \
+              --verify-tag
+          fi

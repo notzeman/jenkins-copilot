@@ -198,18 +198,26 @@ npm ci && npx playwright test               # UI tests
 
 ## Publishing
 
-The repository includes a root `Jenkinsfile` for Jenkins CI:
+The root `Jenkinsfile` builds and tests the plugin and archives
+`jenkins-plugin/target/*.hpi` as a Jenkins build artifact. Configure a Jenkins JDK 21 tool; Node.js is not
+required because the compiled UI is committed.
 
-- builds the React UI,
-- runs the plugin tests,
-- packages the HPI,
-- archives `jenkins-plugin/target/*.hpi` as a build artifact.
+GitHub Releases are published by `.github/workflows/release.yml` when a `v*` tag is pushed:
 
-Configure Jenkins tool installations named `jdk21` (JDK 21) and `nodejs24` (Node.js 24), then point a
-Pipeline job at this repository. The archived HPI can be downloaded from the build page and attached to a
-release or installed with **Manage Jenkins → Plugins → Advanced settings**.
+1. Bump `<version>` in `jenkins-plugin/pom.xml`.
+2. Add `docs/release-notes/v<version>.md`.
+3. Commit, tag, and push:
 
-Listing in the public update center is a separate submission to the Jenkins project.
+   ```bash
+   git tag v1.0.2
+   git push origin v1.0.2
+   ```
+
+The workflow builds and tests with JDK 21, verifies that the tag matches `pom.xml`, attaches
+`jenkins-ai-copilot.hpi` and its SHA-256 checksum to the GitHub Release, and uses the matching release-notes
+file when present.
+
+Listing in the public Jenkins update center is a separate submission to the Jenkins project.
 
 ## Known limitations
 
