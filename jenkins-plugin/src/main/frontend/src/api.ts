@@ -124,6 +124,16 @@ export function renameConversation(id: string, title: string): Promise<{ renamed
   return postJson<{ renamed: boolean }>('renameConversation', { id, title });
 }
 
+export interface ApprovalModeResponse {
+  mode: 'ask' | 'auto' | 'bypass';
+  autoApproveLevel2: boolean;
+  autoApproveAll: boolean;
+}
+
+export function setApprovalMode(mode: 'ask' | 'auto' | 'bypass'): Promise<ApprovalModeResponse> {
+  return postJson<ApprovalModeResponse>('setApprovalMode', { mode });
+}
+
 export function getAccounts(): Promise<AccountsResponse> {
   return getJson<AccountsResponse>('settingsAccounts');
 }

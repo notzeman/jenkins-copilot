@@ -167,6 +167,19 @@ public class CopilotPluginTest {
     }
 
     @Test
+    public void approvalBypassExecutesPrivilegedToolsWithoutPausing() throws Exception {
+        jenkins.createFreeStyleProject("demo");
+        FakeProvider provider = new FakeProvider(
+                toolCall("create_view", "{\"name\":\"bypass-view\",\"type\":\"list\",\"jobs\":[\"demo\"]}"),
+                text("View created."));
+        AgentRequest request = request(provider, toolContext());
+        request.setAutoApproveAll(true);
+        AgentOutcome outcome = new AgentLoop().run(request, new RecordingSink(), AbortSignal.NEVER);
+        assertEquals(AgentOutcome.DONE, outcome.getStatus());
+        assertNotNull(Jenkins.get().getView("bypass-view"));
+    }
+
+    @Test
     public void readOnlyToolExecutesAndTheLoopContinues() throws Exception {
         jenkins.createFreeStyleProject("demo");
         FakeProvider provider = new FakeProvider(
@@ -305,6 +318,32 @@ public class CopilotPluginTest {
         public void approvalRequired(ApprovalRecord approval) {
             approvals.add(approval.getToolName());
         }
+    }
+
+    @Test
+    public void approvalBypassIsAdminOnlyAndVisibleInSessionConfig() throws Exception {
+        Response forbidden = post(
+                "jenkins-ai-copilot/setApprovalMode",
+                Jackson.write(Jackson.obj().put("mode", "bypass")),
+                "alice");
+        assertEquals(403, forbidden.status);
+
+        Response enabled = post(
+                "jenkins-ai-copilot/setApprovalMode",
+                Jackson.write(Jackson.obj().put("mode", "bypass")),
+                "admin");
+        assertEquals(200, enabled.status);
+        assertTrue(Jackson.parse(enabled.body).path("autoApproveAll").asBoolean());
+
+        JsonNode sessionConfig = Jackson.parse(get("jenkins-ai-copilot/session", "admin").body)
+                .path("config");
+        assertTrue(sessionConfig.path("autoApproveAll").asBoolean());
+
+        Response restored = post(
+                "jenkins-ai-copilot/setApprovalMode",
+                Jackson.write(Jackson.obj().put("mode", "ask")),
+                "admin");
+        assertFalse(Jackson.parse(restored.body).path("autoApproveAll").asBoolean());
     }
 
     @Test

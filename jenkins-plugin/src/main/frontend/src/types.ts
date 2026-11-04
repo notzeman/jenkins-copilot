@@ -34,6 +34,7 @@ export interface SessionResponse {
     maxSteps: number;
     maxAttachmentMb: number;
     autoApproveLevel2: boolean;
+    autoApproveAll?: boolean;
     githubConfigured: boolean;
     accountsConfigured?: boolean;
     defaultProviderId?: string;

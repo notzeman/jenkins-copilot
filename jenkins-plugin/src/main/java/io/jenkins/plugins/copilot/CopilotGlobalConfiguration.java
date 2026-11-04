@@ -31,6 +31,7 @@ public class CopilotGlobalConfiguration extends GlobalConfiguration {
     private int maxSteps = 20;
     private int requestTimeoutSeconds = 300;
     private boolean autoApproveLevel2 = false;
+    private boolean autoApproveAll = false;
 
     private Secret githubToken;
     private String githubApiUrl = "https://api.github.com";
@@ -163,6 +164,16 @@ public class CopilotGlobalConfiguration extends GlobalConfiguration {
         save();
     }
 
+    public boolean isAutoApproveAll() {
+        return autoApproveAll;
+    }
+
+    @DataBoundSetter
+    public void setAutoApproveAll(boolean autoApproveAll) {
+        this.autoApproveAll = autoApproveAll;
+        save();
+    }
+
     public Secret getGithubToken() {
         return githubToken;
     }
@@ -255,6 +266,7 @@ public class CopilotGlobalConfiguration extends GlobalConfiguration {
         out.put("maxSteps", maxSteps);
         out.put("maxAttachmentMb", maxAttachmentMb);
         out.put("autoApproveLevel2", autoApproveLevel2);
+        out.put("autoApproveAll", autoApproveAll);
         out.put("githubConfigured", githubConfigured());
 
         JSONArray providers = new JSONArray();

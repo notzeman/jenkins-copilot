@@ -353,6 +353,7 @@ public class CopilotRootAction implements UnprotectedRootAction {
                 config.isAutoApproveLevel2(),
                 config.getMaxSteps(),
                 config.getRequestTimeoutSeconds());
+        request.setAutoApproveAll(config.isAutoApproveAll());
         synchronized (store.runLock(conversation.getId())) {
             streamRun(rsp, conversation, store, request, pageContext);
         }
@@ -559,6 +560,51 @@ public class CopilotRootAction implements UnprotectedRootAction {
         } catch (IllegalArgumentException e) {
             writeError(rsp, 404, "conversation_not_found", "Conversation not found");
         }
+    }
+
+    @POST
+    public void doSetApprovalMode(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        JsonNode body;
+        try {
+            body = readJson(req);
+        } catch (Exception e) {
+            writeError(rsp, 400, "invalid_request", e.getMessage());
+            return;
+        }
+        String mode = body.path("mode").asText("ask").toLowerCase();
+        CopilotGlobalConfiguration config = CopilotGlobalConfiguration.get();
+        switch (mode) {
+            case "ask" -> {
+                config.setAutoApproveLevel2(false);
+                config.setAutoApproveAll(false);
+            }
+            case "auto" -> {
+                config.setAutoApproveLevel2(true);
+                config.setAutoApproveAll(false);
+            }
+            case "bypass" -> {
+                config.setAutoApproveLevel2(true);
+                config.setAutoApproveAll(true);
+            }
+            default -> {
+                writeError(rsp, 400, "invalid_mode", "mode must be 'ask', 'auto', or 'bypass'");
+                return;
+            }
+        }
+        new AccountsStore().audit(user.getId(), "settings.approvals", mode, "succeeded", "{}");
+        writeJson(rsp, 200, Jackson.obj()
+                .put("mode", mode)
+                .put("autoApproveLevel2", config.isAutoApproveLevel2())
+                .put("autoApproveAll", config.isAutoApproveAll()));
     }
 
     public void doSettingsAccounts(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
@@ -871,6 +917,7 @@ public class CopilotRootAction implements UnprotectedRootAction {
                     config.isAutoApproveLevel2(),
                     config.getMaxSteps(),
                     config.getRequestTimeoutSeconds());
+            request.setAutoApproveAll(config.isAutoApproveAll());
             request.setPageContext(pageContext);
             AgentOutcome outcome = new AgentLoop().resume(request, state, state.getApprovals(), sink, sink.abortSignal());
             finish(conversation, store, outcome, sink);

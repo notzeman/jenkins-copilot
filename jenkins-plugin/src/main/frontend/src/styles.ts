@@ -148,10 +148,12 @@ export const css = `
 .cp-chip.cp-fail { border-color: color-mix(in srgb, var(--cp-danger) 40%, var(--cp-border)); color: var(--cp-danger); }
 .cp-chip.cp-ok { border-color: color-mix(in srgb, var(--cp-success) 40%, var(--cp-border)); color: var(--cp-success); }
 .cp-thread {
-  flex: 1; overflow-y: auto; overflow-x: hidden; padding: 14px 14px 8px;
+  flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 14px 14px 8px;
   display: flex; flex-direction: column; gap: 12px;
   scrollbar-width: thin; scrollbar-color: var(--cp-border-strong) transparent;
 }
+/* Never let cards shrink and clip their own content when the thread is short. */
+.cp-thread > * { flex: 0 0 auto; }
 .cp-thread::-webkit-scrollbar { width: 8px; }
 .cp-thread::-webkit-scrollbar-thumb { background: var(--cp-border-strong); border-radius: 8px; }
 .cp-empty {
@@ -268,7 +270,9 @@ export const css = `
 .cp-approval.cp-risk3 { border-color: color-mix(in srgb, var(--cp-danger) 55%, var(--cp-border)); }
 .cp-approval-head { padding: 9px 10px; background: var(--cp-warning-soft); display: flex; align-items: center; gap: 8px; }
 .cp-approval.cp-risk3 .cp-approval-head { background: var(--cp-danger-soft); }
-.cp-approval-title { font-weight: 650; font-size: 12px; }
+.cp-approval-title { font-weight: 650; font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cp-approval-head-actions { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+.cp-btn.cp-btn-sm { padding: 3px 7px; font-size: 10px; border-radius: 6px; }
 .cp-risk { margin-left: auto; font-size: 9px; text-transform: uppercase; letter-spacing: .06em; font-family: var(--cp-mono); padding: 2px 7px; border-radius: 999px; border: 1px solid currentColor; }
 .cp-risk.cp-r2 { color: var(--cp-warning); }
 .cp-risk.cp-r3 { color: var(--cp-danger); }
@@ -375,6 +379,27 @@ export const css = `
 .cp-mini-select:focus { outline: 2px solid var(--cp-accent); outline-offset: 1px; }
 
 
+.cp-approval-dock {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border-top: 1px solid color-mix(in srgb, var(--cp-warning) 45%, var(--cp-border));
+  background: var(--cp-warning-soft);
+}
+.cp-approval-dock-risk3 {
+  border-top-color: color-mix(in srgb, var(--cp-danger) 55%, var(--cp-border));
+  background: var(--cp-danger-soft);
+}
+.cp-approval-dock-main { display: flex; align-items: center; gap: 7px; min-width: 0; flex: 1; }
+.cp-approval-dock-main svg { width: 14px; height: 14px; color: var(--cp-warning); flex: 0 0 auto; }
+.cp-approval-dock-risk3 .cp-approval-dock-main svg { color: var(--cp-danger); }
+.cp-approval-dock-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.cp-approval-dock-title { font-size: 11.5px; font-weight: 650; }
+.cp-approval-dock-meta {
+  font-size: 10px; font-family: var(--cp-mono); color: var(--cp-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.cp-approval-dock-actions { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }
 .cp-composer {
   border-top: 1px solid var(--cp-border);
   padding: 10px 12px 12px;
@@ -417,10 +442,18 @@ export const css = `
 .cp-bar-btn:hover { background: var(--cp-panel); border-color: var(--cp-border); color: var(--cp-text); }
 .cp-bar-btn svg { width: 15px; height: 15px; }
 .cp-shield {
-  width: 28px; height: 28px; display: grid; place-items: center;
-  color: var(--cp-success); opacity: .9; cursor: default;
+  width: 28px; height: 28px; padding: 0; display: grid; place-items: center;
+  color: var(--cp-success); opacity: .9; cursor: pointer;
+  border: 1px solid transparent; background: transparent; border-radius: 7px;
 }
+.cp-shield:hover { background: var(--cp-panel); border-color: var(--cp-border); opacity: 1; }
+.cp-shield:disabled { cursor: not-allowed; opacity: .45; }
 .cp-shield svg { width: 15px; height: 15px; }
+.cp-shield-bypass {
+  color: var(--cp-danger); opacity: 1;
+  background: var(--cp-danger-soft);
+  border-color: color-mix(in srgb, var(--cp-danger) 45%, var(--cp-border));
+}
 .cp-pill {
   display: inline-flex; align-items: center; gap: 4px; height: 28px;
   padding: 0 5px 0 7px; border-radius: 7px; border: 1px solid transparent;

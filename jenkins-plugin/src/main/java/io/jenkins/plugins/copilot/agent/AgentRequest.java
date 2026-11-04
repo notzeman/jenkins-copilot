@@ -21,6 +21,7 @@ public class AgentRequest {
     private final ToolContext tools;
     private final AttachmentLoader attachments;
     private final boolean autoApproveLevel2;
+    private boolean autoApproveAll = false;
     private final int maxSteps;
     private final int timeoutSeconds;
     private String pageContext = "{}";
@@ -117,6 +118,14 @@ public class AgentRequest {
 
     public boolean autoApproveLevel2() {
         return autoApproveLevel2;
+    }
+
+    public boolean autoApproveAll() {
+        return autoApproveAll;
+    }
+
+    public void setAutoApproveAll(boolean autoApproveAll) {
+        this.autoApproveAll = autoApproveAll;
     }
 
     public int maxSteps() {

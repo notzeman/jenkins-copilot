@@ -10,6 +10,7 @@ import {
   loadSession,
   renameConversation,
   runtime,
+  setApprovalMode,
   streamChat,
   streamDecision,
 } from './api';
@@ -26,6 +27,7 @@ import type {
 import { Markdown } from './components/Markdown';
 import { ToolCard } from './components/ToolCard';
 import { ApprovalCard } from './components/ApprovalCard';
+import { ApprovalDock } from './components/ApprovalDock';
 import { ReasoningPanel } from './components/ReasoningPanel';
 import { CopyButton } from './components/CopyButton';
 import { SettingsPage } from './components/SettingsPage';
@@ -82,6 +84,7 @@ export function App(): React.ReactElement {
   const [busy, setBusy] = useState(false);
   const [phase, setPhase] = useState<'thinking' | 'tools' | 'streaming' | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [approvalBusy, setApprovalBusy] = useState(false);
   const [thinking, setThinking] = useState(() => localStorage.getItem('cp.thinking') ?? 'AUTO');
   const [attachments, setAttachments] = useState<LocalAttachment[]>([]);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -270,6 +273,10 @@ export function App(): React.ReactElement {
     ? accounts.providers.length === 0
     : session?.config.setupRequired ?? true;
   const currentSession = sessions.find((item) => item.id === conversationId);
+  const approvalsBypassed = session?.config.autoApproveAll === true;
+  const pendingApprovals = items.filter(
+    (item): item is ApprovalItem => item.kind === 'approval' && item.status === 'pending',
+  );
 
   useEffect(() => {
     if (session?.isAdmin && setupRequired && !openedSettings.current) {
@@ -767,6 +774,35 @@ export function App(): React.ReactElement {
     window.addEventListener('pointerup', onUp);
   }, []);
 
+  const toggleApprovalBypass = useCallback(async () => {
+    if (!session?.isAdmin || approvalBusy) {
+      return;
+    }
+    setApprovalBusy(true);
+    try {
+      const result = await setApprovalMode(approvalsBypassed ? 'ask' : 'bypass');
+      setSession((current) =>
+        current
+          ? {
+              ...current,
+              config: {
+                ...current.config,
+                autoApproveLevel2: result.autoApproveLevel2,
+                autoApproveAll: result.autoApproveAll,
+              },
+            }
+          : current,
+      );
+      setError(null);
+    } catch (toggleError) {
+      setError(
+        toggleError instanceof Error ? toggleError.message : 'Could not change the approval mode',
+      );
+    } finally {
+      setApprovalBusy(false);
+    }
+  }, [approvalBusy, approvalsBypassed, session?.isAdmin]);
+
   const changeTheme = useCallback((next: 'light' | 'dark') => {
     setTheme(next);
     localStorage.setItem('cp.theme', next);
@@ -969,6 +1005,7 @@ export function App(): React.ReactElement {
                 )}
                 {!jobName && <span className="cp-chip">no job context</span>}
                 {setupRequired && <span className="cp-chip cp-fail">setup required</span>}
+                {approvalsBypassed && <span className="cp-chip cp-fail">approvals bypassed</span>}
                 {!session?.config.githubConfigured && <span className="cp-chip">GitHub not configured</span>}
               </div>
             </header>
@@ -1128,6 +1165,8 @@ export function App(): React.ReactElement {
               })}
             </div>
 
+            <ApprovalDock approvals={pendingApprovals} onDecide={decide} />
+
             <div
               className="cp-composer"
               onDragOver={(event) => event.preventDefault()}
@@ -1216,13 +1255,23 @@ export function App(): React.ReactElement {
                         }
                       }}
                     />
-                    <span
-                      className="cp-shield"
-                      title="Privileged actions require human approval"
-                      aria-label="Privileged actions require human approval"
+                    <button
+                      type="button"
+                      className={`cp-shield ${approvalsBypassed ? 'cp-shield-bypass' : ''}`}
+                      title={
+                        !session?.isAdmin
+                          ? 'Only administrators can bypass approvals'
+                          : approvalsBypassed
+                            ? 'Approvals are bypassed — click to require human approval again'
+                            : 'Privileged actions require human approval — click to bypass all approvals'
+                      }
+                      aria-label={approvalsBypassed ? 'Restore human approval' : 'Bypass approvals'}
+                      aria-pressed={approvalsBypassed}
+                      disabled={!session?.isAdmin || approvalBusy}
+                      onClick={() => void toggleApprovalBypass()}
                     >
                       <ShieldIcon />
-                    </span>
+                    </button>
                   </div>
 
                   <div className="cp-bar-right">

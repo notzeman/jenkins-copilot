@@ -60,6 +60,10 @@
              description="Never applies to production targets or privileged operations">
       <f:checkbox/>
     </f:entry>
+    <f:entry title="Bypass all approvals" field="autoApproveAll"
+             description="DANGEROUS: privileged operations, production targets, deletes, restarts, and permission changes run without a human decision">
+      <f:checkbox/>
+    </f:entry>
     <f:entry title="Maximum attachment size (MB)" field="maxAttachmentMb">
       <f:number/>
     </f:entry>

@@ -150,7 +150,7 @@ public class AgentLoop {
                     sink.toolError(call, "Invalid JSON arguments");
                     continue;
                 }
-                if (!needsApproval(spec, args, request.autoApproveLevel2())) {
+                if (!needsApproval(spec, args, request.autoApproveLevel2(), request.autoApproveAll())) {
                     execute(request, call, args, null, messages, sink);
                 } else {
                     ApprovalRecord approval = approval(request, call, spec, args);
@@ -243,7 +243,11 @@ public class AgentLoop {
         return approval;
     }
 
-    private static boolean needsApproval(ToolSpec spec, JsonNode args, boolean autoApproveLevel2) {
+    private static boolean needsApproval(
+            ToolSpec spec, JsonNode args, boolean autoApproveLevel2, boolean autoApproveAll) {
+        if (autoApproveAll) {
+            return false;
+        }
         if (spec.getRisk() >= 3) {
             return true;
         }

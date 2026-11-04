@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Item } from '../types';
 import { DiffView } from './DiffView';
 import { CheckIcon, FlagIcon, XIcon } from './icons';
@@ -13,7 +13,30 @@ interface Props {
 export function ApprovalCard({ item, onDecide }: Props): React.ReactElement {
   const [comment, setComment] = useState('');
   const [expanded, setExpanded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   const decided = item.status !== 'pending';
+
+  useEffect(() => {
+    if (decided) {
+      return;
+    }
+    const card = cardRef.current;
+    if (!card) {
+      return;
+    }
+    const scroll = (): void => {
+      const thread = card.closest('.cp-thread') as HTMLElement | null;
+      if (!thread) {
+        return;
+      }
+      const cardRect = card.getBoundingClientRect();
+      const threadRect = thread.getBoundingClientRect();
+      thread.scrollTop = Math.max(0, thread.scrollTop + cardRect.top - threadRect.top - 8);
+    };
+    scroll();
+    const frame = window.requestAnimationFrame(scroll);
+    return () => window.cancelAnimationFrame(frame);
+  }, [decided, item.approvalId]);
   const riskClass = item.risk >= 3 ? 'cp-risk3' : '';
   const validation = item.validation as
     | { validated?: boolean; kind?: string; errors?: string[] }
@@ -21,7 +44,7 @@ export function ApprovalCard({ item, onDecide }: Props): React.ReactElement {
     | undefined;
   const target = item.target ?? String(item.args.job ?? item.args.environment ?? '');
   return (
-    <div className={`cp-approval ${riskClass}`}>
+    <div className={`cp-approval ${riskClass}`} ref={cardRef}>
       <div className="cp-approval-head">
         <FlagIcon />
         <span className="cp-approval-title">

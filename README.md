@@ -103,6 +103,8 @@ OpenAI-compatible gateway.
 - **Copy response** on every assistant message, including a copied confirmation.
 - **Tool cards** with arguments and results.
 - **Approval cards** for privileged operations, with risk, diff, validation, comment, approve, and reject.
+- **Always-visible approval dock** above the composer, plus an admin-only shield toggle that bypasses approvals
+  entirely. The bypass state is shown in red and every mode change is audited.
 - **Session manager** grouped by pipeline, with rename, delete, search, and new-session actions. Multibranch
   branch jobs are grouped under the parent multibranch project.
 - **Broken-build CTA**: a failing or unstable latest build pulses the floating icon and offers
