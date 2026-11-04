@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { SessionSummary } from '../types';
-import { ChevronIcon, FolderIcon, PencilIcon, PlusIcon, TrashIcon } from './icons';
+import { ChevronIcon, FolderIcon, PencilIcon, PlusIcon, StatusIcon, TrashIcon, type StatusState } from './icons';
 import { ConfirmDialog } from './ConfirmDialog';
 
 interface Props {
@@ -14,6 +14,22 @@ interface Props {
   onDelete: (id: string) => void;
   onRename: (id: string, title: string) => void;
   onClose?: () => void;
+}
+
+const SESSION_STATUS: Record<string, { state: StatusState; label: string }> = {
+  awaiting_approval: { state: 'unstable', label: 'Waiting for your approval' },
+  error: { state: 'failure', label: 'Stopped with an error' },
+  running: { state: 'running', label: 'Running' },
+};
+
+/** Idle sessions show nothing: only states that need attention earn an icon. */
+function SessionStatus({ status }: { status: string }): React.ReactElement {
+  const info = SESSION_STATUS[status];
+  return (
+    <span className="cp-session-status">
+      {info && <StatusIcon state={info.state} label={info.label} />}
+    </span>
+  );
 }
 
 function relativeTime(value: number): string {
@@ -86,7 +102,7 @@ export function SessionList({
           <span className="cp-sessions-count">{sessions.length}</span>
           <span className="cp-grow" />
           {onClose && (
-            <button type="button" className="cp-bar-btn" onClick={onClose} title="Back to chat" aria-label="Back to chat">
+            <button type="button" className="cp-bar-btn" onClick={onClose} data-tip="Back to chat" aria-label="Back to chat">
               <ChevronIcon className="cp-back-chevron" />
             </button>
           )}
@@ -94,7 +110,7 @@ export function SessionList({
             type="button"
             className="cp-bar-btn"
             onClick={() => onNew(currentPipeline)}
-            title="New session"
+            data-tip="New session"
             aria-label="New session"
           >
             <PlusIcon />
@@ -125,18 +141,19 @@ export function SessionList({
                   className="cp-session-group-toggle"
                   onClick={() => onToggle(group.pipeline)}
                   aria-expanded={!isCollapsed}
-                  title={group.pipeline}
+                  data-tip={group.pipeline}
+                  data-tip-truncated
                 >
                   <ChevronIcon className={`cp-session-chevron ${isCollapsed ? 'cp-collapsed' : ''}`} />
                   <FolderIcon className="cp-session-folder" />
-                  <span className="cp-session-pipeline">{shortPipeline(group.pipeline)}</span>
+                  <span className="cp-session-pipeline" data-truncates>{shortPipeline(group.pipeline)}</span>
                   <span className="cp-session-group-count">{group.items.length}</span>
                 </button>
                 <button
                   type="button"
                   className="cp-session-new"
                   onClick={() => onNew(group.pipeline)}
-                  title={`New session in ${group.pipeline}`}
+                  data-tip={`New session in ${group.pipeline}`}
                   aria-label={`New session in ${group.pipeline}`}
                 >
                   <PlusIcon />
@@ -155,10 +172,7 @@ export function SessionList({
                       <div className={`cp-session-row ${active ? 'cp-session-row-active' : ''}`} key={session.id}>
                         {renamingId === session.id ? (
                           <div className="cp-session-row-main">
-                            <span
-                              className={`cp-session-status cp-status-${session.status}`}
-                              aria-label={session.status}
-                            />
+                            <SessionStatus status={session.status} />
                             <input
                               className="cp-session-rename"
                               value={renameValue}
@@ -179,31 +193,31 @@ export function SessionList({
                             />
                           </div>
                         ) : (
-                          <button
-                            type="button"
-                            className="cp-session-row-main"
-                            onClick={() => onSelect(session.id)}
-                            title={session.title}
-                          >
-                            <span
-                              className={`cp-session-status cp-status-${session.status}`}
-                              aria-label={session.status}
-                            />
+                          <div className="cp-session-row-main">
+                            <SessionStatus status={session.status} />
+                            <button
+                              type="button"
+                              className="cp-session-open"
+                              onClick={() => onSelect(session.id)}
+                              data-tip={session.title}
+                              data-tip-truncated
+                            >
                             <span className="cp-session-row-text">
-                              <span className="cp-session-name">{title}</span>
+                              <span className="cp-session-name" data-truncates>{title}</span>
                               <span className="cp-session-meta">
                                 {relativeTime(session.updatedAt)}
                                 {session.model ? ` · ${session.model}` : ''}
                               </span>
                             </span>
-                          </button>
+                            </button>
+                          </div>
                         )}
                         {renamingId !== session.id && (
                           <span className="cp-session-actions">
                             <button
                               type="button"
                               className="cp-session-action"
-                              title="Rename session"
+                              data-tip="Rename session"
                               aria-label="Rename session"
                               onClick={() => beginRename(session)}
                             >
@@ -212,7 +226,7 @@ export function SessionList({
                             <button
                               type="button"
                               className="cp-session-action"
-                              title="Delete session"
+                              data-tip="Delete session"
                               aria-label="Delete session"
                               onClick={() => setDeleteTarget(session)}
                             >

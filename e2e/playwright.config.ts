@@ -7,7 +7,8 @@ export default defineConfig({
   retries: 0,
   reporter: [['list']],
   use: {
-    baseURL: process.env.JENKINS_URL ?? 'http://localhost:8080',
+    // Trailing slash so relative paths in the tests stay under the /jenkins prefix used by dev.sh.
+    baseURL: `${(process.env.JENKINS_URL ?? 'http://localhost:8080/jenkins').replace(/\/$/, '')}/`,
     ignoreHTTPSErrors: true,
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',

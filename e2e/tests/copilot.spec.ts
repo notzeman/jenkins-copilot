@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 const user = process.env.JENKINS_USER ?? 'admin';
 const password = process.env.JENKINS_PASSWORD ?? 'admin';
@@ -26,8 +26,63 @@ const session = {
   },
 };
 
+const accounts = {
+  providers: [
+    {
+      id: 'account-1',
+      provider: 'openai',
+      providerLabel: 'OpenAI',
+      label: 'OpenAI',
+      baseUrl: '',
+      defaultModel: 'gpt-test',
+      hasKey: true,
+      default: true,
+    },
+  ],
+  github: [],
+  defaultProviderId: 'account-1',
+  defaultGithubId: '',
+};
+
+const conversationId = '11111111-1111-4111-8111-111111111111';
+
+function json(body: unknown) {
+  return { status: 200, contentType: 'application/json', body: JSON.stringify(body) };
+}
+
+async function mockBackend(page: Page, overrides: { session?: unknown; accounts?: unknown } = {}): Promise<void> {
+  await page.route('**/jenkins-ai-copilot/session', (route) => route.fulfill(json(overrides.session ?? session)));
+  await page.route('**/jenkins-ai-copilot/settingsAccounts', (route) =>
+    route.fulfill(json(overrides.accounts ?? accounts)),
+  );
+  await page.route('**/jenkins-ai-copilot/conversations', (route) => route.fulfill(json({ conversations: [] })));
+  await page.route('**/jenkins-ai-copilot/providerModels', (route) =>
+    route.fulfill(
+      json({ provider: 'openai', accountId: 'account-1', models: [{ id: 'gpt-test', label: 'gpt-test' }] }),
+    ),
+  );
+  await page.route('**/jenkins-ai-copilot/createConversation', (route) =>
+    route.fulfill(
+      json({
+        id: conversationId,
+        title: 'Mocked run',
+        model: 'gpt-test',
+        providerAccountId: 'account-1',
+        thinking: 'AUTO',
+      }),
+    ),
+  );
+}
+
+async function openCopilot(page: Page): Promise<void> {
+  await page.goto('manage/');
+  await page.locator('button[aria-label="Open Jenkins Copilot"]').click();
+}
+
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  // Go straight to the login page: on a secured controller the root URL only reaches it through
+  // a client-side redirect, which a check right after navigation would miss.
+  await page.goto('login');
   if (await page.locator('#j_username').count()) {
     await page.fill('#j_username', user);
     await page.fill('#j_password', password);
@@ -36,46 +91,24 @@ test.beforeEach(async ({ page }) => {
   }
 });
 
-test('setup card lists the supported providers', async ({ page }) => {
-  await page.route('**/jenkins-ai-copilot/session', (route) =>
-    route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({
-        ...session,
-        config: {
-          ...session.config,
-          setupRequired: true,
-          defaultModel: '',
-          providers: session.config.providers.map((item) => ({ ...item, configured: false })),
-        },
-      }),
-    }),
-  );
-  await page.goto('/manage/');
-  await page.locator('button[aria-label="Open Jenkins Copilot"]').click();
-  await expect(page.locator('.cp-setup')).toBeVisible();
-  await expect(page.locator('.cp-provider-name')).toHaveText(['OpenAI', 'Claude', 'opencode go']);
+test('first run opens provider settings', async ({ page }) => {
+  await mockBackend(page, {
+    session: { ...session, config: { ...session.config, setupRequired: true, defaultModel: '' } },
+    accounts: { providers: [], github: [], defaultProviderId: '', defaultGithubId: '' },
+  });
+  await openCopilot(page);
+
+  await expect(page.locator('.cp-settings-tab-active')).toContainText('Providers');
+  await page.getByRole('button', { name: 'Add provider' }).click();
+  await expect(page.locator('.cp-provider-name')).toHaveText(['OpenAI', 'Claude', 'opencode go', 'Custom']);
   await expect(page.locator('.cp-field input[type="password"]')).toBeVisible();
 });
 
 test('renders streamed tool activity, an image, and an approval card', async ({ page }) => {
-  await page.route('**/jenkins-ai-copilot/session', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(session) }),
-  );
-  await page.route('**/jenkins-ai-copilot/models', (route) =>
-    route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({ provider: 'openai', models: [{ id: 'gpt-test', label: 'gpt-test' }] }),
-    }),
-  );
-  await page.route('**/jenkins-ai-copilot/conversations', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ conversations: [] }) }),
-  );
+  await mockBackend(page);
 
   const sse = [
-    ['conversation', { id: '11111111-1111-4111-8111-111111111111', title: 'Mocked run' }],
+    ['conversation', { id: conversationId, title: 'Mocked run' }],
     [
       'tool.start',
       { toolCallId: 'call-1', toolName: 'list_jobs', args: {}, risk: 1, reason: 'Read-only job inventory' },
@@ -124,8 +157,7 @@ test('renders streamed tool activity, an image, and an approval card', async ({ 
     }),
   );
 
-  await page.goto('/manage/');
-  await page.locator('button[aria-label="Open Jenkins Copilot"]').click();
+  await openCopilot(page);
   await expect(page.locator('.cp-textarea')).toBeVisible();
 
   const png = Buffer.from(
@@ -142,8 +174,9 @@ test('renders streamed tool activity, an image, and an approval card', async ({ 
   await page.locator('.cp-textarea').fill('Check the jobs and propose a pipeline change.');
   await page.keyboard.press('Enter');
 
-  expect(chatCalls).toBe(1);
   await expect(page.locator('.cp-tool-name').filter({ hasText: 'list_jobs' })).toBeVisible();
+  expect(chatCalls).toBe(1);
+  await expect(page.locator('.cp-tool .cp-statusicon').first()).toHaveAttribute('aria-label', 'Succeeded');
   await expect(page.locator('.cp-msg-body').filter({ hasText: 'jobs' }).last()).toContainText('jobs');
   await expect(page.locator('.cp-thumb img')).toBeVisible();
 
@@ -158,4 +191,31 @@ test('renders streamed tool activity, an image, and an approval card', async ({ 
 
   await approval.getByRole('button', { name: 'Reject' }).click();
   await expect(approval.locator('.cp-approval-title')).toContainText('Change rejected');
+});
+
+test('status icons explain themselves and the primary colour can be changed', async ({ page }) => {
+  await mockBackend(page, {
+    session: {
+      ...session,
+      context: { ...session.context, lastBuildNumber: 7, lastBuildResult: 'SUCCESS', jobFullName: 'demo' },
+    },
+  });
+  await openCopilot(page);
+
+  await page.locator('.cp-context .cp-statusicon').hover();
+  await expect(page.locator('.cp-tip')).toHaveText('Build #7: SUCCESS');
+
+  await page.getByRole('button', { name: 'Settings' }).click();
+  await page.getByRole('tab', { name: 'Appearance' }).click();
+
+  const accent = () =>
+    page.locator('.cp-shell').evaluate((element) => (element as HTMLElement).style.getPropertyValue('--cp-accent'));
+  const before = await accent();
+  await page.getByRole('button', { name: 'Bow tie' }).click();
+  const chosen = await accent();
+  expect(chosen).not.toBe(before);
+
+  await page.reload();
+  await page.locator('button[aria-label="Open Jenkins Copilot"]').click();
+  await expect.poll(accent).toBe(chosen);
 });

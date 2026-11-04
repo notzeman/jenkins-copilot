@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-labelledby="hero-title hero-desc">
+  <title id="hero-title">Jenkins AI Copilot</title>
+  <desc id="hero-desc">A Jenkins pipeline runs through Checkout, Install, Tests, Docker Build and Publish. Docker Build fails, Copilot diagnoses it, a person approves the fix, and the pipeline passes.</desc>
+
+  <style>
+    /* Base styles are the finished state, so the image still reads if animation does not run. */
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+    .serif { font-family: Georgia, "Times New Roman", "Noto Serif", serif; }
+    .label { font-size: 21px; fill: #aaa193; text-anchor: middle; }
+    .caption { font-size: 25px; font-weight: 600; text-anchor: middle; }
+    .stage { fill: #6fc48d; }
+    .check { fill: none; stroke: #171512; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+
+    .a { animation-duration: 14s; animation-timing-function: linear; animation-iteration-count: infinite; }
+    .s1 { animation-name: s1; } .s2 { animation-name: s2; } .s3 { animation-name: s3; }
+    .s4 { animation-name: s4; } .s5 { animation-name: s5; }
+    .k1 { animation-name: k1; } .k2 { animation-name: k2; } .k3 { animation-name: k3; }
+    .k4 { animation-name: k4; } .k5 { animation-name: k5; }
+    .x4 { animation-name: x4; opacity: 0; }
+    .c1 { animation-name: c1; opacity: 0; } .c2 { animation-name: c2; opacity: 0; }
+    .c3 { animation-name: c3; opacity: 0; } .c4 { animation-name: c4; opacity: 0; }
+    .c5 { animation-name: c5; }
+
+    @keyframes s1 { 0%, 7% { fill: #4a443b; } 9%, 97% { fill: #6fc48d; } 100% { fill: #4a443b; } }
+    @keyframes s2 { 0%, 13% { fill: #4a443b; } 15%, 97% { fill: #6fc48d; } 100% { fill: #4a443b; } }
+    @keyframes s3 { 0%, 19% { fill: #4a443b; } 21%, 97% { fill: #6fc48d; } 100% { fill: #4a443b; } }
+    @keyframes s4 {
+      0%, 23% { fill: #4a443b; } 25%, 27% { fill: #86b7d6; } 29%, 56% { fill: #ec8077; }
+      58%, 70% { fill: #e2a64b; } 72%, 97% { fill: #6fc48d; } 100% { fill: #4a443b; }
+    }
+    @keyframes s5 { 0%, 75% { fill: #4a443b; } 77%, 97% { fill: #6fc48d; } 100% { fill: #4a443b; } }
+
+    @keyframes k1 { 0%, 8% { opacity: 0; } 9%, 97% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes k2 { 0%, 14% { opacity: 0; } 15%, 97% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes k3 { 0%, 20% { opacity: 0; } 21%, 97% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes k4 { 0%, 71% { opacity: 0; } 72%, 97% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes k5 { 0%, 76% { opacity: 0; } 77%, 97% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes x4 { 0%, 28% { opacity: 0; } 29%, 56% { opacity: 1; } 57%, 100% { opacity: 0; } }
+
+    @keyframes c1 { 0% { opacity: 0; } 1%, 25% { opacity: 1; } 27%, 100% { opacity: 0; } }
+    @keyframes c2 { 0%, 27% { opacity: 0; } 29%, 39% { opacity: 1; } 41%, 100% { opacity: 0; } }
+    @keyframes c3 { 0%, 41% { opacity: 0; } 43%, 55% { opacity: 1; } 57%, 100% { opacity: 0; } }
+    @keyframes c4 { 0%, 57% { opacity: 0; } 59%, 70% { opacity: 1; } 72%, 100% { opacity: 0; } }
+    @keyframes c5 { 0%, 72% { opacity: 0; } 74%, 97% { opacity: 1; } 100% { opacity: 0; } }
+
+    @media (prefers-reduced-motion: reduce) { .a { animation: none; } }
+  </style>
+
+  <rect width="1200" height="430" rx="20" fill="#171512"/>
+  <rect x="0.5" y="0.5" width="1199" height="429" rx="20" fill="none" stroke="#35302a"/>
+
+  <g id="title-block" transform="translate(64 0)">
+    <text class="mono" x="0" y="66" font-size="20" letter-spacing="2" fill="#86b7d6">JENKINS PLUGIN</text>
+    <text class="serif" x="0" y="130" font-size="62" font-weight="700" fill="#ece6dc">Jenkins AI <tspan fill="#86b7d6">Copilot</tspan></text>
+    <text class="sans" x="0" y="178" font-size="27" fill="#aaa193">Diagnose failed builds and fix pipelines from chat, inside Jenkins.</text>
+  </g>
+
+  <g id="bow-tie" transform="translate(1012 44) scale(5)" fill="#86b7d6">
+    <path d="M10.2 9.5 3.9 5.9C2.9 5.3 1.7 6 1.7 7.2v9.6c0 1.2 1.2 1.9 2.2 1.3l6.3-3.6z"/>
+    <path d="m13.8 9.5 6.3-3.6c1-.6 2.2.1 2.2 1.3v9.6c0 1.2-1.2 1.9-2.2 1.3l-6.3-3.6z"/>
+    <rect x="10.2" y="8.9" width="3.6" height="6.2" rx="1.1"/>
+  </g>
+
+  <g id="connectors">
+    <rect class="stage a s2" x="144" y="243" width="192" height="4" rx="2"/>
+    <rect class="stage a s3" x="384" y="243" width="192" height="4" rx="2"/>
+    <rect class="stage a s4" x="624" y="243" width="192" height="4" rx="2"/>
+    <rect class="stage a s5" x="864" y="243" width="192" height="4" rx="2"/>
+  </g>
+
+  <g id="stages">
+    <circle class="stage a s1" cx="120" cy="245" r="24"/>
+    <circle class="stage a s2" cx="360" cy="245" r="24"/>
+    <circle class="stage a s3" cx="600" cy="245" r="24"/>
+    <circle class="stage a s4" cx="840" cy="245" r="24"/>
+    <circle class="stage a s5" cx="1080" cy="245" r="24"/>
+
+    <path class="check a k1" d="M109 245 l8 8 l14 -15"/>
+    <path class="check a k2" d="M349 245 l8 8 l14 -15"/>
+    <path class="check a k3" d="M589 245 l8 8 l14 -15"/>
+    <path class="check a k4" d="M829 245 l8 8 l14 -15"/>
+    <path class="check a k5" d="M1069 245 l8 8 l14 -15"/>
+    <path class="check a x4" d="M831 236 l18 18 M849 236 l-18 18"/>
+  </g>
+
+  <g id="stage-labels" class="mono">
+    <text class="label" x="120" y="303">Checkout</text>
+    <text class="label" x="360" y="303">Install</text>
+    <text class="label" x="600" y="303">Tests</text>
+    <text class="label" x="840" y="303">Docker Build</text>
+    <text class="label" x="1080" y="303">Publish</text>
+  </g>
+
+  <rect x="64" y="338" width="1072" height="60" rx="12" fill="#201d19" stroke="#35302a"/>
+  <g id="captions" class="sans">
+    <text class="caption a c1" x="600" y="377" fill="#86b7d6">Build #3 is running</text>
+    <text class="caption a c2" x="600" y="377" fill="#ec8077">Docker Build failed</text>
+    <text class="caption a c3" x="600" y="377" fill="#86b7d6">Copilot reads the log: no Docker daemon on this agent</text>
+    <text class="caption a c4" x="600" y="377" fill="#e2a64b">Fix validated. Waiting for your approval</text>
+    <text class="caption a c5" x="600" y="377" fill="#6fc48d">Approved and rebuilt. Pipeline is green</text>
+  </g>
+</svg>

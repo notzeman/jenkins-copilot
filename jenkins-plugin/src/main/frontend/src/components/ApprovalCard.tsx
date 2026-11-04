@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Item } from '../types';
 import { DiffView } from './DiffView';
-import { CheckIcon, FlagIcon, XIcon } from './icons';
+import { ChevronIcon, ShieldWarningIcon, StatusIcon } from './icons';
 
 type ApprovalItem = Extract<Item, { kind: 'approval' }>;
 
@@ -44,14 +44,20 @@ export function ApprovalCard({ item, onDecide }: Props): React.ReactElement {
     | undefined;
   const target = item.target ?? String(item.args.job ?? item.args.environment ?? '');
   return (
-    <div className={`cp-approval ${riskClass}`} ref={cardRef}>
+    <div className={`cp-approval ${riskClass} ${decided ? `cp-approval-${item.status}` : ''}`} ref={cardRef}>
       <div className="cp-approval-head">
-        <FlagIcon />
         <span className="cp-approval-title">
           {decided ? `Change ${item.status}` : 'Approval required'}
         </span>
-        <span className={`cp-risk ${item.risk >= 3 ? 'cp-r3' : 'cp-r2'}`}>
-          {item.risk >= 3 ? 'privileged' : 'controlled'}
+        <span
+          className={`cp-risk ${item.risk >= 3 ? 'cp-r3' : 'cp-r2'}`}
+          role="img"
+          tabIndex={0}
+          aria-label={item.risk >= 3 ? 'Privileged action' : 'Controlled action'}
+          data-tip={item.risk >= 3 ? 'Privileged action (level 3)' : 'Controlled action (level 2)'}
+        >
+          <ShieldWarningIcon />
+          <span className="cp-sr">{item.risk >= 3 ? 'privileged' : 'controlled'}</span>
         </span>
       </div>
       <div className="cp-approval-body">
@@ -72,7 +78,10 @@ export function ApprovalCard({ item, onDecide }: Props): React.ReactElement {
 
         {validation && (
           <div className={`cp-validation ${validation.validated ? 'cp-ok' : 'cp-bad'}`}>
-            {validation.validated ? <CheckIcon /> : <XIcon />}
+            <StatusIcon
+              state={validation.validated ? 'success' : 'failure'}
+              label={validation.validated ? 'Validation passed' : 'Validation failed'}
+            />
             <span>
               {validation.validated
                 ? `Jenkinsfile validated (${validation.kind ?? 'declarative'})`
@@ -85,12 +94,16 @@ export function ApprovalCard({ item, onDecide }: Props): React.ReactElement {
           <>
             <button
               type="button"
-              className="cp-btn"
+              className={`cp-disclose ${expanded ? 'cp-disclose-open' : ''}`}
+              aria-expanded={expanded}
               onClick={() => setExpanded((value) => !value)}
             >
+              <ChevronIcon />
               {expanded ? 'Hide diff' : 'Review diff'}
             </button>
-            {expanded && <DiffView diff={item.diff} />}
+            <div className={`cp-fold ${expanded ? 'cp-fold-open' : ''}`}>
+              <div className="cp-fold-inner">{expanded && <DiffView diff={item.diff} />}</div>
+            </div>
           </>
         )}
 

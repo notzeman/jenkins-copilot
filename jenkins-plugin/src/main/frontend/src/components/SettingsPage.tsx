@@ -10,7 +10,23 @@ import {
 } from '../api';
 import type { AccountsResponse, GitHubAccount, ModelInfo, ProviderAccount } from '../types';
 import { SimpleSelect } from './Pickers';
-import { CheckIcon, GitHubIcon, PencilIcon, ProviderIcon, TrashIcon } from './icons';
+import {
+  BowTie,
+  CheckIcon,
+  ChevronIcon,
+  DefaultIcon,
+  GearIcon,
+  GitHubIcon,
+  InfoIcon,
+  MoonIcon,
+  PaletteIcon,
+  PencilIcon,
+  ProviderIcon,
+  RibbonIcon,
+  SunIcon,
+  TrashIcon,
+} from './icons';
+import { ACCENT_PRESETS, JENKINS_ACCENT, accentSource, readableOn } from '../accent';
 
 const ABOUT = [
   'Jenkins AI Copilot is an agentic CI/CD assistant built into Jenkins. It diagnoses failing builds, ' +
@@ -69,6 +85,8 @@ export function SettingsPage({
   version,
   theme,
   onThemeChange,
+  accent,
+  onAccentChange,
   onClose,
   onReload,
   onAccountsChanged,
@@ -78,11 +96,15 @@ export function SettingsPage({
   version: string;
   theme: 'light' | 'dark';
   onThemeChange: (theme: 'light' | 'dark') => void;
+  accent: string;
+  onAccentChange: (accent: string) => void;
   onClose: () => void;
   onReload: () => Promise<void>;
   onAccountsChanged: (accounts: AccountsResponse) => void;
 }): React.ReactElement {
-  const [tab, setTab] = useState<'providers' | 'github' | 'assistant' | 'about'>('providers');
+  const [tab, setTab] = useState<'providers' | 'github' | 'appearance' | 'assistant' | 'about'>(
+    isAdmin ? 'providers' : 'appearance',
+  );
   const [providerForm, setProviderForm] = useState<ProviderForm | null>(null);
   const [githubForm, setGithubForm] = useState<GitHubForm | null>(null);
   const [saving, setSaving] = useState(false);
@@ -217,28 +239,32 @@ export function SettingsPage({
   return (
     <div className="cp-settings">
       <div className="cp-settings-head">
-        <button type="button" className="cp-bar-btn" onClick={onClose} title="Back to chat" aria-label="Back to chat">
-          <span className="cp-settings-back">←</span>
+        <button type="button" className="cp-bar-btn" onClick={onClose} data-tip="Back to chat" aria-label="Back to chat">
+          <ChevronIcon className="cp-back-chevron" />
         </button>
         <span className="cp-settings-title">Settings</span>
         <span className="cp-grow" />
       </div>
 
       <div className="cp-settings-tabs" role="tablist">
-        {[
-          ['providers', 'Providers'],
-          ['github', 'GitHub'],
-          ['assistant', 'Assistant'],
-          ['about', 'About'],
-        ].map(([id, label]) => (
+        {(
+          [
+            ['providers', 'Providers', <ProviderIcon key="p" />],
+            ['github', 'GitHub', <GitHubIcon key="g" />],
+            ['appearance', 'Appearance', <PaletteIcon key="a" />],
+            ['assistant', 'Assistant', <GearIcon key="s" />],
+            ['about', 'About', <InfoIcon key="i" />],
+          ] as const
+        ).map(([id, label, icon]) => (
           <button
             type="button"
             key={id}
             role="tab"
             aria-selected={tab === id}
             className={`cp-settings-tab ${tab === id ? 'cp-settings-tab-active' : ''}`}
-            onClick={() => setTab(id as typeof tab)}
+            onClick={() => setTab(id)}
           >
+            {icon}
             {label}
           </button>
         ))}
@@ -273,7 +299,7 @@ export function SettingsPage({
                 <div className="cp-settings-card-main">
                   <div className="cp-settings-card-title">
                     {account.label}
-                    {account.default && <span className="cp-settings-badge"><CheckIcon /> default</span>}
+                    {account.default && <span className="cp-settings-badge" role="img" tabIndex={0} aria-label="Default" data-tip="Default"><DefaultIcon /></span>}
                   </div>
                   <div className="cp-settings-card-meta">
                     {account.providerLabel}
@@ -286,15 +312,17 @@ export function SettingsPage({
                     {!account.default && (
                       <button
                         type="button"
-                        className="cp-btn"
+                        className="cp-iconbtn"
+                        data-tip="Make default"
+                        aria-label={`Make ${account.label} the default`}
                         onClick={() =>
                           void setDefaultProvider(account.id).then((result) => reloadWith(result.accounts))
                         }
                       >
-                        Set default
+                        <RibbonIcon />
                       </button>
                     )}
-                    <button type="button" className="cp-iconbtn" title="Edit" onClick={() => editProvider(account)}>
+                    <button type="button" className="cp-iconbtn" data-tip="Edit" aria-label={`Edit ${account.label}`} onClick={() => editProvider(account)}>
                       <PencilIcon />
                     </button>
                     {deleteId === account.id ? (
@@ -317,7 +345,8 @@ export function SettingsPage({
                       <button
                         type="button"
                         className="cp-iconbtn"
-                        title="Delete"
+                        data-tip="Delete"
+                        aria-label={`Delete ${account.label}`}
                         onClick={() => setDeleteId(account.id)}
                       >
                         <TrashIcon />
@@ -442,7 +471,7 @@ export function SettingsPage({
                 <div className="cp-settings-card-main">
                   <div className="cp-settings-card-title">
                     {account.label}
-                    {account.default && <span className="cp-settings-badge"><CheckIcon /> default</span>}
+                    {account.default && <span className="cp-settings-badge" role="img" tabIndex={0} aria-label="Default" data-tip="Default"><DefaultIcon /></span>}
                   </div>
                   <div className="cp-settings-card-meta">{account.apiUrl} · token stored</div>
                 </div>
@@ -451,16 +480,19 @@ export function SettingsPage({
                     {!account.default && (
                       <button
                         type="button"
-                        className="cp-btn"
+                        className="cp-iconbtn"
+                        data-tip="Make default"
+                        aria-label={`Make ${account.label} the default`}
                         onClick={() => void setDefaultGithub(account.id).then((result) => reloadWith(result.accounts))}
                       >
-                        Set default
+                        <RibbonIcon />
                       </button>
                     )}
                     <button
                       type="button"
                       className="cp-iconbtn"
-                      title="Edit"
+                      data-tip="Edit"
+                      aria-label={`Edit ${account.label}`}
                       onClick={() =>
                         setGithubForm({
                           id: account.id,
@@ -492,7 +524,8 @@ export function SettingsPage({
                       <button
                         type="button"
                         className="cp-iconbtn"
-                        title="Delete"
+                        data-tip="Delete"
+                        aria-label={`Delete ${account.label}`}
                         onClick={() => setDeleteId(account.id)}
                       >
                         <TrashIcon />
@@ -544,6 +577,15 @@ export function SettingsPage({
           </section>
         )}
 
+        {tab === 'appearance' && (
+          <AppearanceSection
+            theme={theme}
+            onThemeChange={onThemeChange}
+            accent={accent}
+            onAccentChange={onAccentChange}
+          />
+        )}
+
         {tab === 'assistant' && (
           <section className="cp-settings-section">
             <h3>Assistant</h3>
@@ -561,25 +603,6 @@ export function SettingsPage({
                   void setDefaultProvider(value).then((result) => reloadWith(result.accounts));
                 }}
               />
-            </div>
-            <div className="cp-settings-row">
-              <span>Theme</span>
-              <div className="cp-settings-actions">
-                <button
-                  type="button"
-                  className={`cp-btn ${theme === 'dark' ? 'cp-primary' : ''}`}
-                  onClick={() => onThemeChange('dark')}
-                >
-                  Dark
-                </button>
-                <button
-                  type="button"
-                  className={`cp-btn ${theme === 'light' ? 'cp-primary' : ''}`}
-                  onClick={() => onThemeChange('light')}
-                >
-                  Light
-                </button>
-              </div>
             </div>
             <div className="cp-settings-note">
               Provider keys are stored as Jenkins Secrets. GitHub tools use the default token.
@@ -607,5 +630,96 @@ export function SettingsPage({
         )}
       </div>
     </div>
+  );
+}
+
+const swatchVars = (color: string): React.CSSProperties =>
+  ({ '--cp-swatch': color, '--cp-swatch-on': readableOn(color) }) as React.CSSProperties;
+
+function AppearanceSection({
+  theme,
+  onThemeChange,
+  accent,
+  onAccentChange,
+}: {
+  theme: 'light' | 'dark';
+  onThemeChange: (theme: 'light' | 'dark') => void;
+  accent: string;
+  onAccentChange: (accent: string) => void;
+}): React.ReactElement {
+  const preset = ACCENT_PRESETS.find((item) => item.id === accent);
+  const custom = !preset && accent !== JENKINS_ACCENT;
+  const name = preset?.label ?? (accent === JENKINS_ACCENT ? 'Follow Jenkins' : accent.toUpperCase());
+  return (
+    <section className="cp-settings-section">
+      <div>
+        <h3>Appearance</h3>
+        <p>Saved in this browser, for you only.</p>
+      </div>
+
+      <div className="cp-settings-row">
+        <span>Theme</span>
+        <div className="cp-segment">
+          <button type="button" aria-pressed={theme === 'light'} onClick={() => onThemeChange('light')}>
+            <SunIcon /> Light
+          </button>
+          <button type="button" aria-pressed={theme === 'dark'} onClick={() => onThemeChange('dark')}>
+            <MoonIcon /> Dark
+          </button>
+        </div>
+      </div>
+
+      <h4>Primary colour</h4>
+      <div className="cp-swatches" role="group" aria-label="Primary colour">
+        {ACCENT_PRESETS.map((item) => (
+          <button
+            type="button"
+            key={item.id}
+            className={`cp-swatch ${accent === item.id ? 'cp-swatch-active' : ''}`}
+            style={swatchVars(item[theme])}
+            data-tip={item.label}
+            aria-label={item.label}
+            aria-pressed={accent === item.id}
+            onClick={() => onAccentChange(item.id)}
+          >
+            {accent === item.id && <CheckIcon />}
+          </button>
+        ))}
+        <button
+          type="button"
+          className={`cp-swatch ${accent === JENKINS_ACCENT ? 'cp-swatch-active' : ''}`}
+          style={swatchVars(accentSource(JENKINS_ACCENT, theme))}
+          data-tip="Follow Jenkins: uses this controller's accent colour"
+          aria-label="Follow Jenkins"
+          aria-pressed={accent === JENKINS_ACCENT}
+          onClick={() => onAccentChange(JENKINS_ACCENT)}
+        >
+          {accent === JENKINS_ACCENT ? <CheckIcon /> : <BowTie />}
+        </button>
+        <label
+          className={`cp-swatch cp-swatch-custom ${custom ? 'cp-swatch-active' : ''}`}
+          style={custom ? swatchVars(accent) : undefined}
+          data-tip="Custom colour"
+        >
+          {custom && <CheckIcon />}
+          <input
+            type="color"
+            aria-label="Custom colour"
+            value={custom ? accent : '#2b5874'}
+            onChange={(event) => onAccentChange(event.target.value)}
+          />
+        </label>
+      </div>
+      <div className="cp-accent-name">
+        <b>{name}</b>
+      </div>
+
+      <div className="cp-accent-preview" aria-hidden="true">
+        <BowTie className="cp-accent-tie" />
+        <span className="cp-btn cp-primary">Approve and run</span>
+        <span className="cp-accent-link">A link in a reply</span>
+      </div>
+      <p>Hard-to-read colours are adjusted automatically so text stays legible in both themes.</p>
+    </section>
   );
 }

@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="flow-title flow-desc">
+  <title id="flow-title">How Jenkins AI Copilot handles a request</title>
+  <desc id="flow-desc">A request moves through Ask, Inspect, Diagnose and Propose, then stops at an approval gate. Only after a person approves does the exact stored tool call execute.</desc>
+
+  <style>
+    /* Base styles are the finished state, so the image still reads if animation does not run. */
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+    .name { font-size: 24px; font-weight: 600; fill: #ece6dc; text-anchor: middle; }
+    .sub { font-size: 18px; fill: #aaa193; text-anchor: middle; }
+    .band { font-size: 20px; letter-spacing: 1px; }
+    .node { fill: #201d19; stroke: #86b7d6; stroke-width: 3; }
+    .gate { fill: #33291a; stroke: #e2a64b; stroke-width: 3; }
+    .done { fill: #1f3326; stroke: #6fc48d; stroke-width: 3; }
+
+    .a { animation-duration: 12s; animation-timing-function: linear; animation-iteration-count: infinite; }
+    .n1 { animation-name: n1; } .n2 { animation-name: n2; } .n3 { animation-name: n3; } .n4 { animation-name: n4; }
+    .n5 { animation-name: n5; } .n6 { animation-name: n6; }
+    .fill { animation-name: fill; }
+    .wait { animation-name: wait; opacity: 0; }
+    .ok { animation-name: ok; }
+
+    @keyframes n1 { 0%, 3% { stroke: #4a443b; } 5%, 97% { stroke: #86b7d6; } 100% { stroke: #4a443b; } }
+    @keyframes n2 { 0%, 12% { stroke: #4a443b; } 14%, 97% { stroke: #86b7d6; } 100% { stroke: #4a443b; } }
+    @keyframes n3 { 0%, 21% { stroke: #4a443b; } 23%, 97% { stroke: #86b7d6; } 100% { stroke: #4a443b; } }
+    @keyframes n4 { 0%, 30% { stroke: #4a443b; } 32%, 97% { stroke: #86b7d6; } 100% { stroke: #4a443b; } }
+    @keyframes n5 { 0%, 39% { stroke: #4a443b; } 41%, 97% { stroke: #e2a64b; } 100% { stroke: #4a443b; } }
+    @keyframes n6 { 0%, 72% { stroke: #4a443b; } 74%, 97% { stroke: #6fc48d; } 100% { stroke: #4a443b; } }
+
+    /* Progress line: travels to the gate, holds while waiting for a person, then finishes. */
+    @keyframes fill {
+      0%, 4% { transform: scaleX(0); }
+      40%, 64% { transform: scaleX(0.8); }
+      74%, 97% { transform: scaleX(1); }
+      100% { transform: scaleX(0); }
+    }
+    @keyframes wait { 0%, 41% { opacity: 0; } 43%, 63% { opacity: 1; } 65%, 100% { opacity: 0; } }
+    @keyframes ok { 0%, 64% { opacity: 0; } 66%, 97% { opacity: 1; } 100% { opacity: 0; } }
+
+    @media (prefers-reduced-motion: reduce) { .a { animation: none; } }
+  </style>
+
+  <rect width="1200" height="340" rx="20" fill="#171512"/>
+  <rect x="0.5" y="0.5" width="1199" height="339" rx="20" fill="none" stroke="#35302a"/>
+
+  <g id="bands" class="mono">
+    <text class="band" x="110" y="58" fill="#86b7d6">COPILOT WORKS</text>
+    <text class="band" x="860" y="58" text-anchor="middle" fill="#e2a64b">YOU DECIDE</text>
+    <text class="band" x="1080" y="58" text-anchor="middle" fill="#6fc48d">JENKINS RUNS</text>
+    <path d="M110 74 H 740" stroke="#86b7d6" stroke-opacity=".45" stroke-width="2"/>
+    <path d="M790 74 H 930" stroke="#e2a64b" stroke-opacity=".45" stroke-width="2"/>
+    <path d="M1000 74 H 1160" stroke="#6fc48d" stroke-opacity=".45" stroke-width="2"/>
+  </g>
+
+  <rect x="110" y="142" width="980" height="6" rx="3" fill="#35302a"/>
+  <rect class="a fill" x="110" y="142" width="980" height="6" rx="3" fill="#86b7d6" style="transform-origin: 110px 145px"/>
+
+  <g id="nodes">
+    <circle class="node a n1" cx="110" cy="145" r="26"/>
+    <circle class="node a n2" cx="306" cy="145" r="26"/>
+    <circle class="node a n3" cx="502" cy="145" r="26"/>
+    <circle class="node a n4" cx="698" cy="145" r="26"/>
+    <rect class="gate a n5" x="822" y="107" width="76" height="76" rx="14"/>
+    <circle class="done a n6" cx="1090" cy="145" r="26"/>
+  </g>
+
+  <g id="glyphs" class="mono" font-size="22" font-weight="700" text-anchor="middle" fill="#ece6dc">
+    <text x="110" y="153">1</text>
+    <text x="306" y="153">2</text>
+    <text x="502" y="153">3</text>
+    <text x="698" y="153">4</text>
+    <path d="M848 145 l9 10 l17 -20" fill="none" stroke="#e2a64b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M1079 145 l8 9 l14 -16" fill="none" stroke="#6fc48d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g id="labels" class="sans">
+    <text class="name" x="110" y="218">Ask</text>
+    <text class="sub" x="110" y="248">in chat</text>
+
+    <text class="name" x="306" y="218">Inspect</text>
+    <text class="sub" x="306" y="248">logs, stages, commits</text>
+
+    <text class="name" x="502" y="218">Diagnose</text>
+    <text class="sub" x="502" y="248">cause and confidence</text>
+
+    <text class="name" x="698" y="218">Propose</text>
+    <text class="sub" x="698" y="248">validated diff</text>
+
+    <text class="name" x="860" y="218">Approve</text>
+    <text class="sub" x="860" y="248">or reject</text>
+
+    <text class="name" x="1090" y="218">Execute</text>
+    <text class="sub" x="1090" y="248">the stored call</text>
+  </g>
+
+  <g id="status" class="sans" font-size="22" font-weight="600" text-anchor="middle">
+    <text class="a wait" x="600" y="300" fill="#e2a64b">Paused. Privileged changes wait for your approval</text>
+    <text class="a ok" x="600" y="300" fill="#6fc48d">Approved. The exact call you reviewed runs and is audited</text>
+  </g>
+</svg>

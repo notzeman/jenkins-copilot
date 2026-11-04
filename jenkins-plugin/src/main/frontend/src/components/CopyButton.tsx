@@ -51,13 +51,12 @@ export function CopyButton({ text, label = 'Copy response' }: { text: string; la
     <button
       type="button"
       className={`cp-copy-btn ${state === 'copied' ? 'cp-copy-btn-done' : ''}`}
-      title={state === 'copied' ? 'Copied' : state === 'failed' ? 'Could not copy' : label}
-      aria-label={state === 'copied' ? 'Copied' : label}
+      data-tip={state === 'failed' ? 'Could not copy' : label}
+      aria-label={state === 'copied' ? 'Copied' : state === 'failed' ? 'Could not copy' : label}
       onClick={() => void copy()}
       disabled={!text.trim()}
     >
       {state === 'copied' ? <CheckIcon /> : <CopyIcon />}
-      <span>{state === 'copied' ? 'Copied' : state === 'failed' ? 'Failed' : 'Copy'}</span>
     </button>
   );
 }

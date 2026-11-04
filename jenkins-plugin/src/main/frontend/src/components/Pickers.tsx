@@ -18,18 +18,20 @@ interface TriggerProps {
   value: string;
   title?: string;
   muted?: boolean;
+  kind?: 'provider' | 'thinking';
   onClick: (element: HTMLButtonElement) => void;
   active?: boolean;
 }
 
-function PillTrigger({ icon, value, title, muted, onClick, active }: TriggerProps): React.ReactElement {
+function PillTrigger({ icon, value, title, muted, kind, onClick, active }: TriggerProps): React.ReactElement {
   const ref = useRef<HTMLButtonElement>(null);
   return (
     <button
       ref={ref}
       type="button"
-      className={`cp-pill ${active ? 'cp-pill-active' : ''}`}
-      title={title}
+      className={`cp-pill ${kind ? `cp-pill-${kind}` : ''} ${active ? 'cp-pill-active' : ''}`}
+      data-tip={title}
+      aria-label={title ? `${title}: ${value}` : value}
       onClick={() => ref.current && onClick(ref.current)}
     >
       <span className="cp-pill-icon">{icon}</span>
@@ -57,6 +59,7 @@ export function ProviderPicker({
         icon={<ProviderIcon />}
         value={selected ? selected.label : 'No provider'}
         title="Provider"
+        kind="provider"
         muted={!selected}
         active={open}
         onClick={(element) => {
@@ -214,7 +217,7 @@ export function ModelPicker({
           <button
             type="button"
             className="cp-menu-refresh"
-            title="Refresh models"
+            data-tip="Refresh models"
             aria-label="Refresh models"
             onClick={onRefresh}
           >
@@ -299,6 +302,7 @@ export function ThinkingPicker({
         icon={<ThinkingIcon />}
         value={selected.label}
         title="Thinking"
+        kind="thinking"
         active={open}
         onClick={(element) => {
           setAnchor(element);

@@ -5,6 +5,8 @@ import { css } from './styles';
 const host = document.getElementById('jenkins-ai-copilot-root');
 
 if (host && !host.shadowRoot) {
+  // The page decorator renders inside Jenkins' footer, which Jenkins hides on narrow screens.
+  document.body.appendChild(host);
   const shadow = host.attachShadow({ mode: 'open' });
   const style = document.createElement('style');
   style.textContent = css;

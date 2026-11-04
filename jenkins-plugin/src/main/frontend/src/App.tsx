@@ -38,21 +38,29 @@ import {
   ThinkingPicker,
   type ModelsState,
 } from './components/Pickers';
+import { ThinkingLine } from './components/ThinkingLine';
+import { TipLayer } from './components/TipLayer';
 import {
   AlertIcon,
-  BotIcon,
+  BowTie,
   ChevronIcon,
+  ContractIcon,
   ExpandIcon,
   GearIcon,
+  GitHubIcon,
   MoonIcon,
   PaperclipIcon,
   PlusIcon,
   SendIcon,
   ShieldIcon,
+  ShieldWarningIcon,
+  StatusIcon,
   StopIcon,
   SunIcon,
   XIcon,
+  buildState,
 } from './components/icons';
+import { accentVars, loadAccent, saveAccent } from './accent';
 
 type ApprovalItem = Extract<Item, { kind: 'approval' }>;
 type View = 'chat' | 'sessions' | 'settings';
@@ -94,6 +102,7 @@ export function App(): React.ReactElement {
     }
     return 'dark';
   });
+  const [accent, setAccent] = useState(loadAccent);
 
   const abortRef = useRef<AbortController | null>(null);
   const threadRef = useRef<HTMLDivElement>(null);
@@ -808,6 +817,11 @@ export function App(): React.ReactElement {
     localStorage.setItem('cp.theme', next);
   }, []);
 
+  const changeAccent = useCallback((next: string) => {
+    setAccent(next);
+    saveAccent(next);
+  }, []);
+
   const changeThinking = useCallback((next: string) => {
     setThinking(next);
     localStorage.setItem('cp.thinking', next);
@@ -829,12 +843,16 @@ export function App(): React.ReactElement {
     return actions.slice(0, 4);
   }, [jobName]);
 
+  const lastItem = items[items.length - 1];
+  const runningTool = [...items]
+    .reverse()
+    .find((item): item is Extract<Item, { kind: 'tool' }> => item.kind === 'tool' && item.status === 'running');
+  const reasoningLive = lastItem?.kind === 'reasoning' && !lastItem.done;
+  const showWorking = busy && phase !== 'streaming' && !reasoningLive;
+  const shellStyle = useMemo(() => accentVars(accent, theme), [accent, theme]);
+
   const placeholder = busy
-    ? phase === 'thinking'
-      ? 'Thinking…'
-      : phase === 'tools'
-        ? 'Running tools…'
-        : 'Working…'
+    ? 'Copilot is working…'
     : setupRequired
       ? 'Finish provider setup first…'
       : jobName
@@ -842,20 +860,20 @@ export function App(): React.ReactElement {
         : 'Ask about a job, build, pipeline, or deployment…';
 
   return (
-    <div className="cp-shell" data-theme={theme}>
+    <div className="cp-shell" data-theme={theme} style={shellStyle}>
       {!open && (
         <button
           type="button"
           className={`cp-fab ${broken ? 'cp-fab-alert' : ''}`}
           aria-label={broken ? 'Open Jenkins Copilot — latest build failed' : 'Open Jenkins Copilot'}
-          title={
+          data-tip={
             broken
-              ? `Latest build ${lastBuildResult ?? 'failed'} — open Copilot`
+              ? `Latest build ${lastBuildResult ?? 'failed'}. Open Copilot`
               : 'Jenkins Copilot (Ctrl+J)'
           }
           onClick={() => setOpen(true)}
         >
-          <BotIcon />
+          <BowTie />
         </button>
       )}
       <aside
@@ -879,6 +897,8 @@ export function App(): React.ReactElement {
             version={runtime.version}
             theme={theme}
             onThemeChange={changeTheme}
+            accent={accent}
+            onAccentChange={changeAccent}
             onClose={() => setView('chat')}
             onReload={reloadAccounts}
             onAccountsChanged={setAccounts}
@@ -912,56 +932,24 @@ export function App(): React.ReactElement {
               <div className="cp-head-row">
                 <button
                   type="button"
-                  className="cp-iconbtn cp-header-back"
-                  title="Back to sessions"
+                  className="cp-iconbtn"
+                  data-tip="Sessions"
                   aria-label="Back to sessions"
                   onClick={() => setView('sessions')}
                 >
                   <ChevronIcon className="cp-back-chevron" />
                 </button>
                 <div className={`cp-logo ${broken ? 'cp-logo-alert' : ''}`}>
-                  <BotIcon />
+                  <BowTie className={busy ? 'cp-tie-busy' : ''} />
                 </div>
                 <div className="cp-head-text">
-                  <div className="cp-title">Jenkins Copilot</div>
-                  <div className="cp-sub">
-                    {session?.user ? `@${session.user}` : 'agentic CI/CD operator'}
-                  </div>
+                  <div className="cp-title">Copilot</div>
                 </div>
                 <div className="cp-grow" />
-                {session?.isAdmin && (
-                  <button
-                    type="button"
-                    className="cp-iconbtn"
-                    title="Settings"
-                    aria-label="Settings"
-                    onClick={() => setView('settings')}
-                  >
-                    <GearIcon />
-                  </button>
-                )}
                 <button
                   type="button"
                   className="cp-iconbtn"
-                  title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-                  aria-label="Toggle theme"
-                  onClick={() => changeTheme(theme === 'dark' ? 'light' : 'dark')}
-                >
-                  {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-                </button>
-                <button
-                  type="button"
-                  className="cp-iconbtn"
-                  title={expanded ? 'Restore width' : 'Expand'}
-                  aria-label="Expand assistant"
-                  onClick={() => setExpanded((value) => !value)}
-                >
-                  <ExpandIcon />
-                </button>
-                <button
-                  type="button"
-                  className="cp-iconbtn"
-                  title="New session"
+                  data-tip="New session"
                   aria-label="New session"
                   onClick={() => void newSession(pipelineKey)}
                 >
@@ -970,7 +958,35 @@ export function App(): React.ReactElement {
                 <button
                   type="button"
                   className="cp-iconbtn"
-                  title="Close"
+                  data-tip="Settings"
+                  aria-label="Settings"
+                  onClick={() => setView('settings')}
+                >
+                  <GearIcon />
+                </button>
+                <button
+                  type="button"
+                  className="cp-iconbtn"
+                  data-tip={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+                  aria-label="Toggle theme"
+                  onClick={() => changeTheme(theme === 'dark' ? 'light' : 'dark')}
+                >
+                  {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+                </button>
+                <button
+                  type="button"
+                  className="cp-iconbtn"
+                  data-tip={expanded ? 'Restore width' : 'Expand'}
+                  aria-label="Expand assistant"
+                  aria-pressed={expanded}
+                  onClick={() => setExpanded((value) => !value)}
+                >
+                  {expanded ? <ContractIcon /> : <ExpandIcon />}
+                </button>
+                <button
+                  type="button"
+                  className="cp-iconbtn"
+                  data-tip="Close (Ctrl+J)"
                   aria-label="Close assistant"
                   onClick={() => setOpen(false)}
                 >
@@ -978,35 +994,39 @@ export function App(): React.ReactElement {
                 </button>
               </div>
 
-              <div className="cp-chips">
-                {jobName && (
-                  <span className="cp-chip" title={jobName}>
-                    job <b>{jobName}</b>
-                  </span>
-                )}
+              <div className="cp-context">
                 {lastBuildNumber !== undefined && (
-                  <span
-                    className={`cp-chip ${
-                      lastBuildResult === 'FAILURE'
-                        ? 'cp-fail'
-                        : lastBuildResult === 'SUCCESS'
-                          ? 'cp-ok'
-                          : ''
-                    }`}
-                  >
-                    build <b>#{lastBuildNumber}</b>
-                    {lastBuildResult ? ` · ${lastBuildResult}` : ''}
-                  </span>
+                  <StatusIcon
+                    state={buildState(lastBuildResult)}
+                    label={`Build #${lastBuildNumber}: ${lastBuildResult ?? 'in progress'}`}
+                  />
                 )}
+                <span className="cp-context-job" data-tip={jobName} data-tip-truncated>
+                  {jobName ?? 'All of Jenkins'}
+                </span>
+                {lastBuildNumber !== undefined && <span className="cp-context-build">#{lastBuildNumber}</span>}
                 {currentSession && (
-                  <span className="cp-chip" title={currentSession.title}>
-                    session <b>{currentSession.title}</b>
+                  <span className="cp-context-session" data-tip={currentSession.title} data-tip-truncated>
+                    {currentSession.title}
                   </span>
                 )}
-                {!jobName && <span className="cp-chip">no job context</span>}
-                {setupRequired && <span className="cp-chip cp-fail">setup required</span>}
-                {approvalsBypassed && <span className="cp-chip cp-fail">approvals bypassed</span>}
-                {!session?.config.githubConfigured && <span className="cp-chip">GitHub not configured</span>}
+                <span className="cp-context-flags">
+                  {setupRequired && (
+                    <span className="cp-flag cp-flag-danger" role="img" tabIndex={0} aria-label="Setup required" data-tip="Setup required: add a provider">
+                      <AlertIcon />
+                    </span>
+                  )}
+                  {approvalsBypassed && (
+                    <span className="cp-flag cp-flag-danger" role="img" tabIndex={0} aria-label="Approvals are bypassed" data-tip="Approvals are bypassed">
+                      <ShieldWarningIcon />
+                    </span>
+                  )}
+                  {session && !session.config.githubConfigured && (
+                    <span className="cp-flag" role="img" tabIndex={0} aria-label="GitHub is not configured" data-tip="GitHub is not configured">
+                      <GitHubIcon />
+                    </span>
+                  )}
+                </span>
               </div>
             </header>
 
@@ -1018,8 +1038,13 @@ export function App(): React.ReactElement {
                   {broken && (
                     <div className="cp-alert">
                       <div className="cp-alert-title">
-                        <AlertIcon />
-                        {`Build ${lastBuildNumber ? `#${lastBuildNumber} ` : ''}${lastBuildResult ?? 'failed'}`}
+                        <StatusIcon
+                          state={buildState(lastBuildResult)}
+                          label={`Latest build: ${lastBuildResult ?? 'failed'}`}
+                        />
+                        {`Build ${lastBuildNumber ? `#${lastBuildNumber} ` : ''}${
+                          lastBuildResult === 'UNSTABLE' ? 'is unstable' : 'failed'
+                        }`}
                       </div>
                       <p>
                         {jobName ?? 'This pipeline'} did not finish cleanly. I can read the console log,
@@ -1103,23 +1128,6 @@ export function App(): React.ReactElement {
                       }`}
                       key={item.id}
                     >
-                      <div className="cp-msg-head">
-                        <span className="cp-dot" />
-                        {item.role === 'user'
-                          ? 'You'
-                          : item.narration
-                            ? 'Copilot · analysis'
-                            : 'Copilot'}
-                        {item.role === 'assistant' && (
-                          <>
-                            <span className="cp-grow" />
-                            <CopyButton
-                              text={item.text}
-                              label={item.narration ? 'Copy analysis' : 'Copy response'}
-                            />
-                          </>
-                        )}
-                      </div>
                       {item.role === 'user' ? (
                         <>
                           <div className="cp-msg-body" style={{ whiteSpace: 'pre-wrap' }}>
@@ -1142,11 +1150,16 @@ export function App(): React.ReactElement {
                             style={{ whiteSpace: 'pre-wrap' }}
                           >
                             {item.text}
+                            {item.streaming && <span className="cp-cursor" role="img" aria-label="Streaming" />}
                           </div>
-                          {item.streaming && <span className="cp-cursor" aria-label="Streaming" />}
                         </>
                       ) : (
                         <Markdown text={item.text} />
+                      )}
+                      {item.role === 'assistant' && !item.streaming && !item.narration && (
+                        <div className="cp-msg-foot">
+                          <CopyButton text={item.text} label="Copy response" />
+                        </div>
                       )}
                     </div>
                   );
@@ -1163,6 +1176,7 @@ export function App(): React.ReactElement {
                   </div>
                 );
               })}
+              {showWorking && <ThinkingLine toolName={runningTool?.toolName} />}
             </div>
 
             <ApprovalDock approvals={pendingApprovals} onDecide={decide} />
@@ -1235,7 +1249,7 @@ export function App(): React.ReactElement {
                     <button
                       type="button"
                       className="cp-bar-btn"
-                      title="Attach image"
+                      data-tip="Attach image"
                       aria-label="Attach image"
                       onClick={() => fileRef.current?.click()}
                     >
@@ -1255,23 +1269,27 @@ export function App(): React.ReactElement {
                         }
                       }}
                     />
-                    <button
-                      type="button"
-                      className={`cp-shield ${approvalsBypassed ? 'cp-shield-bypass' : ''}`}
-                      title={
+                    <span
+                      className="cp-shield-wrap"
+                      data-tip={
                         !session?.isAdmin
                           ? 'Only administrators can bypass approvals'
                           : approvalsBypassed
-                            ? 'Approvals are bypassed — click to require human approval again'
-                            : 'Privileged actions require human approval — click to bypass all approvals'
+                            ? 'Approvals are bypassed. Click to require approval again'
+                            : 'Privileged actions need your approval. Click to bypass all approvals'
                       }
-                      aria-label={approvalsBypassed ? 'Restore human approval' : 'Bypass approvals'}
-                      aria-pressed={approvalsBypassed}
-                      disabled={!session?.isAdmin || approvalBusy}
-                      onClick={() => void toggleApprovalBypass()}
                     >
-                      <ShieldIcon />
-                    </button>
+                      <button
+                        type="button"
+                        className={`cp-shield ${approvalsBypassed ? 'cp-shield-bypass' : ''}`}
+                        aria-label={approvalsBypassed ? 'Restore human approval' : 'Bypass approvals'}
+                        aria-pressed={approvalsBypassed}
+                        disabled={!session?.isAdmin || approvalBusy}
+                        onClick={() => void toggleApprovalBypass()}
+                      >
+                        {approvalsBypassed ? <ShieldWarningIcon /> : <ShieldIcon />}
+                      </button>
+                    </span>
                   </div>
 
                   <div className="cp-bar-right">
@@ -1303,7 +1321,7 @@ export function App(): React.ReactElement {
                     <ThinkingPicker value={thinking} onChange={changeThinking} />
 
                     {busy ? (
-                      <button type="button" className="cp-send" onClick={stop} aria-label="Stop">
+                      <button type="button" className="cp-send" onClick={stop} aria-label="Stop" data-tip="Stop">
                         <StopIcon />
                       </button>
                     ) : (
@@ -1313,6 +1331,7 @@ export function App(): React.ReactElement {
                         onClick={() => void send(input)}
                         disabled={!input.trim() && attachments.length === 0}
                         aria-label="Send"
+                        data-tip="Send (Enter)"
                       >
                         <SendIcon />
                       </button>
@@ -1325,6 +1344,7 @@ export function App(): React.ReactElement {
         )}
       </aside>
       <div id="cp-portal" className="cp-portal-root" />
+      <TipLayer />
     </div>
   );
 }

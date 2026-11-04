@@ -13,10 +13,14 @@ npx playwright install chromium
 npx playwright test
 ```
 
-The tests mock `/session`, `/models`, `/chat`, and `/decision` where needed, so they do not require a provider
-API key. They verify:
+The tests expect Jenkins at `http://localhost:8080/jenkins`; set `JENKINS_URL` to use another address. On a
+secured controller they sign in with `JENKINS_USER` and `JENKINS_PASSWORD` (default `admin` / `admin`).
 
-1. The setup card lists OpenAI, Claude, and opencode go.
+The tests mock the plugin's API, including `/session`, `/settingsAccounts`, `/chat`, and `/decision`, so they do
+not require a provider API key. They verify:
+
+1. First run opens provider settings, which list OpenAI, Claude, opencode go, and custom endpoints.
 2. Streamed tool activity, Markdown, an uploaded image, an approval card with a diff, and a rejected decision.
+3. Status icon tooltips, and choosing a primary colour that persists across a reload.
 
 For a live provider check, configure a provider in the drawer and chat manually.
