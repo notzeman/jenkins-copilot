@@ -11,7 +11,7 @@ import {
 import type { AccountsResponse, GitHubAccount, ModelInfo, ProviderAccount } from '../types';
 import { SimpleSelect } from './Pickers';
 import {
-  BowTie,
+  CopilotMark,
   CheckIcon,
   ChevronIcon,
   DefaultIcon,
@@ -648,8 +648,7 @@ function AppearanceSection({
   onAccentChange: (accent: string) => void;
 }): React.ReactElement {
   const preset = ACCENT_PRESETS.find((item) => item.id === accent);
-  const custom = !preset && accent !== JENKINS_ACCENT;
-  const name = preset?.label ?? (accent === JENKINS_ACCENT ? 'Follow Jenkins' : accent.toUpperCase());
+  const name = preset?.label ?? 'Follow Jenkins';
   return (
     <section className="cp-settings-section">
       <div>
@@ -694,32 +693,18 @@ function AppearanceSection({
           aria-pressed={accent === JENKINS_ACCENT}
           onClick={() => onAccentChange(JENKINS_ACCENT)}
         >
-          {accent === JENKINS_ACCENT ? <CheckIcon /> : <BowTie />}
+          {accent === JENKINS_ACCENT ? <CheckIcon /> : <CopilotMark />}
         </button>
-        <label
-          className={`cp-swatch cp-swatch-custom ${custom ? 'cp-swatch-active' : ''}`}
-          style={custom ? swatchVars(accent) : undefined}
-          data-tip="Custom colour"
-        >
-          {custom && <CheckIcon />}
-          <input
-            type="color"
-            aria-label="Custom colour"
-            value={custom ? accent : '#2b5874'}
-            onChange={(event) => onAccentChange(event.target.value)}
-          />
-        </label>
       </div>
       <div className="cp-accent-name">
         <b>{name}</b>
       </div>
 
       <div className="cp-accent-preview" aria-hidden="true">
-        <BowTie className="cp-accent-tie" />
+        <CopilotMark className="cp-accent-mark" />
         <span className="cp-btn cp-primary">Approve and run</span>
         <span className="cp-accent-link">A link in a reply</span>
       </div>
-      <p>Hard-to-read colours are adjusted automatically so text stays legible in both themes.</p>
     </section>
   );
 }

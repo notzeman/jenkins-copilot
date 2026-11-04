@@ -54,13 +54,15 @@ export const DefaultIcon = symbolIcon('checkmark-circle');
 export const InfoIcon = symbolIcon('document-text');
 export const ChatIcon = symbolIcon('chatbubble-outline');
 
-/** The butler's bow tie: the Copilot mark. Its wings animate while Copilot works. */
-export function BowTie({ className }: IconProps): React.ReactElement {
+/**
+ * The Copilot mark: a C of pipeline track with one stage held in the opening, waiting for approval.
+ * The ring turns while Copilot works.
+ */
+export function CopilotMark({ className }: IconProps): React.ReactElement {
   return (
-    <svg viewBox="0 0 24 24" className={`cp-tie ${className ?? ''}`} fill="currentColor" aria-hidden="true" focusable="false">
-      <path className="cp-tie-wing cp-tie-left" d="M10.2 9.5 3.9 5.9C2.9 5.3 1.7 6 1.7 7.2v9.6c0 1.2 1.2 1.9 2.2 1.3l6.3-3.6z" />
-      <path className="cp-tie-wing cp-tie-right" d="m13.8 9.5 6.3-3.6c1-.6 2.2.1 2.2 1.3v9.6c0 1.2-1.2 1.9-2.2 1.3l-6.3-3.6z" />
-      <rect x="10.2" y="8.9" width="3.6" height="6.2" rx="1.1" />
+    <svg viewBox="0 0 256 256" className={`cp-mark ${className ?? ''}`} fill="currentColor" aria-hidden="true" focusable="false">
+      <path className="cp-mark-ring" d="M193.59 50.71A104 104 0 1 0 193.59 205.29A18 18 0 0 0 169.50 178.53A68 68 0 1 1 169.50 77.47A18 18 0 0 0 193.59 50.71Z" />
+      <circle className="cp-mark-stage" cx="210" cy="128" r="27" />
     </svg>
   );
 }

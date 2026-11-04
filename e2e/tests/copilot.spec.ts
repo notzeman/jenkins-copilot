@@ -211,7 +211,7 @@ test('status icons explain themselves and the primary colour can be changed', as
   const accent = () =>
     page.locator('.cp-shell').evaluate((element) => (element as HTMLElement).style.getPropertyValue('--cp-accent'));
   const before = await accent();
-  await page.getByRole('button', { name: 'Bow tie' }).click();
+  await page.getByRole('button', { name: 'Crimson' }).click();
   const chosen = await accent();
   expect(chosen).not.toBe(before);
 

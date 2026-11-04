@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Item } from '../types';
-import { BowTie, ChevronIcon } from './icons';
+import { CopilotMark, ChevronIcon } from './icons';
 
 type ReasoningItem = Extract<Item, { kind: 'reasoning' }>;
 
@@ -34,7 +34,7 @@ export function ReasoningPanel({ item }: { item: ReasoningItem }): React.ReactEl
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
-        <BowTie className={item.done ? 'cp-tie-still' : 'cp-tie-busy'} />
+        <CopilotMark className={item.done ? 'cp-mark-still' : 'cp-mark-busy'} />
         {item.done ? (
           <span className="cp-reasoning-title">{duration ? `Thought for ${duration}s` : 'Thought process'}</span>
         ) : (

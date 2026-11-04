@@ -137,7 +137,7 @@ The model cannot approve its own actions. Approvals are stored server-side with 
 - **Session manager** grouped by pipeline, with rename, delete, search, and new-session actions. Deleting asks for confirmation first, and multibranch branch jobs are grouped under their parent project.
 - **Broken-build prompt**: a failing or unstable latest build pulses the floating icon and offers **Quickly analyse**.
 - **Current job and build context** read from the Jenkins page, not from the browser.
-- **Appearance**: light or dark theme, and a primary colour from presets, your Jenkins accent, or a custom colour. Saved per browser.
+- **Appearance**: light or dark theme, and a primary colour from a set of presets or your Jenkins accent. Saved per browser.
 
 ## Security
 

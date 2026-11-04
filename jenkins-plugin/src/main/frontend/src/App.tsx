@@ -42,7 +42,7 @@ import { ThinkingLine } from './components/ThinkingLine';
 import { TipLayer } from './components/TipLayer';
 import {
   AlertIcon,
-  BowTie,
+  CopilotMark,
   ChevronIcon,
   ContractIcon,
   ExpandIcon,
@@ -873,7 +873,7 @@ export function App(): React.ReactElement {
           }
           onClick={() => setOpen(true)}
         >
-          <BowTie />
+          <CopilotMark />
         </button>
       )}
       <aside
@@ -940,7 +940,7 @@ export function App(): React.ReactElement {
                   <ChevronIcon className="cp-back-chevron" />
                 </button>
                 <div className={`cp-logo ${broken ? 'cp-logo-alert' : ''}`}>
-                  <BowTie className={busy ? 'cp-tie-busy' : ''} />
+                  <CopilotMark className={busy ? 'cp-mark-busy' : ''} />
                 </div>
                 <div className="cp-head-text">
                   <div className="cp-title">Copilot</div>

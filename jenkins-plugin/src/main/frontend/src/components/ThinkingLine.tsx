@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { BowTie } from './icons';
+import { CopilotMark } from './icons';
 import { toolMeta } from './toolMeta';
 
 const VERBS = [
   'Pondering',
-  'Straightening the bow tie',
+  'Mulling it over',
   'Minding the queue',
   'Deliberating',
-  'Polishing the silver',
+  'Weighing the options',
   'Ruminating',
 ];
 
@@ -27,7 +27,7 @@ export function ThinkingLine({ toolName }: { toolName?: string }): React.ReactEl
 
   return (
     <div className="cp-working" role="status" aria-label="Copilot is working">
-      <BowTie className="cp-tie-busy" />
+      <CopilotMark className="cp-mark-busy" />
       <span className="cp-shimmer" key={label} aria-hidden="true">
         {label}…
       </span>

@@ -10,29 +10,28 @@ export interface AccentPreset {
 }
 
 export const ACCENT_PRESETS: AccentPreset[] = [
-  { id: 'navy', label: 'Butler navy', light: '#2b5874', dark: '#86b7d6' },
-  { id: 'bowtie', label: 'Bow tie', light: '#b3322c', dark: '#ec8077' },
-  { id: 'brass', label: 'Brass', light: '#85600f', dark: '#d8ae55' },
-  { id: 'moss', label: 'Moss', light: '#42683a', dark: '#94bf85' },
-  { id: 'harbor', label: 'Harbor', light: '#14676a', dark: '#68c0bc' },
-  { id: 'plum', label: 'Plum', light: '#6e4080', dark: '#c49dd3' },
+  { id: 'navy', label: 'Navy', light: '#2b5874', dark: '#86b7d6' },
+  { id: 'crimson', label: 'Crimson', light: '#b3322c', dark: '#ef8a80' },
+  { id: 'amber', label: 'Amber', light: '#85600f', dark: '#e0b252' },
+  { id: 'green', label: 'Green', light: '#2f7044', dark: '#7fca95' },
+  { id: 'teal', label: 'Teal', light: '#14676a', dark: '#62c6c1' },
+  { id: 'violet', label: 'Violet', light: '#5f46a8', dark: '#b3a0ec' },
 ];
 
 export const JENKINS_ACCENT = 'jenkins';
 export const DEFAULT_ACCENT = 'navy';
 
 const KEY = 'cp.accent';
-const PANEL: Record<Theme, RGB> = { light: [255, 253, 248], dark: [32, 29, 25] };
-const TEXT: Record<Theme, RGB> = { light: [36, 32, 26], dark: [236, 230, 220] };
+const PANEL: Record<Theme, RGB> = { light: [255, 255, 255], dark: [14, 16, 22] };
+const TEXT: Record<Theme, RGB> = { light: [20, 22, 27], dark: [231, 233, 238] };
 const FALLBACK = '#1f6feb';
-const HEX = /^#[0-9a-f]{6}$/i;
 
 type RGB = [number, number, number];
 
 export function loadAccent(): string {
   try {
     const saved = localStorage.getItem(KEY);
-    if (saved && (saved === JENKINS_ACCENT || HEX.test(saved) || ACCENT_PRESETS.some((item) => item.id === saved))) {
+    if (saved && (saved === JENKINS_ACCENT || ACCENT_PRESETS.some((item) => item.id === saved))) {
       return saved;
     }
   } catch {
@@ -110,15 +109,15 @@ export function accentSource(value: string, theme: Theme): string {
 /** The more readable of near-white and near-black on top of a colour. */
 export function readableOn(color: string): string {
   const rgb = toRgb(color);
-  return contrast(rgb, [255, 255, 255]) >= contrast(rgb, [26, 23, 19]) ? '#fff' : '#1a1713';
+  return contrast(rgb, [255, 255, 255]) >= contrast(rgb, [14, 16, 22]) ? '#fff' : '#0e1016';
 }
 
-/** CSS variables for the chosen accent. Any colour stays readable in both themes. */
+/** CSS variables for the chosen accent. Jenkins' own accent is adjusted if it would be hard to read. */
 export function accentVars(value: string, theme: Theme): React.CSSProperties {
   const accent = legible(toRgb(accentSource(value, theme)), theme, 3);
   const ink = legible(accent, theme, 4.5);
   const light: RGB = [255, 255, 255];
-  const dark: RGB = [26, 23, 19];
+  const dark: RGB = [14, 16, 22];
   const on = contrast(accent, light) >= contrast(accent, dark) ? light : dark;
   return {
     '--cp-accent': css(accent),

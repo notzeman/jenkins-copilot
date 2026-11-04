@@ -6,12 +6,12 @@
     /* Base styles are the finished state, so the image still reads if animation does not run. */
     .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
     .mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
-    .name { font-size: 24px; font-weight: 600; fill: #ece6dc; text-anchor: middle; }
-    .sub { font-size: 18px; fill: #aaa193; text-anchor: middle; }
+    .name { font-size: 24px; font-weight: 600; fill: #e7e9ee; text-anchor: middle; }
+    .sub { font-size: 18px; fill: #a0a6b3; text-anchor: middle; }
     .band { font-size: 20px; letter-spacing: 1px; }
-    .node { fill: #201d19; stroke: #86b7d6; stroke-width: 3; }
-    .gate { fill: #33291a; stroke: #e2a64b; stroke-width: 3; }
-    .done { fill: #1f3326; stroke: #6fc48d; stroke-width: 3; }
+    .node { fill: #161922; stroke: #86b7d6; stroke-width: 3; }
+    .gate { fill: #2a2113; stroke: #e2a64b; stroke-width: 3; }
+    .done { fill: #14281c; stroke: #6fc48d; stroke-width: 3; }
 
     .a { animation-duration: 12s; animation-timing-function: linear; animation-iteration-count: infinite; }
     .n1 { animation-name: n1; } .n2 { animation-name: n2; } .n3 { animation-name: n3; } .n4 { animation-name: n4; }
@@ -20,12 +20,12 @@
     .wait { animation-name: wait; opacity: 0; }
     .ok { animation-name: ok; }
 
-    @keyframes n1 { 0%, 3% { stroke: #4a443b; } 5%, 97% { stroke: #86b7d6; } 100% { stroke: #4a443b; } }
-    @keyframes n2 { 0%, 12% { stroke: #4a443b; } 14%, 97% { stroke: #86b7d6; } 100% { stroke: #4a443b; } }
-    @keyframes n3 { 0%, 21% { stroke: #4a443b; } 23%, 97% { stroke: #86b7d6; } 100% { stroke: #4a443b; } }
-    @keyframes n4 { 0%, 30% { stroke: #4a443b; } 32%, 97% { stroke: #86b7d6; } 100% { stroke: #4a443b; } }
-    @keyframes n5 { 0%, 39% { stroke: #4a443b; } 41%, 97% { stroke: #e2a64b; } 100% { stroke: #4a443b; } }
-    @keyframes n6 { 0%, 72% { stroke: #4a443b; } 74%, 97% { stroke: #6fc48d; } 100% { stroke: #4a443b; } }
+    @keyframes n1 { 0%, 3% { stroke: #343a48; } 5%, 97% { stroke: #86b7d6; } 100% { stroke: #343a48; } }
+    @keyframes n2 { 0%, 12% { stroke: #343a48; } 14%, 97% { stroke: #86b7d6; } 100% { stroke: #343a48; } }
+    @keyframes n3 { 0%, 21% { stroke: #343a48; } 23%, 97% { stroke: #86b7d6; } 100% { stroke: #343a48; } }
+    @keyframes n4 { 0%, 30% { stroke: #343a48; } 32%, 97% { stroke: #86b7d6; } 100% { stroke: #343a48; } }
+    @keyframes n5 { 0%, 39% { stroke: #343a48; } 41%, 97% { stroke: #e2a64b; } 100% { stroke: #343a48; } }
+    @keyframes n6 { 0%, 72% { stroke: #343a48; } 74%, 97% { stroke: #6fc48d; } 100% { stroke: #343a48; } }
 
     /* Progress line: travels to the gate, holds while waiting for a person, then finishes. */
     @keyframes fill {
@@ -40,8 +40,8 @@
     @media (prefers-reduced-motion: reduce) { .a { animation: none; } }
   </style>
 
-  <rect width="1200" height="340" rx="20" fill="#171512"/>
-  <rect x="0.5" y="0.5" width="1199" height="339" rx="20" fill="none" stroke="#35302a"/>
+  <rect width="1200" height="340" rx="20" fill="#0e1016"/>
+  <rect x="0.5" y="0.5" width="1199" height="339" rx="20" fill="none" stroke="#232733"/>
 
   <g id="bands" class="mono">
     <text class="band" x="110" y="58" fill="#86b7d6">COPILOT WORKS</text>
@@ -52,7 +52,7 @@
     <path d="M1000 74 H 1160" stroke="#6fc48d" stroke-opacity=".45" stroke-width="2"/>
   </g>
 
-  <rect x="110" y="142" width="980" height="6" rx="3" fill="#35302a"/>
+  <rect x="110" y="142" width="980" height="6" rx="3" fill="#232733"/>
   <rect class="a fill" x="110" y="142" width="980" height="6" rx="3" fill="#86b7d6" style="transform-origin: 110px 145px"/>
 
   <g id="nodes">
@@ -64,7 +64,7 @@
     <circle class="done a n6" cx="1090" cy="145" r="26"/>
   </g>
 
-  <g id="glyphs" class="mono" font-size="22" font-weight="700" text-anchor="middle" fill="#ece6dc">
+  <g id="glyphs" class="mono" font-size="22" font-weight="700" text-anchor="middle" fill="#e7e9ee">
     <text x="110" y="153">1</text>
     <text x="306" y="153">2</text>
     <text x="502" y="153">3</text>

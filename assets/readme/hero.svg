@@ -7,10 +7,10 @@
     .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
     .mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
     .serif { font-family: Georgia, "Times New Roman", "Noto Serif", serif; }
-    .label { font-size: 21px; fill: #aaa193; text-anchor: middle; }
+    .label { font-size: 21px; fill: #a0a6b3; text-anchor: middle; }
     .caption { font-size: 25px; font-weight: 600; text-anchor: middle; }
     .stage { fill: #6fc48d; }
-    .check { fill: none; stroke: #171512; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .check { fill: none; stroke: #0e1016; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
 
     .a { animation-duration: 14s; animation-timing-function: linear; animation-iteration-count: infinite; }
     .s1 { animation-name: s1; } .s2 { animation-name: s2; } .s3 { animation-name: s3; }
@@ -22,14 +22,14 @@
     .c3 { animation-name: c3; opacity: 0; } .c4 { animation-name: c4; opacity: 0; }
     .c5 { animation-name: c5; }
 
-    @keyframes s1 { 0%, 7% { fill: #4a443b; } 9%, 97% { fill: #6fc48d; } 100% { fill: #4a443b; } }
-    @keyframes s2 { 0%, 13% { fill: #4a443b; } 15%, 97% { fill: #6fc48d; } 100% { fill: #4a443b; } }
-    @keyframes s3 { 0%, 19% { fill: #4a443b; } 21%, 97% { fill: #6fc48d; } 100% { fill: #4a443b; } }
+    @keyframes s1 { 0%, 7% { fill: #343a48; } 9%, 97% { fill: #6fc48d; } 100% { fill: #343a48; } }
+    @keyframes s2 { 0%, 13% { fill: #343a48; } 15%, 97% { fill: #6fc48d; } 100% { fill: #343a48; } }
+    @keyframes s3 { 0%, 19% { fill: #343a48; } 21%, 97% { fill: #6fc48d; } 100% { fill: #343a48; } }
     @keyframes s4 {
-      0%, 23% { fill: #4a443b; } 25%, 27% { fill: #86b7d6; } 29%, 56% { fill: #ec8077; }
-      58%, 70% { fill: #e2a64b; } 72%, 97% { fill: #6fc48d; } 100% { fill: #4a443b; }
+      0%, 23% { fill: #343a48; } 25%, 27% { fill: #86b7d6; } 29%, 56% { fill: #ec8077; }
+      58%, 70% { fill: #e2a64b; } 72%, 97% { fill: #6fc48d; } 100% { fill: #343a48; }
     }
-    @keyframes s5 { 0%, 75% { fill: #4a443b; } 77%, 97% { fill: #6fc48d; } 100% { fill: #4a443b; } }
+    @keyframes s5 { 0%, 75% { fill: #343a48; } 77%, 97% { fill: #6fc48d; } 100% { fill: #343a48; } }
 
     @keyframes k1 { 0%, 8% { opacity: 0; } 9%, 97% { opacity: 1; } 100% { opacity: 0; } }
     @keyframes k2 { 0%, 14% { opacity: 0; } 15%, 97% { opacity: 1; } 100% { opacity: 0; } }
@@ -47,19 +47,18 @@
     @media (prefers-reduced-motion: reduce) { .a { animation: none; } }
   </style>
 
-  <rect width="1200" height="430" rx="20" fill="#171512"/>
-  <rect x="0.5" y="0.5" width="1199" height="429" rx="20" fill="none" stroke="#35302a"/>
+  <rect width="1200" height="430" rx="20" fill="#0e1016"/>
+  <rect x="0.5" y="0.5" width="1199" height="429" rx="20" fill="none" stroke="#232733"/>
 
   <g id="title-block" transform="translate(64 0)">
     <text class="mono" x="0" y="66" font-size="20" letter-spacing="2" fill="#86b7d6">JENKINS PLUGIN</text>
-    <text class="serif" x="0" y="130" font-size="62" font-weight="700" fill="#ece6dc">Jenkins AI <tspan fill="#86b7d6">Copilot</tspan></text>
-    <text class="sans" x="0" y="178" font-size="27" fill="#aaa193">Diagnose failed builds and fix pipelines from chat, inside Jenkins.</text>
+    <text class="serif" x="0" y="130" font-size="62" font-weight="700" fill="#e7e9ee">Jenkins AI <tspan fill="#86b7d6">Copilot</tspan></text>
+    <text class="sans" x="0" y="178" font-size="27" fill="#a0a6b3">Diagnose failed builds and fix pipelines from chat, inside Jenkins.</text>
   </g>
 
-  <g id="bow-tie" transform="translate(1012 44) scale(5)" fill="#86b7d6">
-    <path d="M10.2 9.5 3.9 5.9C2.9 5.3 1.7 6 1.7 7.2v9.6c0 1.2 1.2 1.9 2.2 1.3l6.3-3.6z"/>
-    <path d="m13.8 9.5 6.3-3.6c1-.6 2.2.1 2.2 1.3v9.6c0 1.2-1.2 1.9-2.2 1.3l-6.3-3.6z"/>
-    <rect x="10.2" y="8.9" width="3.6" height="6.2" rx="1.1"/>
+  <g id="mark" transform="translate(1030 36) scale(.42)" fill="#86b7d6">
+    <path d="M193.59 50.71A104 104 0 1 0 193.59 205.29A18 18 0 0 0 169.50 178.53A68 68 0 1 1 169.50 77.47A18 18 0 0 0 193.59 50.71Z"/>
+    <circle cx="210" cy="128" r="27"/>
   </g>
 
   <g id="connectors">
@@ -92,7 +91,7 @@
     <text class="label" x="1080" y="303">Publish</text>
   </g>
 
-  <rect x="64" y="338" width="1072" height="60" rx="12" fill="#201d19" stroke="#35302a"/>
+  <rect x="64" y="338" width="1072" height="60" rx="12" fill="#161922" stroke="#232733"/>
   <g id="captions" class="sans">
     <text class="caption a c1" x="600" y="377" fill="#86b7d6">Build #3 is running</text>
     <text class="caption a c2" x="600" y="377" fill="#ec8077">Docker Build failed</text>
