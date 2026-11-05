@@ -5,6 +5,7 @@ import hudson.model.User;
 import io.jenkins.plugins.copilot.CopilotGlobalConfiguration;
 import io.jenkins.plugins.copilot.storage.ChangePlanStore;
 import io.jenkins.plugins.copilot.storage.ConversationStore;
+import io.jenkins.plugins.copilot.storage.SkillStore;
 
 /** Per-request services available to tool executors. */
 public final class ToolContext {
@@ -15,6 +16,7 @@ public final class ToolContext {
     private final ChangePlanStore plans;
     private final RecoveryService recovery;
     private final ConversationStore conversations;
+    private final SkillStore skills;
 
     public ToolContext(
             User user,
@@ -23,7 +25,8 @@ public final class ToolContext {
             GitHubService github,
             ChangePlanStore plans,
             RecoveryService recovery,
-            ConversationStore conversations) {
+            ConversationStore conversations,
+            SkillStore skills) {
         this.user = user;
         this.conversationId = conversationId;
         this.config = config;
@@ -31,6 +34,7 @@ public final class ToolContext {
         this.plans = plans;
         this.recovery = recovery;
         this.conversations = conversations;
+        this.skills = skills;
     }
 
     public User user() {
@@ -59,6 +63,10 @@ public final class ToolContext {
 
     public ConversationStore conversations() {
         return conversations;
+    }
+
+    public SkillStore skills() {
+        return skills;
     }
 
     /** Convenience for tools that accept a job argument. */

@@ -131,6 +131,8 @@ The model cannot approve its own actions. Approvals are stored server-side with 
 - **Live thinking**: provider reasoning streams in a muted panel, then folds into "Thought for Ns". While a tool runs, the status line says what it is doing. Tool narration renders as plain text, so partially streamed Markdown tables or code fences never appear as broken blocks.
 - **Images**: file picker, drag and drop, or paste. PNG, JPEG, and WebP; up to 4 per message; downscaled client-side and validated server-side.
 - **Copy response** on every assistant message, with a copied confirmation.
+- **Reusable skills**: admin-managed Markdown procedures, a compact on-demand catalogue, and a Settings → Skills
+  flow that analyses existing pipelines and drafts a new skill for approval.
 - **Tool steps** with Jenkins status icons and tooltips; expand one to see its arguments and results.
 - **Approval cards** for privileged operations, with risk, diff, validation, comment, approve, and reject.
 - **Always-visible approval dock** above the composer.

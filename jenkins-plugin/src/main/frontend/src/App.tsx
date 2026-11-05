@@ -610,6 +610,39 @@ export function App(): React.ReactElement {
     [model, pipelineKey, providerAccountId, refreshSessions, thinking],
   );
 
+  const startSkillDraft = useCallback(
+    async (request: { name: string; folder: string; limit: number }) => {
+      if (busy) {
+        return;
+      }
+      try {
+        const created = await createConversation('Skills', { providerAccountId, model, thinking });
+        streamingId.current = null;
+        setConversationId(created.id);
+        setItems([]);
+        setError(null);
+        setInput('');
+        setAttachments([]);
+        setPhase(null);
+        setView('chat');
+        await refreshSessions();
+        const scope = request.folder ? `the folder "${request.folder}"` : 'all visible pipelines';
+        await send(
+          `Analyse ${scope} with scan_pipelines using a limit of ${request.limit}. Identify the repeated ` +
+            `stage structure, agents, options, checkout/build/test/deploy patterns, and failure handling. ` +
+            `Then create a reusable skill named "${request.name}" with create_skill. The skill body must be ` +
+            `concise Markdown: when to use it, inputs, procedure, checks, and a declarative Jenkinsfile template ` +
+            `with placeholders. Record sourceJobs. Do not include secrets or full raw pipeline source. For ` +
+            `SCM-backed pipelines, inspect representative repository Jenkinsfiles only when GitHub tools are configured.`,
+          { conversationId: created.id },
+        );
+      } catch (draftError) {
+        setError(draftError instanceof Error ? draftError.message : 'Could not start the skill analysis');
+      }
+    },
+    [busy, model, providerAccountId, refreshSessions, send, thinking],
+  );
+
   const quickAnalyse = useCallback(async () => {
     if (busy || !jobName) {
       return;
@@ -900,6 +933,7 @@ export function App(): React.ReactElement {
             onClose={() => setView(settingsReturn)}
             onReload={reloadAccounts}
             onAccountsChanged={setAccounts}
+            onStartSkillDraft={(request) => void startSkillDraft(request)}
           />
         ) : view === 'sessions' ? (
           <SessionList

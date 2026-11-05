@@ -239,3 +239,38 @@ export type ServerEvent =
     }
   | { event: 'error'; data: { message: string; retryable?: boolean } }
   | { event: 'done'; data: { status: string; approvals?: number } };
+
+export interface Skill {
+  id: string;
+  slug: string;
+  name: string;
+  kind: string;
+  description: string;
+  whenToUse: string;
+  body: string;
+  tags: string[];
+  sourceJobs: string[];
+  enabled: boolean;
+  version: number;
+  createdBy?: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface SkillsResponse {
+  skills: Skill[];
+  count: number;
+}
+
+export interface SkillInput {
+  id?: string;
+  name: string;
+  slug?: string;
+  kind?: string;
+  description?: string;
+  whenToUse?: string;
+  body: string;
+  tags?: string[];
+  sourceJobs?: string[];
+  enabled?: boolean;
+}

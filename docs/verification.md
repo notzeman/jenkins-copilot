@@ -13,6 +13,8 @@ jenkins-plugin:
                                   chat setup guard, conversation ownership, approval pause/rejection,
                                   read-only tool execution, masked provider/GitHub accounts, pipeline
                                   persistence, rename, and per-user session listing
+  SkillsOperationsTest   5 tests   skill CRUD, catalogue filtering, pipeline pattern scanning,
+                                  admin-only writes, tool registration
   OpenAiProviderTest    3 tests   session header, custom User-Agent, gateway error type, base URL normalization
   injected test         6 tests   1 skipped by the harness
 ```
@@ -30,7 +32,7 @@ cd ../../../e2e
 npm ci && npx playwright test
 ```
 
-Result: **42 plugin tests pass**, frontend typecheck passes, **2 Playwright tests pass** (the Playwright suite
+Result: **48 plugin tests pass**, frontend typecheck passes, **2 Playwright tests pass** (the Playwright suite
 predates the single-HPI rewrite and is not part of the Jenkins build).
 
 ## Live verification performed

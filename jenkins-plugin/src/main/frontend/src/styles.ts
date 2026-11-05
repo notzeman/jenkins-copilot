@@ -644,6 +644,50 @@ export const css = `
 .cp-setup-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .cp-setup-note { color: var(--cp-muted); font-size: 12px; }
 
+
+/* Skills */
+.cp-skills { gap: 12px; }
+.cp-skill-draft {
+  border: 1px solid var(--cp-border-strong); border-radius: 6px; padding: 12px;
+  display: flex; flex-direction: column; gap: 8px; background: var(--cp-panel-2);
+}
+.cp-skill-draft-head { display: flex; align-items: center; gap: 7px; font-size: 13px; }
+.cp-skill-draft-head svg { width: 16px; height: 16px; color: var(--cp-accent-ink); }
+.cp-skill-draft p { margin: 0; color: var(--cp-muted); font-size: 12px; line-height: 1.5; }
+.cp-skill-draft-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 60px; gap: 8px; }
+.cp-skill-draft-fields .cp-field > span { font-size: 11px; }
+.cp-skill-limit input { padding: 0 6px; }
+.cp-skill-form .cp-field textarea, .cp-skill-body {
+  width: 100%; min-height: 140px; resize: vertical; border: 1px solid var(--cp-border-strong); border-radius: 5px;
+  background: var(--cp-panel); color: var(--cp-text); padding: 8px 9px; font-size: 12px; line-height: 1.5;
+  font-family: var(--cp-mono);
+}
+.cp-skill-form .cp-field textarea:focus { outline: none; border-color: var(--cp-accent-ink); }
+.cp-skill-enabled { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--cp-text); }
+.cp-skill-enabled input { accent-color: var(--cp-accent-ink); }
+.cp-skill-card {
+  border: 1px solid var(--cp-border); border-radius: 6px; padding: 10px 11px;
+  display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; background: var(--cp-panel);
+}
+.cp-skill-card-main { min-width: 0; flex: 1 1 220px; display: flex; flex-direction: column; gap: 3px; }
+.cp-skill-card-title { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+.cp-skill-card-title svg { width: 16px; height: 16px; color: var(--cp-accent-ink); flex: 0 0 auto; }
+.cp-skill-kind { font-family: var(--cp-mono); font-size: 10.5px; color: var(--cp-muted); border: 1px solid var(--cp-border); border-radius: 3px; padding: 0 4px; }
+.cp-skill-off { font-size: 10px; color: var(--cp-muted); text-transform: uppercase; letter-spacing: .06em; }
+.cp-skill-card-meta { font-size: 12px; color: var(--cp-muted); line-height: 1.45; }
+.cp-skill-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+.cp-skill-tags span { font-size: 10.5px; color: var(--cp-accent-ink); background: var(--cp-accent-soft); border-radius: 3px; padding: 1px 5px; }
+.cp-skill-card-actions { display: flex; align-items: center; gap: 2px; flex: 0 0 auto; }
+.cp-skill-card-actions .cp-btn { padding: 3px 7px; font-size: 11px; }
+.cp-skill-disabled { opacity: .58; }
+.cp-skill-preview { flex: 1 0 100%; }
+.cp-skill-preview summary { cursor: pointer; color: var(--cp-muted); font-size: 11.5px; }
+.cp-skill-preview pre {
+  margin: 7px 0 0; max-height: 260px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere;
+  background: var(--cp-code); color: var(--cp-code-text); border-radius: 5px; padding: 9px;
+  font-family: var(--cp-mono); font-size: 11px; line-height: 1.5;
+}
+
 /* Appearance */
 .cp-swatches { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
 .cp-swatch {

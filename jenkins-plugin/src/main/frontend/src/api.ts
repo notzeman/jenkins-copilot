@@ -7,6 +7,9 @@ import type {
   SessionCreated,
   SessionResponse,
   SessionSummary,
+  Skill,
+  SkillInput,
+  SkillsResponse,
   StoredConversation,
 } from './types';
 
@@ -311,4 +314,20 @@ function parseBlock(block: string): ServerEvent | null {
   } catch {
     return null;
   }
+}
+
+export function getSkills(): Promise<SkillsResponse> {
+  return getJson<SkillsResponse>('settingsSkills');
+}
+
+export function saveSkill(body: SkillInput): Promise<{ saved: boolean; skill: Skill; skills: Skill[] }> {
+  return postJson('saveSkill', body);
+}
+
+export function deleteSkill(skill: string): Promise<{ deleted: boolean; skills: Skill[] }> {
+  return postJson('deleteSkill', { skill, confirm: true });
+}
+
+export function setSkillEnabled(skill: string, enabled: boolean): Promise<{ skill: Skill; skills: Skill[] }> {
+  return postJson('setSkillEnabled', { skill, enabled });
 }

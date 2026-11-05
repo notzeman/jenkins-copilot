@@ -36,6 +36,7 @@ public final class Operations {
         Map<String, Operation> ops = new LinkedHashMap<>();
         add(ops, new JobOperations());
         add(ops, new ViewOperations());
+        add(ops, new SkillOperations());
         add(ops, new FolderOperations());
         add(ops, new QueueOperations());
         add(ops, new BuildOperations());

@@ -2165,6 +2165,228 @@
         ],
         "additionalProperties": false
       }
+    },
+    {
+      "name": "list_skills",
+      "description": "List reusable skills by name, kind, tags, or description. The system prompt already includes a compact catalogue; use this to search or refresh.",
+      "risk": 1,
+      "reason": "Read-only skill inventory",
+      "operation": "list_skills",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_skill",
+      "description": "Load the full Markdown body of a skill. Call this when a catalogue entry matches the current task.",
+      "risk": 1,
+      "reason": "Reads an approved skill",
+      "operation": "get_skill",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "skill": {
+            "type": "string",
+            "description": "Skill id, slug, or name"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "skill"
+        ]
+      }
+    },
+    {
+      "name": "scan_pipelines",
+      "description": "Scan Pipeline jobs and return compact structural evidence: stages, agent labels, environment keys, credential ids, and feature flags. It never returns full Jenkinsfiles; use get_pipeline_source for a representative sample.",
+      "risk": 1,
+      "reason": "Read-only pipeline pattern scan",
+      "operation": "scan_pipelines",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "folder": {
+            "type": "string",
+            "description": "Optional folder full name"
+          },
+          "jobs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional explicit Pipeline job full names"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "create_skill",
+      "description": "Create a reusable skill from a distilled procedure or pipeline pattern. Always requires approval. Do not store secrets or full raw Jenkinsfiles.",
+      "risk": 3,
+      "reason": "Creates a persistent assistant skill",
+      "operation": "create_skill",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "whenToUse": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string",
+            "description": "Markdown procedure and optional fenced template"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceJobs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Pipelines or jobs used as evidence"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "body"
+        ]
+      }
+    },
+    {
+      "name": "update_skill",
+      "description": "Update an existing skill and increment its version. Always requires approval.",
+      "risk": 3,
+      "reason": "Updates a persistent assistant skill",
+      "operation": "update_skill",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "skill": {
+            "type": "string",
+            "description": "Skill id, slug, or name"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "whenToUse": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceJobs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "skill"
+        ]
+      }
+    },
+    {
+      "name": "delete_skill",
+      "description": "Delete a skill. Requires confirm=true and explicit approval.",
+      "risk": 3,
+      "reason": "Deletes a persistent assistant skill",
+      "operation": "delete_skill",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "skill": {
+            "type": "string"
+          },
+          "confirm": {
+            "type": "boolean",
+            "const": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "skill",
+          "confirm"
+        ]
+      }
+    },
+    {
+      "name": "set_skill_enabled",
+      "description": "Enable or disable a skill in the system-prompt catalogue.",
+      "risk": 2,
+      "reason": "Changes skill availability",
+      "operation": "set_skill_enabled",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "skill": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "skill",
+          "enabled"
+        ]
+      }
     }
   ]
 }

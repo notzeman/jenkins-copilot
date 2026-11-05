@@ -24,6 +24,7 @@ import io.jenkins.plugins.copilot.tools.ToolContext;
 import io.jenkins.plugins.copilot.tools.ToolSpec;
 import io.jenkins.plugins.copilot.storage.ChangePlanStore;
 import io.jenkins.plugins.copilot.storage.ConversationStore;
+import io.jenkins.plugins.copilot.storage.SkillStore;
 import io.jenkins.plugins.copilot.util.Jackson;
 import io.jenkins.plugins.copilot.util.Json;
 import java.io.InputStream;
@@ -59,7 +60,8 @@ public class ManagementOperationsTest {
                 new GitHubService("", "https://api.github.com"),
                 new ChangePlanStore(),
                 new RecoveryService(),
-                new ConversationStore());
+                new ConversationStore(),
+                new SkillStore());
         JsonNode result = ToolCatalog.execute(
                 "create_view",
                 Jackson.parse("{\"name\":\"copilot\",\"type\":\"list\","

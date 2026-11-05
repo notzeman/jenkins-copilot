@@ -10,6 +10,7 @@ import {
 } from '../api';
 import type { AccountsResponse, GitHubAccount, ModelInfo, ProviderAccount } from '../types';
 import { SimpleSelect } from './Pickers';
+import { SkillsPanel } from './SkillsPanel';
 import {
   CopilotMark,
   CheckIcon,
@@ -31,7 +32,7 @@ import { ACCENT_PRESETS, JENKINS_ACCENT, accentSource, readableOn } from '../acc
 const ABOUT = [
   'Jenkins AI Copilot is an agentic CI/CD assistant built into Jenkins. It diagnoses failing builds, ' +
     'reviews Jenkinsfiles, prepares fixes, and manages views, folders, jobs, queue items, agents, ' +
-    'credentials, permissions, plugins, and controller settings — with privileged actions gated behind explicit approval ' +
+    'credentials, permissions, plugins, controller settings, and reusable skills — with privileged actions gated behind explicit approval ' +
     'and provider keys kept encrypted on the controller.',
   'Works with OpenAI, Claude, opencode go, or any OpenAI-compatible endpoint.',
 ];
@@ -90,6 +91,7 @@ export function SettingsPage({
   onClose,
   onReload,
   onAccountsChanged,
+  onStartSkillDraft,
 }: {
   accounts: AccountsResponse | null;
   isAdmin: boolean;
@@ -101,8 +103,9 @@ export function SettingsPage({
   onClose: () => void;
   onReload: () => Promise<void>;
   onAccountsChanged: (accounts: AccountsResponse) => void;
+  onStartSkillDraft: (request: { name: string; folder: string; limit: number }) => void;
 }): React.ReactElement {
-  const [tab, setTab] = useState<'providers' | 'github' | 'appearance' | 'assistant' | 'about'>(
+  const [tab, setTab] = useState<'providers' | 'github' | 'appearance' | 'skills' | 'assistant' | 'about'>(
     isAdmin ? 'providers' : 'appearance',
   );
   const [providerForm, setProviderForm] = useState<ProviderForm | null>(null);
@@ -252,6 +255,7 @@ export function SettingsPage({
             ['providers', 'Providers', <ProviderIcon key="p" />],
             ['github', 'GitHub', <GitHubIcon key="g" />],
             ['appearance', 'Appearance', <PaletteIcon key="a" />],
+            ['skills', 'Skills', <RibbonIcon key="k" />],
             ['assistant', 'Assistant', <GearIcon key="s" />],
             ['about', 'About', <InfoIcon key="i" />],
           ] as const
@@ -584,6 +588,10 @@ export function SettingsPage({
             accent={accent}
             onAccentChange={onAccentChange}
           />
+        )}
+
+        {tab === 'skills' && (
+          <SkillsPanel isAdmin={isAdmin} onStartDraft={onStartSkillDraft} />
         )}
 
         {tab === 'assistant' && (

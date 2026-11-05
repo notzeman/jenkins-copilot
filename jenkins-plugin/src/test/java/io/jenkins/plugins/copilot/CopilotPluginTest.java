@@ -28,6 +28,7 @@ import io.jenkins.plugins.copilot.storage.ApprovalRecord;
 import io.jenkins.plugins.copilot.storage.ChangePlanStore;
 import io.jenkins.plugins.copilot.storage.Conversation;
 import io.jenkins.plugins.copilot.storage.ConversationStore;
+import io.jenkins.plugins.copilot.storage.SkillStore;
 import io.jenkins.plugins.copilot.tools.GitHubService;
 import io.jenkins.plugins.copilot.tools.RecoveryService;
 import io.jenkins.plugins.copilot.tools.ToolContext;
@@ -218,7 +219,8 @@ public class CopilotPluginTest {
                 new GitHubService("", "https://api.github.com"),
                 new ChangePlanStore(),
                 new RecoveryService(),
-                new ConversationStore());
+                new ConversationStore(),
+                new SkillStore());
     }
 
     private static io.jenkins.plugins.copilot.storage.RunState runState(AgentOutcome outcome) {
@@ -344,6 +346,39 @@ public class CopilotPluginTest {
                 Jackson.write(Jackson.obj().put("mode", "ask")),
                 "admin");
         assertFalse(Jackson.parse(restored.body).path("autoApproveAll").asBoolean());
+    }
+
+    @Test
+    public void skillsSettingsAreAdminOnly() throws Exception {
+        Response forbidden = post(
+                "jenkins-ai-copilot/saveSkill",
+                Jackson.write(Jackson.obj().put("name", "Alice skill").put("body", "Body")),
+                "alice");
+        assertEquals(403, forbidden.status);
+
+        Response saved = post(
+                "jenkins-ai-copilot/saveSkill",
+                Jackson.write(Jackson.obj()
+                        .put("name", "Create pipeline")
+                        .put("body", "## Procedure")
+                        .put("description", "Pipeline skill")
+                        .set("tags", Jackson.arr().add("pipeline"))),
+                "admin");
+        assertEquals(200, saved.status);
+        JsonNode skill = Jackson.parse(saved.body).path("skill");
+        String slug = skill.path("slug").asText();
+        assertFalse(slug.isBlank());
+
+        Response list = get("jenkins-ai-copilot/settingsSkills", "admin");
+        assertEquals(200, list.status);
+        assertTrue(list.body.contains("Create pipeline"));
+        assertEquals(403, get("jenkins-ai-copilot/settingsSkills", "alice").status);
+
+        Response deleted = post(
+                "jenkins-ai-copilot/deleteSkill",
+                Jackson.write(Jackson.obj().put("skill", slug).put("confirm", true)),
+                "admin");
+        assertEquals(200, deleted.status);
     }
 
     @Test

@@ -29,6 +29,8 @@ import io.jenkins.plugins.copilot.storage.ProviderAccount;
 import io.jenkins.plugins.copilot.storage.ConversationStore;
 import io.jenkins.plugins.copilot.storage.CopilotStorage;
 import io.jenkins.plugins.copilot.storage.RunState;
+import io.jenkins.plugins.copilot.storage.Skill;
+import io.jenkins.plugins.copilot.storage.SkillStore;
 import io.jenkins.plugins.copilot.tools.GitHubService;
 import io.jenkins.plugins.copilot.tools.RecoveryService;
 import io.jenkins.plugins.copilot.tools.ToolContext;
@@ -560,6 +562,127 @@ public class CopilotRootAction implements UnprotectedRootAction {
         } catch (IllegalArgumentException e) {
             writeError(rsp, 404, "conversation_not_found", "Conversation not found");
         }
+    }
+
+    public void doSettingsSkills(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        SkillStore skills = new SkillStore();
+        ObjectNode response = Jackson.obj();
+        response.set("skills", Jackson.MAPPER.valueToTree(skills.list()));
+        response.put("count", skills.list().size());
+        writeJson(rsp, 200, response);
+    }
+
+    @POST
+    public void doSaveSkill(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        JsonNode body;
+        try {
+            body = readJson(req);
+        } catch (Exception e) {
+            writeError(rsp, 400, "invalid_request", e.getMessage());
+            return;
+        }
+        try {
+            Skill input = Jackson.MAPPER.treeToValue(body, Skill.class);
+            SkillStore skills = new SkillStore();
+            Skill saved = skills.save(input, user.getId());
+            new AccountsStore().audit(user.getId(), "settings.skill.save", saved.getSlug(), "succeeded", "{}");
+            ObjectNode response = Jackson.obj();
+            response.put("saved", true);
+            response.set("skill", Jackson.MAPPER.valueToTree(saved));
+            response.set("skills", Jackson.MAPPER.valueToTree(skills.list()));
+            writeJson(rsp, 200, response);
+        } catch (IllegalArgumentException e) {
+            writeError(rsp, 400, "invalid_skill", e.getMessage());
+        } catch (Exception e) {
+            writeError(rsp, 400, "invalid_skill", e.getMessage() == null ? "Could not save the skill" : e.getMessage());
+        }
+    }
+
+    @POST
+    public void doDeleteSkill(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        JsonNode body;
+        try {
+            body = readJson(req);
+        } catch (Exception e) {
+            writeError(rsp, 400, "invalid_request", e.getMessage());
+            return;
+        }
+        String key = body.path("skill").asText(body.path("id").asText(""));
+        if (!body.path("confirm").asBoolean(false)) {
+            writeError(rsp, 400, "confirm_required", "confirm=true is required to delete a skill");
+            return;
+        }
+        SkillStore skills = new SkillStore();
+        if (!skills.delete(key)) {
+            writeError(rsp, 404, "skill_not_found", "No skill named '" + key + "'");
+            return;
+        }
+        new AccountsStore().audit(user.getId(), "settings.skill.delete", key, "succeeded", "{}");
+        ObjectNode response = Jackson.obj();
+        response.put("deleted", true);
+        response.set("skills", Jackson.MAPPER.valueToTree(skills.list()));
+        writeJson(rsp, 200, response);
+    }
+
+    @POST
+    public void doSetSkillEnabled(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
+        User user = currentUser();
+        if (user == null) {
+            writeError(rsp, 401, "unauthenticated", "Sign in to Jenkins first");
+            return;
+        }
+        if (!Jenkins.get().hasPermission(Jenkins.ADMINISTER)) {
+            writeError(rsp, 403, "forbidden", "Administrator permission is required");
+            return;
+        }
+        JsonNode body;
+        try {
+            body = readJson(req);
+        } catch (Exception e) {
+            writeError(rsp, 400, "invalid_request", e.getMessage());
+            return;
+        }
+        String key = body.path("skill").asText(body.path("id").asText(""));
+        boolean enabled = body.path("enabled").asBoolean(true);
+        SkillStore skills = new SkillStore();
+        Skill saved = skills.setEnabled(key, enabled);
+        if (saved == null) {
+            writeError(rsp, 404, "skill_not_found", "No skill named '" + key + "'");
+            return;
+        }
+        new AccountsStore().audit(user.getId(), "settings.skill.enabled", key, enabled ? "enabled" : "disabled", "{}");
+        ObjectNode response = Jackson.obj();
+        response.put("enabled", saved.isEnabled());
+        response.set("skill", Jackson.MAPPER.valueToTree(saved));
+        response.set("skills", Jackson.MAPPER.valueToTree(skills.list()));
+        writeJson(rsp, 200, response);
     }
 
     @POST
@@ -1124,7 +1247,8 @@ public class CopilotRootAction implements UnprotectedRootAction {
                 new GitHubService(token, apiUrl),
                 new ChangePlanStore(),
                 new RecoveryService(),
-                new ConversationStore());
+                new ConversationStore(),
+                new SkillStore());
     }
 
     private AttachmentLoader attachmentLoader(String userId, String conversationId, ConversationStore store) {
