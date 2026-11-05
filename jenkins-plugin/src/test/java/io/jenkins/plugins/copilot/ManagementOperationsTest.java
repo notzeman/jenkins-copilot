@@ -241,11 +241,21 @@ public class ManagementOperationsTest {
         job.scheduleBuild2(0);
         var queued = Jenkins.get().getQueue().getItems();
         assertTrue(queued.length > 0);
-        handle("cancel_queue_item", Json.obj("id", queued[0].getId()));
-        assertEquals(0, Jenkins.get().getQueue().getItems().length);
+        JSONObject cancelled = handle("cancel_queue_item", Json.obj("id", queued[0].getId()));
+        assertTrue(cancelled.getBoolean("cancelled"));
+        waitForQueueEmpty();
 
         job.scheduleBuild2(0);
-        handle("cancel_job_queue", Json.obj("job", "queue-me"));
+        JSONObject cancelledAll = handle("cancel_job_queue", Json.obj("job", "queue-me"));
+        assertTrue(cancelledAll.getInt("count") >= 1);
+        waitForQueueEmpty();
+    }
+
+    private static void waitForQueueEmpty() throws InterruptedException {
+        long deadline = System.currentTimeMillis() + 5_000;
+        while (Jenkins.get().getQueue().getItems().length > 0 && System.currentTimeMillis() < deadline) {
+            Thread.sleep(50);
+        }
         assertEquals(0, Jenkins.get().getQueue().getItems().length);
     }
 
