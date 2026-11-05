@@ -13,7 +13,7 @@
 
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>jenkins-ai-copilot</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <packaging>hpi</packaging>
 
   <name>Jenkins AI Copilot</name>
